@@ -1,0 +1,324 @@
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: blueviolet;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column; /* Stack items vertically */
+    min-height: 100vh;
+    font-size: 16px;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
+/* Container styling */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 120px; /* Adjusted to avoid overlap with fixed top content */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+}
+
+/* Heading styling */
+h2 {
+    font-size: 36px;
+    color: cyan;
+}
+
+/* Paragraph styling */
+p {
+    font-size: 18px;
+    color: lightgray;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.paragraph-1 {
+    font-size: 20px;
+    color: lightblue;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.paragraph-2 {
+    font-size: 18px;
+    color: lightgreen;
+    font-style: italic;
+}
+
+/* Button styling */
+.button {
+    background-color: #0000fa;
+    color: lightgray;
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto; /* Centers button */
+}
+
+.button:hover {
+    background-color: #00007d;
+}
+
+/* Image Styling */
+.img-responsive {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px 0;
+}
+
+/* Time and Calendar Container */
+#time-calendar-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 10;
+    padding: 10px;
+    font-size: 1rem;
+    text-align: center; /* Center text */
+    margin: 0;
+}
+
+/* Time and Calendar Styling */
+#time, #calendar {
+    font-size: 1.2rem; /* Increase font size slightly */
+    color: violet;
+    background-color: cyan;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 5px;
+    width: 80%; /* Adjust width for mobile */
+    max-width: 300px; /* Ensure they don't exceed screen width */
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    /* Adjust container and text sizes for smaller screens */
+    .container {
+        margin-top: 120px; /* Avoid overlap with fixed content */
+        width: 100%; /* Allow container to take up full width */
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 24px; /* Adjust heading size */
+    }
+
+    .button {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    #time, #calendar {
+        font-size: 1.1rem; /* Slightly smaller font size for mobile */
+        width: 90%; /* Allow the time and calendar to adjust to screen */
+        max-width: 90%; /* Keep it from getting too wide */
+    }
+
+    /* Adjust top margin for fixed header */
+    #time-calendar-container {
+        padding: 8px;
+        font-size: 1rem;
+    }
+
+    .img-responsive img {
+        max-width: 200px; /* Adjust max-width for mobile */
+    }
+}
+
+/* Larger Screens (Desktop & Tablets) */
+@media (min-width: 768px) {
+    body {
+        font-size: 16px; /* Set default font size for desktop */
+    }
+
+    .container {
+        margin-top: 120px; /* Space for the fixed top bar */
+        padding: 40px; /* More padding on larger screens */
+        width: 60%; /* Ensure container doesn't stretch too wide */
+    }
+
+    h2 {
+        font-size: 40px; /* Larger heading for desktop */
+    }
+
+    .button {
+        padding: 15px 30px;
+        font-size: 18px;
+    }
+
+    /* Adjust size of clock and calendar on larger screens */
+    #time, #calendar {
+        font-size: 1.5rem; /* Larger font size for desktop */
+        width: 40%; /* Make them narrower */
+        max-width: 400px; /* Prevent stretching */
+    }
+
+    /* Image responsiveness */
+    .img-responsive img {
+        max-width: 300px; /* Larger max-width for desktop */
+    }
+}
+
+/* Ensure the layout is also good on extra large screens */
+@media (min-width: 1200px) {
+    .container {
+        width: 50%; /* Reduce width on extra large screens */
+    }
+
+    h2 {
+        font-size: 48px; /* Even larger heading */
+    }
+}
+
+/* Container to hold the image and description */
+.image-container {
+    position: relative;
+    width: 100%; /* Full width */
+    max-width: 400px; /* Set max width for the image */
+    margin: 0 auto; /* Center container */
+}
+
+/* Style for the image */
+.image {
+    width: 100%;
+    height: auto;
+}
+
+/* Hidden text by default */
+.text {
+    position: absolute;
+    bottom: 10px; /* Adjust position to where you want the text */
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    color: white;
+    padding: 10px;
+    opacity: 0; /* Text is hidden initially */
+    transition: opacity 0.3s ease; /* Smooth transition */
+    width: 90%; /* Optional, to control text width */
+}
+
+/* Show the text when hovering over the image container */
+.image-container:hover .text {
+    opacity: 1; /* Make text visible on hover */
+}
+
+/* style.css */
+
+/* Basic Styling */
+
+h1 {
+    color: cyan;
+}
+
+/* Button to open the modal */
+#open-modal-btn {
+    background-color: violet;
+    color: cyan;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#open-modal-btn:hover {
+    background-color: blueviolet;
+}
+
+/* The Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 100px;
+    width: 100%; /* Width */
+    height: 100%; /* Height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with transparency */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: blueviolet;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+}
+
+/* Close Button */
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Game Styling */
+#answers-container button {
+    background-color: cyan;
+    color: blueviolet;
+    padding: 10px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#answers-container button:hover {
+    background-color: violet;
+}
+
+#score-container {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#score-message-container img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+}
