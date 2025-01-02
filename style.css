@@ -235,8 +235,6 @@ p {
     opacity: 1; /* Make text visible on hover */
 }
 
-/* style.css */
-
 /* Basic Styling */
 
 h1 {
@@ -321,4 +319,31 @@ h1 {
     width: 100%;
     max-width: 500px;
     height: auto;
+}
+
+/* Wiggle effect */
+.wiggle {
+    transition: transform 0.3s ease;
+}
+
+.wiggle:hover {
+    transform: translateX(-5px); /* Wiggle slightly left */
+    animation: wiggle 0.5s ease infinite;
+}
+
+@keyframes wiggle {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(5px); }
+    50% { transform: translateX(0); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Zoom effect */
+.zoom {
+    transition: transform 0.3s ease-in-out;
+}
+
+.zoom:hover {
+    transform: scale(1.05); /* Slightly zooms in */
 }

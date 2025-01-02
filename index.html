@@ -6,10 +6,9 @@
     <title>Fun Hayase Yuuka Website</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="IMG_3446.ico" type="image/x-icon">
-    <base href="/hayase-yuuka/">
 
     <style>
-        #timer {
+        #quiz-timer {
             font-size: 30px;
             font-weight: bold;
         }
@@ -40,74 +39,35 @@
     <div id="time-calendar-container">
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
-        <button id="open-modal-btn" class="quiz-btn">Start Yuuka Quiz</button>
+        <button id="open-modal-btn" class="quiz-btn" onclick="startQuiz()">Start Yuuka Quiz</button>
     </div>
 
-<!-- Modal (Popup) -->
-<div id="quiz-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="close-modal-btn">&times;</span>
-        <h1>Yuuka Quiz Game</h1>
-        <div id="question-container">
-            <p id="question">Who is Hayse Yuuka?</p>
-        </div>
-        <div id="answers-container">
-            <button class="answer" onclick="checkAnswer('Treasurer of Seminar')">Treasurer of Seminar</button>
-            <button class="answer" onclick="checkAnswer('100KG')">100KG</button>
-            <button class="answer" onclick="checkAnswer('I Do not know')">I Do not know</button>
-            <button class="answer" onclick="checkAnswer('Strict financial girl')">Strict financial girl</button>
-        </div>
-        <div id="score-container">
-            <p id="score">Score: 0</p>
+    <!-- Modal (Popup) -->
+    <div id="quiz-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal-btn">&times;</span>
+            <h1>Yuuka Quiz Game</h1>
+            <div id="question-container">
+                <p id="question">Who is Hayase Yuuka?</p>
+            </div>
+            <div id="answers-container">
+                <button class="answer" onclick="checkAnswer('Treasurer of Seminar')">Treasurer of Seminar</button>
+                <button class="answer" onclick="checkAnswer('100KG')">100KG</button>
+                <button class="answer" onclick="checkAnswer('I Do not know')">I Do not know</button>
+                <button class="answer" onclick="checkAnswer('Strict financial girl')">Strict financial girl</button>
+            </div>
+            <div id="score-container">
+                <p id="score">Score: 0</p>
+            </div>
+            <div id="timer-container">
+                <p id="quiz-timer">Time Left: 00:00</p>
+            </div>        
         </div>
     </div>
-</div>
 
-<script>
-    let score = 0;
-    const quizModal = document.getElementById('quiz-modal');
-    const openModalButton = document.getElementById('open-modal-btn');
-    const closeModalButton = document.getElementById('close-modal-btn');
-    const scoreElement = document.getElementById('score');
-
-    // Open Modal when clicking the Start Quiz button
-    openModalButton.addEventListener('click', () => {
-        quizModal.style.display = 'block';
-    });
-
-    // Close Modal when clicking the close button
-    closeModalButton.addEventListener('click', () => {
-        quizModal.style.display = 'none';
-    });
-
-    // Function to check the answer
-    function checkAnswer(answer) {
-        // Simple logic for demonstration purposes
-        const correctAnswer = "Strict financial girl"; // Define correct answer
-        if (answer === correctAnswer) {
-            score++;
-            scoreElement.textContent = `Score: ${score}`;
-            alert("Correct!");
-        } else {
-            alert("Incorrect.");
-        }
-    }
-
-    // To close modal if user clicks anywhere outside the modal
-    window.onclick = function(event) {
-        if (event.target === quizModal) {
-            quizModal.style.display = 'none';
-        }
-    };
-</script>
-
-</body>
-</html>
     <!-- Main Content Section -->
     <div class="container">
-
-    <!-- Container to display the final score message and image -->
-    <div id="score-message-container" style="text-align: center; padding-top: 20px;"></div>
+        <div id="score-message-container" style="text-align: center; padding-top: 20px;"></div>
 
         <h2>Welcome to My Fun Hayase Yuuka Website!</h2>
         <p class="paragraph-1">This is my second website using VS Code.</p>
@@ -120,39 +80,38 @@
         </div>
 
         <div class="img-responsive image-container">
-            <img src="IMG_3441.GIF" alt="Cute Yuuka" class="image">
+            <img src="IMG_3441.GIF" alt="Cute Yuuka" class="image wiggle">
             <div class="text" style="color: cyan;">This is Yuuka from Blue Archive!</div>
         </div>
 
         <div class="img-responsive image-container">
-            <img src="IMG_2490.GIF" alt="Peeking Yuuka" class="image">
+            <img src="IMG_2490.GIF" alt="Peeking Yuuka" class="image zoom">
             <div class="text" style="color: violet;">Yuuka is peeking around and leaving!</div>
         </div>
 
         <div class="img-responsive image-container">
-            <img src="IMG_2432.GIF" alt="Angry Yuuka" class="image">
+            <img src="IMG_2432.GIF" alt="Angry Yuuka" class="image zoom">
             <div class="text" style="color: blueviolet;">You angered Yuuka because you spend too much on impulsive purchases!</div>
         </div>
 
         <div class="img-responsive image-container">
-            <img src="IMG_3794.JPG" alt="Cute Yuuka" class="image">
+            <img src="IMG_3794.JPG" alt="Cute Yuuka" class="image wiggle">
             <div class="text" style="color: violet;">Yuuka is so cute!</div>
         </div>
 
-        <p style="color: cyan; background-color: blue; font-size: 18px;
-        font: bold; margin: 20px; padding: 10px;">More Yuuka Photos Below</p>
+        <p style="color: cyan; background-color: blue; font-size: 18px; font: bold; margin: 20px; padding: 10px;">More Yuuka Photos Below</p>
 
         <div class="img-responsive image-container">
-            <img src="IMG_2496.GIF" alt="Yuuka with a dog" class="image">
+            <img src="IMG_2496.GIF" alt="Yuuka with a dog" class="image zoom">
             <div class="text" style="color: blue;">Yuuka has a robot dog!</div>
         </div>
 
         <div class="img-responsive image-container">
-            <img src="IMG_2487.GIF" alt="Happy Yuuka" class="image">
+            <img src="IMG_2487.GIF" alt="Happy Yuuka" class="image zoom">
             <div class="text" style="color: blueviolet;">Yuuka is happy!</div>
 
             <div class="img-responsive image-container">
-                <img src="IMG_3793.JPG" alt="Yuuka has coffee" class="image">
+                <img src="IMG_3793.JPG" alt="Yuuka has coffee" class="image wiggle">
                 <div class="text" style="color: violet;">Yuuka is serving you coffee!</div>
             </div>
         </div>

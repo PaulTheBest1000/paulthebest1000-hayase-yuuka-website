@@ -82,10 +82,54 @@ updateCalendar();
 let currentScore = 0;
 let currentQuestionIndex = 0;
 
+// Set your desired time limit for the quiz (in seconds)
+let timeLimit = 120; // 2 minutes
+let timerElement = document.getElementById('quiz-timer');  // Use one timerElement for the quiz timer
+
+// Function to start the timer
+function startTimer() {
+    // Update the timer every second
+    const timerInterval = setInterval(() => {
+        // Calculate minutes and seconds
+        let minutes = Math.floor(timeLimit / 60);
+        let seconds = timeLimit % 60;
+
+        // Format minutes and seconds as "MM:SS"
+        timerElement.textContent = `Time Left: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        // Decrease the time limit by 1 second
+        timeLimit--;
+
+        // When the timer reaches zero, stop the interval and end the quiz
+        if (timeLimit < 0) {
+            clearInterval(timerInterval); // Stop the timer
+            alert("Time's up! Yuuka Quiz Over."); // Alert the user
+            endQuiz(); // End quiz function (you can define this)
+        }
+    }, 1000); // Interval of 1 second
+}
+
+// Start the quiz and timer when the button is clicked
+function startQuiz() {
+    // Start the timer
+    startTimer();
+
+    // Optionally, show the quiz modal
+    const quizModal = document.getElementById('quiz-modal');
+    quizModal.style.display = 'block';
+}
+
+// Example of ending the quiz when time is up (you can customize this)
+function endQuiz() {
+    // Logic to stop the quiz, show results, or perform other actions
+    console.log("Quiz Ended");
+    // For example, close the modal, disable buttons, etc.
+}
+
 // Array of questions
 const questions = [
     {
-        question: "Hayse Yuuka is-",
+        question: "Hayase Yuuka is-",
         correctAnswer: "Treasurer of Seminar",
         options: ["Treasurer of Seminar", "100KG", "I do not know", "Strict financial girl", "Cute girl"]
     },
@@ -169,21 +213,23 @@ function checkAnswer(selectedAnswer) {
     
     // Array of fun facts
     const funFacts = [
-    "Yuuka is known for her strict financial habits!",
-    "Did you know Yuuka has been a treasurer for 3 years?",
-    "100KG? That's an interesting guess!",
-    "Yuuka's nickname in the group is 'Budget Master'.",
-    "She once balanced a seminar's budget perfectly without external help!"
-];
+        "Yuuka is known for her strict financial habits!",
+        "Did you know Yuuka has been a treasurer for 3 years?",
+        "100KG? That's an interesting guess!",
+        "Yuuka's nickname in the group is 'Budget Master'.",
+        "She once balanced a seminar's budget perfectly without external help!"
+    ];
+
     // Get sound elements
     const correctSound = document.getElementById('correct-sound');
     const wrongSound = document.getElementById('wrong-sound');
     
     // Function to show a random fun fact
     function showFunFact() {
-    const fact = funFacts[Math.floor(Math.random() * funFacts.length)];
-    alert(`Fun Fact: ${fact}`);
-}
+        const fact = funFacts[Math.floor(Math.random() * funFacts.length)];
+        alert(`Fun Fact: ${fact}`);
+    }
+
     // Display feedback and update score if correct
     if (selectedAnswer === currentQuestion.correctAnswer) {
         currentScore += 25; // Add 25 points for a correct answer
@@ -255,7 +301,7 @@ function endGame() {
         imageElement.style.height = 'auto'; // Maintain aspect ratio
 
         // Append the image to the container
-       scoreMessageContainer.appendChild(imageElement); // Add the image
+        scoreMessageContainer.appendChild(imageElement); // Add the image
 
         // Set a timeout to hide the image and message after 10 seconds (10000 ms)
         setTimeout(() => {
@@ -270,6 +316,7 @@ function endGame() {
         }, 2500); // Wait for 2.5 seconds to give time for the image and message to be shown
       }, 500); // Wait for a moment before showing the final score
  }
+
 
 function showMessage() {
     alert('WE LOVE HAYASE YUUKA!!!'); // Show alert with the message
