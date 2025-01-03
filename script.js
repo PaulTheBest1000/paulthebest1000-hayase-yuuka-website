@@ -330,19 +330,3 @@ function showMessage() {
         gifContainer.style.display = 'none';  // Hide the GIF container
     }, 5000); // 5000ms = 5 seconds
 }
-
-const iframe = document.getElementById('youtube-iframe');
-const playPauseButton = document.getElementById('play-pause-btn');
-let isPlaying = false;
-
-// Play or pause the audio
-playPauseButton.addEventListener('click', () => {
-    if (isPlaying) {
-        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-        playPauseButton.textContent = 'Play';
-    } else {
-        iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        playPauseButton.textContent = 'Pause';
-    }
-    isPlaying = !isPlaying;
-});
