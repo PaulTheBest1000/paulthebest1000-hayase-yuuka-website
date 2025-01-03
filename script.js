@@ -82,49 +82,28 @@ updateCalendar();
 let currentScore = 0;
 let currentQuestionIndex = 0;
 
-// Set your desired time limit for the quiz (in seconds)
-let timeLimit = 120; // 2 minutes
-let timerElement = document.getElementById('quiz-timer');  // Use one timerElement for the quiz timer
+// Set the duration of the quiz in seconds (e.g., 5 minutes = 300 seconds)
+let quizDuration = 300; // You can change this to any number of seconds
+let timerElement = document.getElementById('quiz-timer');
 
-// Function to start the timer
-function startTimer() {
-    // Update the timer every second
-    const timerInterval = setInterval(() => {
-        // Calculate minutes and seconds
-        let minutes = Math.floor(timeLimit / 60);
-        let seconds = timeLimit % 60;
-
-        // Format minutes and seconds as "MM:SS"
-        timerElement.textContent = `Time Left: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-        // Decrease the time limit by 1 second
-        timeLimit--;
-
-        // When the timer reaches zero, stop the interval and end the quiz
-        if (timeLimit < 0) {
-            clearInterval(timerInterval); // Stop the timer
-            alert("Time's up! Yuuka Quiz Over."); // Alert the user
-            endQuiz(); // End quiz function (you can define this)
-        }
-    }, 1000); // Interval of 1 second
+// Function to format time into MM:SS
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
 }
 
-// Start the quiz and timer when the button is clicked
-function startQuiz() {
-    // Start the timer
-    startTimer();
-
-    // Optionally, show the quiz modal
-    const quizModal = document.getElementById('quiz-modal');
-    quizModal.style.display = 'block';
-}
-
-// Example of ending the quiz when time is up (you can customize this)
-function endQuiz() {
-    // Logic to stop the quiz, show results, or perform other actions
-    console.log("Quiz Ended");
-    // For example, close the modal, disable buttons, etc.
-}
+// Update the timer every second
+let countdown = setInterval(() => {
+    if (quizDuration <= 0) {
+        clearInterval(countdown);
+        timerElement.textContent = "Time's up!";
+        // Add any action to be taken when the timer runs out, e.g., submit the quiz
+    } else {
+        timerElement.textContent = `Time Left: ${formatTime(quizDuration)}`;
+        quizDuration--;
+    }
+}, 1000);
 
 // Array of questions
 const questions = [
