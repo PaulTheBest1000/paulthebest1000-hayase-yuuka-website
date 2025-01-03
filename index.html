@@ -35,7 +35,7 @@
 </head>
 <body>
 
-    <!-- Time and Calendar Container -->
+    <!-- Time and Calendar Container with an additional button and audio player -->
     <div id="time-calendar-container">
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
@@ -67,27 +67,91 @@
 
     <!-- Main Content Section -->
     <div class="container">
+
         <div id="score-message-container" style="text-align: center; padding-top: 20px;"></div>
 
-        <h2>Welcome to My Fun Hayase Yuuka Website!</h2>
+        <section id="profile">
+        <h2>Welcome to My Hayase Yuuka Website!</h2>
         <p class="paragraph-1">This is my second website using VS Code.</p>
         <p class="paragraph-2">If you love Hayase Yuuka, press the button!</p>
+        <button class="button" onclick="showMessage()">Click Me Please!</button></section>
 
-        <button class="button" onclick="showMessage()">Click Me Please!</button>
-
+        <section id="fan-art">
+            <h2>Submit Your Yuuka Fan Art</h2>
+            <form>
+                <label for="file">Upload Yuuka Image:</label>
+                <input type="file" id="file" name="file">
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+        
+        <section id="youtube-audio">
+            <h2>Listen to YouTube Video</h2>
+            <div class="audio-player">
+                <iframe 
+                    id="youtube-iframe" 
+                    width="0" 
+                    height="0" 
+                    src="https://www.youtube.com/embed/jHSozMn7GgA?autoplay=0&controls=0"
+                    frameborder="0" 
+                    allow="autoplay; encrypted-media" 
+                    allowfullscreen>
+                </iframe>
+                <button id="play-pause-btn">Play</button>
+            </div>
+        </section>
+        
         <div id="gif-container" style="display:none;">
             <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
         </div>
 
-        <div class="img-responsive image-container">
-            <img src="IMG_3441.GIF" alt="Cute Yuuka" class="image wiggle">
-            <div class="text" style="color: cyan;">This is Yuuka from Blue Archive!</div>
-        </div>
+        <div class="img-responsive image-container carousel">
+    <div class="image-item">
+        <img src="IMG_3441.GIF" alt="Nicee Yuuka" class="image wiggle">
+        <div class="text" style="color: cyan;">This is Yuuka from Blue Archive!</div>
+    </div>
+    <div class="image-item">
+        <img src="IMG_2490.GIF" alt="Peeking Yuuka" class="image zoom">
+        <div class="text" style="color: violet;">Yuuka is peeking around and leaving!</div>
+    </div>
+    <div class="image-item">
+        <img src="IMG_3794.JPG" alt="Cute Yuuka" class="image wiggle">
+        <div class="text" style="color: violet;">Yuuka is so cute!</div>
+    </div>
+</div>
 
-        <div class="img-responsive image-container">
-            <img src="IMG_2490.GIF" alt="Peeking Yuuka" class="image zoom">
-            <div class="text" style="color: violet;">Yuuka is peeking around and leaving!</div>
-        </div>
+<script>
+    const images = document.querySelectorAll('.carousel .image-item');
+    let index = 0;
+
+    // Initially display only the first image
+    images.forEach((item, i) => {
+        item.style.display = i === 0 ? 'block' : 'none';
+    });
+
+    setInterval(() => {
+        images[index].style.display = 'none'; // Hide the current image
+        index = (index + 1) % images.length; // Move to the next index
+        images[index].style.display = 'block'; // Show the next image
+    }, 3000); // Change every 3 seconds
+</script>
+
+<style>
+    .carousel {
+        position: relative;
+    }
+    .image-item {
+        text-align: center;
+    }
+    .image {
+        max-width: 100%;
+        height: auto;
+    }
+    .text {
+        margin-top: 10px;
+        font-size: 1.2em;
+    }
+</style>
 
         <div class="img-responsive image-container">
             <img src="IMG_2432.GIF" alt="Angry Yuuka" class="image zoom">
@@ -95,27 +159,36 @@
         </div>
 
         <div class="img-responsive image-container">
-            <img src="IMG_3794.JPG" alt="Cute Yuuka" class="image wiggle">
-            <div class="text" style="color: violet;">Yuuka is so cute!</div>
+            <img src="IMG_3850.JPG" alt="Glasses Yuuka" class="image zoom">
+            <div class="text" style="color: blue;">Yuuka has red glasses?</div>
+        </div>
+
+        <div class="img-responsive image-container">
+            <img src="IMG_2432.GIF" alt="Yuuka's Test Results" class="image zoom">
+            <div class="text" style="color: violet;">Yuuka is showing you her math test results! (Can't understand it though)</div>
         </div>
 
         <p style="color: blueviolet; background-color: cyan; font-size: 18px; font: bold; margin: 20px; padding: 10px;">More Yuuka Photos Below</p>
 
         <div class="img-responsive image-container">
             <img src="IMG_2496.GIF" alt="Yuuka with a dog" class="image zoom">
-            <div class="text" style="color: blue;">Yuuka has a robot dog!</div>
+            <div class="text" style="color: violet;">Yuuka has a robot dog!</div>
         </div>
 
         <div class="img-responsive image-container">
             <img src="IMG_2487.GIF" alt="Happy Yuuka" class="image zoom">
-            <div class="text" style="color: blueviolet;">Yuuka is happy!</div>
-
-            <div class="img-responsive image-container">
-                <img src="IMG_3793.JPG" alt="Yuuka has coffee" class="image wiggle">
-                <div class="text" style="color: violet;">Yuuka is serving you coffee!</div>
-            </div>
+            <div class="text" style="color: blueviolet;">Yuuka is Encouraging!</div>
         </div>
+
+        <div class="img-responsive image-container">
+            <img src="IMG_3793.JPG" alt="Yuuka has coffee" class="image wiggle">
+            <div class="text" style="color: blue;">Yuuka is serving you coffee!</div>
+        </div>
+
+        <p> <div style="color: cyan">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar". </style>
+            <div style="color: pink">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</style></p>
     </div>
+</div>
 
     <!-- External JavaScript File -->
     <script src="script.js"></script>
