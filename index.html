@@ -73,107 +73,139 @@
         <section id="profile">
         <h2>Welcome to My Hayase Yuuka Website!</h2>
         <p class="paragraph-1">This is my second website using VS Code.</p>
-        <div id="music-player">
-            <audio id="bg-music" loop>
-                <source src="Blue Archive OST 17. Irasshaimase.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-            <button id="music-toggle-btn" onclick="toggleMusic()">Play Music</button>
-        </div>
-        
-        <style>
-            /* Music Player Container */
-            #music-player {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                margin: 20px auto;
-                padding: 15px;
-                max-width: 300px;
-                background-color: #f9f9f9;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                font-family: Arial, sans-serif;
-            }
-        
-            /* Styling the Audio Element */
-            #bg-music {
-                width: 100%;
-                margin-bottom: 15px;
-            }
-        
-            /* Styling the Play/Pause Button */
-            #music-toggle-btn {
-                background-color: #007BFF;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                padding: 10px 20px;
-                font-size: 16px;
-                cursor: pointer;
-                transition: background-color 0.3s, transform 0.2s;
-            }
-        
-            /* Hover Effect for the Button */
-            #music-toggle-btn:hover {
-                background-color: #0056b3;
-                transform: scale(1.05);
-            }
-        
-            /* Button Active State */
-            #music-toggle-btn:active {
-                background-color: #004080;
-                transform: scale(0.95);
-            }
-        </style>
-        
-        <script>
-            const music = document.getElementById('bg-music');
-            const toggleButton = document.getElementById('music-toggle-btn');
-        
-            function toggleMusic() {
-                if (music.paused) {
-                    music.play();
-                    toggleButton.textContent = "Pause Music";
-                } else {
-                    music.pause();
-                    toggleButton.textContent = "Play Music";
-                }
-            }
-        </script>
-        <p class="paragraph-2">If you love Hayase Yuuka, press the button!</p>
-        <button class="button" onclick="showMessage()">Click Me Please!</button></section>
+        <p> <div style="color: cyan">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar". </style></p>
 
-        <section id="fan-art">
-            <h2>Submit Your Yuuka Fan Art</h2>
-            <form>
-                <label for="file">Upload Yuuka Image:</label>
-                <input type="file" id="file" name="file">
-                <button type="submit">Submit</button>
-            </form>
-        </section>
-                    
-        
-        <section id="quotes">
-            <h2>Hayase Yuuka Quotes</h2>
-            <p id="quote"></p>
-        </section>
-        <script>
-            const quotes = [
-                "Stay true to yourself.",
-                "Every day is a new beginning.",
-                "Always aim for greatness!"
-            ];
-            let quoteIndex = 0;
-            const quoteElement = document.getElementById('quote');
-            setInterval(() => {
-                quoteElement.textContent = quotes[quoteIndex];
-                quoteIndex = (quoteIndex + 1) % quotes.length;
-            }, 5000);
-        </script>
-        
+            <div id="music-player">
+                <audio id="bg-music" loop>
+                    <source src="Blue Archive OST 17. Irasshaimase.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <button id="music-toggle-btn" onclick="toggleMusic()">Play Music</button>
+                <p id="message"></p> <!-- Added a message container -->
+            </div>
+            
+            <style>
+                /* Music Player Container */
+                #music-player {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 20px auto;
+                    padding: 15px;
+                    max-width: 300px;
+                    background-color: #f9f9f9;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    font-family: Arial, sans-serif;
+                }
+            
+                /* Styling the Audio Element */
+                #bg-music {
+                    width: 100%;
+                    margin-bottom: 15px;
+                }
+            
+                /* Styling the Play/Pause Button */
+                #music-toggle-btn {
+                    background-color: #007BFF;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: background-color 0.3s, transform 0.2s;
+                }
+            
+                /* Hover Effect for the Button */
+                #music-toggle-btn:hover {
+                    background-color: #0056b3;
+                    transform: scale(1.05);
+                }
+            
+                /* Button Active State */
+                #music-toggle-btn:active {
+                    background-color: #004080;
+                    transform: scale(0.95);
+                }
+            
+                /* Styling for the Message */
+                #message {
+                    margin-top: 15px;
+                    font-size: 16px;
+                    color: #333;
+                    text-align: center;
+                }
+            </style>
+
+<style>
+    /* Music Animation Styles */
+    .music-animation {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .music-animation span {
+        display: inline-block;
+        width: 5px;
+        height: 20px;
+        margin: 0 2px;
+        background-color: #007BFF;
+        animation: pulse 1s infinite ease-in-out;
+    }
+
+    .music-animation span:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .music-animation span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .music-animation span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scaleY(1);
+        }
+        50% {
+            transform: scaleY(1.5);
+        }
+    }
+</style>
+
+<script>
+    const music = document.getElementById('bg-music');
+    const toggleButton = document.getElementById('music-toggle-btn');
+    const message = document.getElementById('message'); // Reference to the message container
+
+    function toggleMusic() {
+        if (music.paused) {
+            music.play();
+            toggleButton.textContent = "Pause Music";
+            message.innerHTML = `
+                Music is now playing. Enjoy the melody! <br>
+                Blue Archive OST 17. Irasshaimase 
+                <div class="music-animation">
+                    <span></span><span></span><span></span>
+                </div>`;
+        } else {
+            music.pause();
+            toggleButton.textContent = "Play Music";
+            message.innerHTML = `Music is paused. Take a break! <br> 
+                <a href="https://www.youtube.com/watch?v=jHSozMn7GgA&pp=ygUMaXJhc3NoYWltYXNl" target="_blank" style="color: blue; text-decoration: underline;">
+                    Original Blue Archive OST 17. Irasshaimase YouTube Video
+                </a>`;
+        }
+    }
+</script>
+    
         <div id="gif-container" style="display:none;">
             <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
         </div>
@@ -257,89 +289,9 @@
             <img src="IMG_3793.JPG" alt="Yuuka has coffee" class="image wiggle">
             <div class="text" style="color: cyan;">Yuuka is serving you coffee!</div>
         </div>
-
-        <p> <div style="color: cyan">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar". </style>
-            <div style="color: pink">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</style></p>
+        <p> <div style="color: pink">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</style></p>
     </div>
 </div>
-
-<section id="timeline">
-    <h2>Milestones</h2>
-    <ul>
-        <li><strong>2020:</strong> Debut event.</li>
-        <li><strong>2021:</strong> Won Best Character Award.</li>
-        <li><strong>2023:</strong> Featured in a major collaboration.</li>
-    </ul>
-</section>
-
-<style>
-    /* Styling the Timeline Section */
-    #timeline {
-        background-color: gray;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        max-width: 800px;
-        margin: 50px auto;
-        font-family: 'Arial', sans-serif;
-    }
-
-    /* Title styling */
-    #timeline h2 {
-        font-size: 28px;
-        text-align: center;
-        color: #333;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
-
-    /* Styling the unordered list */
-    #timeline ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    /* Styling the list items */
-    #timeline li {
-        font-size: 18px;
-        line-height: 1.6;
-        padding-left: 20px;
-        position: relative;
-        margin-bottom: 10px;
-    }
-
-    /* Adding a circle bullet with a vertical line */
-    #timeline li::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 10px;
-        height: 10px;
-        background-color: blueviolet;
-        border-radius: 50%;
-        border: 2px solid white;
-        z-index: 1;
-    }
-
-    /* Adding a vertical line to the left of the items */
-    #timeline li::after {
-        content: '';
-        position: absolute;
-        left: 4px;
-        top: 10px;
-        width: 2px;
-        height: 100%;
-        background-color: blueviolet;
-        z-index: 0;
-    }
-
-    /* Styling for the years */
-    #timeline li strong {
-        color: #007BFF;
-        font-weight: bold;
-    }
-</style>
 
 <div id="easter-egg" onclick="showSecret()" style="color: #8527dd;">Click me for a surprise!</div>
 <script>
