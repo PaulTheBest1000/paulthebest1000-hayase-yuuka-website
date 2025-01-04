@@ -349,76 +349,112 @@ h1 {
     transform: scale(1.05); /* Slightly zooms in */
 }
 
-/* General styling for the section */
-#fan-art {
-    background-color: lightgray; /* Light gray background */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 20px; /* Inner spacing */
-    max-width: 500px; /* Constrain width */
-    margin: 20px auto; /* Center the section */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    font-family: Arial, sans-serif; /* Clean font */
-}
-
-/* Styling for the section heading */
-#fan-art h2 {
-    text-align: center;
-    color: #333; /* Darker text */
-    margin-bottom: 15px;
-    font-size: 1.5em;
-}
-
-/* Form styling */
-#fan-art form {
+/* Music Player Container */
+#music-player {
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    gap: 15px; /* Space between form elements */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 300px;
+    background-color: lightgray;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
 }
 
-/* Label styling */
-#fan-art form label {
-    font-weight: bold;
-    color: #555; /* Medium-dark text */
+/* Styling the Audio Element */
+#bg-music {
+    width: 100%;
+    margin-bottom: 15px;
 }
 
-/* File input styling */
-#fan-art form input[type="file"] {
-    padding: 5px;
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 4px; /* Rounded edges */
-    font-size: 1em;
-}
-
-/* Button styling */
-#fan-art form button {
-    background-color: #007BFF; /* Blue button */
-    color: #fff; /* White text */
+/* Styling the Play/Pause Button */
+#music-toggle-btn {
+    background-color: #007BFF;
+    color: white;
     border: none;
-    border-radius: 4px;
-    padding: 10px;
-    font-size: 1em;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-/* Button hover effect */
-#fan-art form button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+/* Hover Effect for the Button */
+#music-toggle-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    #fan-art {
-        padding: 15px;
-    }
+/* Button Active State */
+#music-toggle-btn:active {
+    background-color: #004080;
+    transform: scale(0.95);
+}
 
-    #fan-art h2 {
-        font-size: 1.2em;
-    }
+/* Styling for the Message */
+#message {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
 
-    #fan-art form button {
-        font-size: 0.9em;
-        padding: 8px;
+/* Style the progress bar */
+#progress-bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background-color: #ddd; /* Background of the progress bar */
+    appearance: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Style the progress bar's color (left side) */
+#progress-bar::-webkit-progress-value {
+    background-color: cyan; /* Color for the left side */
+    border-radius: 5px;
+}
+
+/* Mozilla Firefox */
+#progress-bar::-moz-progress-bar {
+    background-color: #4caf50;
+    border-radius: 5px;
+}
+
+/* Animation for music player */
+.music-animation {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.music-animation span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    margin: 0 4px;
+    border-radius: 50%;
+    background-color: #4caf50;
+    animation: bounce 0.6s ease-in-out infinite alternate;
+}
+
+.music-animation span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.music-animation span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-10px);
     }
 }

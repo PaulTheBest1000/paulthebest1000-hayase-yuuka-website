@@ -296,6 +296,61 @@ function endGame() {
       }, 500); // Wait for a moment before showing the final score
  }
 
+// Wait until the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const music = document.getElementById('bg-music');
+    const toggleButton = document.getElementById('music-toggle-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const timeDisplay = document.getElementById('time-display');
+    const message = document.getElementById('message');
+    
+    // Toggle the play/pause state of the music
+    function toggleMusic() {
+        if (music.paused) {
+            music.play();
+            toggleButton.textContent = "Pause Music";
+            message.innerHTML = `
+                Music is now playing. Enjoy the melody! <br>
+                Blue Archive OST 17. Irasshaimase 
+                <div class="music-animation">
+                    <span></span><span></span><span></span>
+                </div>`;
+        } else {
+            music.pause();
+            toggleButton.textContent = "Play Music";
+            message.innerHTML = `Music is paused. Take a break! <br> 
+                <a href="https://www.youtube.com/watch?v=jHSozMn7GgA&pp=ygUMaXJhc3NoYWltYXNl" target="_blank" style="color: blue; text-decoration: underline;">
+                    Original Blue Archive OST 17. Irasshaimase YouTube Video
+                </a>`;
+        }
+    }
+
+    // Update progress bar and time display as music plays
+    music.addEventListener('timeupdate', () => {
+        const progress = (music.currentTime / music.duration) * 100;
+        progressBar.value = progress || 0;
+
+        const currentTime = formatTime(music.currentTime);
+        const duration = formatTime(music.duration);
+        timeDisplay.textContent = `${currentTime} / ${duration}`;
+    });
+
+    // Seek music position when user moves the progress bar
+    progressBar.addEventListener('input', () => {
+        const seekTime = (progressBar.value / 100) * music.duration;
+        music.currentTime = seekTime;
+    });
+
+    // Format time in minutes and seconds
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    // Attach the toggleMusic function to the button click event
+    toggleButton.addEventListener('click', toggleMusic);
+});
 
 function showMessage() {
     alert('WE LOVE HAYASE YUUKA!!!'); // Show alert with the message
