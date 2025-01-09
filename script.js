@@ -319,8 +319,8 @@ document.addEventListener('DOMContentLoaded', function() {
             music.pause();
             toggleButton.textContent = "Play Music";
             message.innerHTML = `Music is paused. Take a break! <br> 
-                <a href="https://www.youtube.com/watch?v=jHSozMn7GgA&pp=ygUMaXJhc3NoYWltYXNl" target="_blank" style="color: blue; text-decoration: underline;">
-                    Original Blue Archive OST 17. Irasshaimase YouTube Video
+                <a href="(https://www.youtube.com/watch?v=jHSozMn7GgA&pp=ygUMaXJhc3NoYWltYXNl)" target="_blank" style="color: blue; text-decoration: underline;">
+                    [Original Blue Archive OST 17. Irasshaimase YouTube Video]
                 </a>`;
         }
     }
