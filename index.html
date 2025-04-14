@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hayase Yuuka Website</title>
@@ -34,14 +35,6 @@
 
 </head>
 <body>
-
-    <!-- Time and Calendar Container with an additional button and audio player -->
-    <div id="time-calendar-container">
-        <div id="time">Loading time...</div>
-        <div id="calendar">Loading calendar...</div>
-        <button id="open-modal-btn" class="quiz-btn" onclick="startQuiz()">Start Yuuka Quiz</button>
-    </div>
-
     <!-- Modal (Popup) -->
     <div id="quiz-modal" class="modal">
         <div class="modal-content">
@@ -65,12 +58,34 @@
         </div>
     </div>
 
+    <!-- Time and Calendar with additional buttons and audio player with Sidebar menu -->
+    <header class="header">
+        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+        <nav>
+          <ul class="menu" id="nav-menu">
+            <li>
+              <a href="hayase-yuuka-photos.html"><i class="fa fa-camera"></i> All Hayase Yuuka Photos</a>
+            </li>
+
+            <li>
+              <a href="index.html"><i class="fa fa-home"></i> Home</a>
+            </li>
+      
+            <li>
+              <a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a>
+            </li>
+          </ul>
+        </nav>
+      </header>      
+
     <!-- Main Content Section -->
-    <div class="container">
+      <div id="score-message-container" style="text-align: center; padding-top: 20px;"></div>
 
-        <div id="score-message-container" style="text-align: center; padding-top: 20px;"></div>
+      <div class="container">
+        <div id="time">Loading time...</div>
+        <div id="calendar">Loading calendar...</div>
+        <button id="open-modal-btn" class="quiz-btn" onclick="startQuiz()">Start Yuuka Quiz</button>
 
-        <section id="profile">
         <h2>Welcome to My Hayase Yuuka Website!</h2>
         <p class="paragraph-1">This is my second website using VS Code.</p>
         <p> <div style="color: cyan">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar". </style></p>

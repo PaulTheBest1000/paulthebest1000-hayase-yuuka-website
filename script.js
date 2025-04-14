@@ -364,3 +364,53 @@ function showMessage() {
         gifContainer.style.display = 'none';  // Hide the GIF container
     }, 5000); // 5000ms = 5 seconds
 }
+
+// Example: Highlight the active menu item on click
+document.querySelectorAll('.menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.menu a.active')?.classList.remove('active');
+        link.classList.add('active');
+    });
+});
+
+document.querySelectorAll('.menu li').forEach(item => {
+    item.addEventListener('click', () => {
+        const dropdown = item.querySelector('.dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('open');
+        }
+    });
+});
+
+// Toggle menu visibility on mobile
+const menuToggle = document.querySelector('.menu-toggle');
+const menu = document.querySelector('.menu');
+
+menuToggle.addEventListener('click', () => {
+    menu.classList.toggle('active');
+});
+
+
+// Handle Dropdown in Mobile
+document.querySelectorAll('.menu li').forEach(item => {
+    item.addEventListener('click', () => {
+        const dropdown = item.querySelector('.dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('open');
+            item.classList.toggle('active');
+        }
+    });
+});
+
+function setGridView() {
+    const container = document.querySelector('.media-container');
+    container.classList.remove('list-view');
+    container.classList.add('grid-view');
+  }
+
+  function setListView() {
+    const container = document.querySelector('.media-container');
+    container.classList.remove('grid-view');
+    container.classList.add('list-view');
+  }
+  
