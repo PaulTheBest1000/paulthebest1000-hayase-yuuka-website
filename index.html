@@ -35,28 +35,35 @@
 
 </head>
 <body>
-    <!-- Modal (Popup) -->
     <div id="quiz-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="close-modal-btn">&times;</span>
             <h1>Yuuka Quiz Game</h1>
+    
             <div id="question-container">
                 <p id="question">Who is Hayase Yuuka?</p>
             </div>
+    
             <div id="answers-container">
                 <button class="answer" onclick="checkAnswer('Treasurer of Seminar')">Treasurer of Seminar</button>
                 <button class="answer" onclick="checkAnswer('100KG')">100KG</button>
                 <button class="answer" onclick="checkAnswer('I Do not know')">I Do not know</button>
                 <button class="answer" onclick="checkAnswer('Strict financial girl')">Strict financial girl</button>
             </div>
+    
             <div id="score-container">
                 <p id="score">Score: 0</p>
             </div>
+    
             <div id="timer-container">
                 <p id="quiz-timer">Time Left: 00:00</p>
-            </div>        
+            </div>
+    
+            <!-- ✨ This is where the end game message and GIF will go -->
+            <div id="score-message-container"></div>
         </div>
     </div>
+    
 
     <!-- Time and Calendar with additional buttons and audio player with Sidebar menu -->
     <header class="header">
@@ -74,14 +81,20 @@
             <li>
               <a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a>
             </li>
+
+            <li>
+                <a href="quiz-leaderboard.html"><i class="fa fa-trophy"></i> Leaderboard For Hayase Yuuka Quiz</a>
+            </li>
           </ul>
         </nav>
       </header>      
 
     <!-- Main Content Section -->
-      <div id="score-message-container" style="text-align: center; padding-top: 20px;"></div>
-
       <div class="container">
+      <div id="gif-container" style="display:none;">
+      <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
+      </div>            
+
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
         <button id="open-modal-btn" class="quiz-btn" onclick="startQuiz()">Start Yuuka Quiz</button>
@@ -103,10 +116,6 @@
                 <span id="time-display">0:00 / 0:00</span>
                 <div id="message"></div> <!-- Container for custom messages -->
             </div>
-            
-        <div id="gif-container" style="display:none;">
-            <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
-        </div>
 
         <div class="img-responsive image-container carousel">
     <div class="image-item">

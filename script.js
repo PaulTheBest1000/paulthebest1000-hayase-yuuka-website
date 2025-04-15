@@ -78,12 +78,13 @@ setInterval(updateCalendar, 60000); // Update calendar every minute (60000 ms)
 updateTime();
 updateCalendar();
 
-// Initialize score and question index
+// Initialize score and question index 
 let currentScore = 0;
 let currentQuestionIndex = 0;
 
 // Set the duration of the quiz in seconds (e.g., 5 minutes = 300 seconds)
 let quizDuration = 300; // You can change this to any number of seconds
+let timer;
 let timerElement = document.getElementById('quiz-timer');
 
 // Function to format time into MM:SS
@@ -93,25 +94,23 @@ function formatTime(seconds) {
     return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
 }
 
-// Update the timer every second
-let countdown = setInterval(() => {
-    if (quizDuration <= 0) {
-        clearInterval(countdown);
-        timerElement.textContent = "Time's up!";
-        // Add any action to be taken when the timer runs out, e.g., submit the quiz
-    } else {
-        timerElement.textContent = `Time Left: ${formatTime(quizDuration)}`;
-        quizDuration--;
-    }
-}, 1000);
+// Start the countdown
+function startCountdown() {
+    clearInterval(timer); // Make sure no previous timer is running
+    timer = setInterval(() => {
+        if (quizDuration <= 0) {
+            clearInterval(timer);
+            timerElement.textContent = "Time's up!";
+            endGame();
+        } else {
+            timerElement.textContent = `Time Left: ${formatTime(quizDuration)}`;
+            quizDuration--;
+        }
+    }, 1000);
+}
 
 // Array of questions
 const questions = [
-    {
-        question: "Hayase Yuuka is-",
-        correctAnswer: "Treasurer of Seminar",
-        options: ["Treasurer of Seminar", "100KG", "I do not know", "Strict financial girl", "Cute girl"]
-    },
     {
         question: "Why do we love Yuuka?",
         correctAnswer: "Because she's cute",
@@ -123,11 +122,92 @@ const questions = [
         options: ["No", "Maybe", "Yes"]
     },
     {
-        question: "Yuuka is actually 100KG!",
-        correctAnswer: "False",
-        options: ["True", "False"]
+        question: "Yuuka is #1!",
+        correctAnswer: "I Agree",
+        options: ["I Refuse", "I Agree"]
     },
+    {
+        question: "What is Yuuka’s personality like?",
+        correctAnswer: "Strict and organized",
+        options: ["Strict and organized", "Playful and silly", "Shy and quiet", "Wild and unpredictable", "Cool and aloof"]
+    },
+    {
+        question: "What does Yuuka usually carry with her?",
+        correctAnswer: "A calculator",
+        options: ["A calculator", "A plushie", "A water bottle", "A phone", "A sandwich"]
+    },
+    {
+        question: "How does Yuuka react to compliments?",
+        correctAnswer: "Blushes and gets flustered",
+        options: ["Blushes and gets flustered", "Says 'Thank you!' proudly", "Ignores them", "Denies them awkwardly", "Writes them down"]
+    },
+    {
+        question: "What is Yuuka’s hair color?",
+        correctAnswer: "Blue",
+        options: ["Blue", "Pink", "Black", "White", "Red"]
+    },
+    {
+        question: "What is Yuuka most likely to say?",
+        correctAnswer: "That’s not in the plan!",
+        options: ["I’m watching the budget.", "That’s not in the plan!", "Why is everyone like this…", "Stay focused!", "Cute things are a distraction!"]
+    },
+    {
+        question: "How heavy is Yuuka according to memes?",
+        correctAnswer: "100KG",
+        options: ["45KG", "100KG", "69KG", "90KG", "0KG"]
+    },
+    {
+        question: "Yuuka’s favorite way to relax is probably:",
+        correctAnswer: "Organizing her things",
+        options: ["Organizing her things", "Drinking tea quietly", "Playing mobile games", "Watching anime", "Cuddling a plushie"]
+    },
+    {
+        question: "Yuuka secretly likes:",
+        correctAnswer: "Cute stuff",
+        options: ["Cute stuff", "Loud music", "Horror movies", "Being praised", "Oversleeping"]
+    }
 ];
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+questions.forEach(question => shuffleArray(question.options));
+
+let leaderboard = [];
+
+function checkAnswers(userAnswers) {
+    let score = 0;
+    questions.forEach((question, index) => {
+        if (userAnswers[index] === question.correctAnswer) {
+            score++;
+        }
+    });
+    return score;
+}
+
+function updateLeaderboard(name, score) {
+    leaderboard.push({ name, score });
+    leaderboard.sort((a, b) => b.score - a.score);
+    leaderboard = leaderboard.slice(0, 5);
+    displayLeaderboard();
+}
+
+function displayLeaderboard() {
+    console.log("Leaderboard:");
+    leaderboard.forEach((entry, index) => {
+        console.log(`${index + 1}. ${entry.name}: ${entry.score} points`);
+    });
+}
+
+function runQuiz(userName, userAnswers) {
+    const userScore = checkAnswers(userAnswers);
+    updateLeaderboard(userName, userScore);
+    alert(`${userName}, your score is: ${userScore} out of ${questions.length}`);
+}
 
 // Get modal elements
 const modal = document.getElementById("quiz-modal");
@@ -137,21 +217,24 @@ const scoreContainer = document.getElementById("score-container");
 const scoreText = document.getElementById("score");
 
 // Open the modal when the user clicks the "Start Quiz" button
-openModalBtn.onclick = function() {
-    resetGame();  // Reset the game when the button is clicked
-    modal.style.display = "block"; // Show the modal
-    loadQuestion();  // Load the first question
+openModalBtn.onclick = function () {
+    resetGame();
+    modal.style.display = "block";
+    startCountdown();
+    loadQuestion();
 };
 
 // Close the modal when the user clicks the "X" button
-closeModalBtn.onclick = function() {
-    modal.style.display = "none"; // Hide the modal
+closeModalBtn.onclick = function () {
+    modal.style.display = "none";
+    clearInterval(timer);
 };
 
 // Close the modal if the user clicks anywhere outside of the modal content
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target === modal) {
-        modal.style.display = "none"; // Hide the modal
+        modal.style.display = "none";
+        clearInterval(timer);
     }
 };
 
@@ -159,9 +242,12 @@ window.onclick = function(event) {
 function resetGame() {
     currentScore = 0;
     currentQuestionIndex = 0;
-    scoreContainer.style.display = "block";  // Ensure the score container is visible
-    scoreText.textContent = "Score: 0"; // Reset score display
-    loadQuestion(); // Load the first question
+    quizDuration = 300; // Reset the timer
+    scoreContainer.style.display = "block";
+    scoreText.textContent = "Score: 0";
+    document.getElementById("quiz-timer").textContent = `Time Left: ${formatTime(quizDuration)}`;
+    const scoreMessageContainer = document.getElementById("score-message-container");
+    scoreMessageContainer.innerHTML = "";
 }
 
 // Load the current question
@@ -169,11 +255,10 @@ function loadQuestion() {
     if (currentQuestionIndex < questions.length) {
         const currentQuestion = questions[currentQuestionIndex];
         document.getElementById("question").textContent = currentQuestion.question;
-        
-        const answersContainer = document.getElementById("answers-container");
-        answersContainer.innerHTML = ""; // Clear previous answers
 
-        // Create the answer buttons
+        const answersContainer = document.getElementById("answers-container");
+        answersContainer.innerHTML = "";
+
         currentQuestion.options.forEach(option => {
             const button = document.createElement("button");
             button.classList.add("answer");
@@ -189,8 +274,6 @@ function loadQuestion() {
 // Check if the selected answer is correct
 function checkAnswer(selectedAnswer) {
     const currentQuestion = questions[currentQuestionIndex];
-    
-    // Array of fun facts
     const funFacts = [
         "Yuuka is known for her strict financial habits!",
         "Did you know Yuuka has been a treasurer for 3 years?",
@@ -199,102 +282,161 @@ function checkAnswer(selectedAnswer) {
         "She once balanced a seminar's budget perfectly without external help!"
     ];
 
-    // Get sound elements
     const correctSound = document.getElementById('correct-sound');
     const wrongSound = document.getElementById('wrong-sound');
-    
-    // Function to show a random fun fact
+
     function showFunFact() {
         const fact = funFacts[Math.floor(Math.random() * funFacts.length)];
         alert(`Fun Fact: ${fact}`);
     }
 
-    // Display feedback and update score if correct
     if (selectedAnswer === currentQuestion.correctAnswer) {
-        currentScore += 25; // Add 25 points for a correct answer
-        correctSound.play(); // Play correct sound
-        alert("Correct! You earned 25 points.");
-        showFunFact(); // Show fun fact for correct answers
+        currentScore += 150;
+        correctSound.play();
+        alert("Correct! You earned 150 points.");
+        showFunFact();
     } else {
-        wrongSound.play(); // Play wrong sound
+        wrongSound.play();
         alert("Incorrect! You earned no points.");
-        showFunFact(); // Show fun fact for wrong answers
+        showFunFact();
     }
-    
-    // Update the score display
+
     scoreText.textContent = "Score: " + currentScore;
-
-    // Move to the next question
     currentQuestionIndex++;
-
-    // Load the next question or end the game
     loadQuestion();
 }
 
 // End the game and display the final score with a message and image
 function endGame() {
-    let message = ""; // Initialize a message variable
-    let imageSrc = ""; // Initialize a variable for the image source
+    clearInterval(timer);
 
-    // Determine the message and image based on the final score
+    let message = "";
+    let imageSrc = "";
+
     if (currentScore === 0) {
         message = "Yuuka is angry because you failed!";
-        imageSrc = "IMG_2432.GIF"; // Image for 0 points
-    } else if (currentScore === 25) {
+        imageSrc = "IMG_2432.GIF";
+    } else if (currentScore === 150) {
         message = "Yuuka is peeking and leaving because you almost failed!";
-        imageSrc = "IMG_2490.GIF"; // Image for 25 points
-    } else if (currentScore === 50) {
-        message = "Wow you tried! As a reward, Yuuka will encourage you to make it to 100 points!";
-        imageSrc = "IMG_2487.GIF"; // Image for 50 points
-    } else if (currentScore === 75) {
-        message = "You're so close! Yuuka is peeking at your progress!";
-        imageSrc = "IMG_3624.GIF"; // Image for 75 points
-    } else if (currentScore === 100) {
+        imageSrc = "IMG_2490.GIF";
+    } else if (currentScore === 300) {
+        message = "Wow you tried! As a reward, Yuuka will encourage you to make it to 450 points!";
+        imageSrc = "IMG_2487.GIF";
+    } else if (currentScore === 450) {
+        message = "You're getting there! Yuuka is peeking at your progress!";
+        imageSrc = "IMG_3624.GIF";
+    } else if (currentScore === 600) {
+        message = "You're halfway there! Yuuka is starting to notice you!";
+        imageSrc = "IMG_3611.GIF";
+    } else if (currentScore === 750) {
+        message = "Yuuka is impressed! Keep going!";
+        imageSrc = "IMG_3615.GIF";
+    } else if (currentScore === 900) {
+        message = "So close! Yuuka is cheering you on now!";
+        imageSrc = "IMG_3588.GIF";
+    } else if (currentScore === 1050) {
+        message = "You're doing great! Yuuka is quietly smiling!";
+        imageSrc = "IMG_3560.GIF";
+    } else if (currentScore === 1200) {
+        message = "Wow! Yuuka is really proud of you now!";
+        imageSrc = "IMG_3543.GIF";
+    } else if (currentScore === 1350) {
+        message = "Almost perfect! Yuuka is blushing with joy!";
+        imageSrc = "IMG_3522.GIF";
+    } else if (currentScore === 1500) {
+        message = "Incredible! One question away from perfection!";
+        imageSrc = "IMG_3466.GIF";
+    } else if (currentScore === 1650) {
         message = "Amazing! You got a perfect score and Yuuka is happy!";
-        imageSrc = "IMG_3442.GIF"; // Image for 100 points
+        imageSrc = "IMG_3442.GIF";
     }
 
-    // Update the score text
+    console.log(`Message: ${message}, GIF: ${imageSrc}`);
+
     scoreText.textContent = "Final Score: " + currentScore;
 
-    // Create an img element to display the image
-    const imageElement = document.createElement("img");
-    imageElement.src = imageSrc; // Set the image source based on the score
-    imageElement.alt = "Score Image"; // Set an alt attribute for accessibility
-    imageElement.style.width = "100%"; // Make the image responsive on mobile
-    imageElement.style.maxWidth = "500px"; // Limit the image width on larger screens
-    imageElement.style.height = "auto"; // Maintain aspect ratio
-
-    // Display the alert with the final score and the message
     setTimeout(() => {
         alert("Game Over! Your final score is: " + currentScore + "\n" + message);
 
-        // Append the image and message to a specific container 
         const scoreMessageContainer = document.getElementById("score-message-container");
+        scoreMessageContainer.innerHTML = "";
 
-        // Make the message 25% smaller by reducing font size
-        scoreMessageContainer.innerHTML = `<p style="text-align: center; font-size: 13.5px; padding: 10px;">${message}</p>`; // 25% smaller font size
+        const messageElement = document.createElement("p");
+        messageElement.textContent = message;
 
-        // Make the image 25% smaller by scaling width
-        imageElement.style.width = '75%'; // Scale the image to 75% of its original size
-        imageElement.style.height = 'auto'; // Maintain aspect ratio
+        const imageElement = document.createElement("img");
+        imageElement.src = imageSrc;
+        imageElement.alt = "Score Image";
 
-        // Append the image to the container
-        scoreMessageContainer.appendChild(imageElement); // Add the image
+        scoreMessageContainer.appendChild(messageElement);
+        scoreMessageContainer.appendChild(imageElement);
 
-        // Set a timeout to hide the image and message after 10 seconds (10000 ms)
+        // Create an input field for the player's name
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Enter your name";
+        scoreMessageContainer.appendChild(nameInput);
+
+        // Create a submit button for the name
+        const submitButton = document.createElement("button");
+        submitButton.textContent = "Submit";
+        scoreMessageContainer.appendChild(submitButton);
+
+// Handle the submit button click
+submitButton.onclick = function () {
+    const playerName = nameInput.value.trim();
+    if (playerName) {
+        // Disable input and button to prevent resubmission
+        nameInput.disabled = true;
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitted";
+
+        // Update the leaderboard
+        updateLeaderboard(playerName, currentScore);
+        alert(`Thank you for playing, ${playerName}! Your score has been saved.`);
+        displayLeaderboard(); // Optional - if you have this function
+
+        // Optional: Show thank-you message and close modal
         setTimeout(() => {
-            scoreMessageContainer.innerHTML = ""; // Clear the container
-            // Optionally, add a message like "Proceeding to the next step..." or similar
-            scoreMessageContainer.innerHTML = "<p>Thank you for playing the Yuuka quiz</p>";
-        }, 10000); // 10000 ms = 10 seconds (this can be adjusted)
+            scoreMessageContainer.innerHTML = "<p>Thank you for playing the Yuuka quiz!</p>";
+        }, 5000);
 
-      // Close the modal after a short delay
-       setTimeout(() => {
-         modal.style.display = "none"; // Close the modal after the timeout
-        }, 2500); // Wait for 2.5 seconds to give time for the image and message to be shown
-      }, 500); // Wait for a moment before showing the final score
- }
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 10000);
+
+        // Optional: Redirect to leaderboard page after 3 seconds
+        setTimeout(() => {
+            window.location.href = "leaderboard.html";
+        }, 3000);
+    } else {
+        alert("Please enter a name.");
+    }
+};        
+        
+    }, 500);
+}
+
+// Function to update the leaderboard and save scores
+function updateLeaderboard(name, score) {
+    let storedData = JSON.parse(localStorage.getItem("yuukaLeaderboard")) || [];
+    storedData.push({ name, score });
+    storedData.sort((a, b) => b.score - a.score);
+    storedData = storedData.slice(0, 10); // Keep top 10
+    localStorage.setItem("yuukaLeaderboard", JSON.stringify(storedData));
+}
+
+// Function to display the leaderboard
+function displayLeaderboard() {
+    const leaderboardList = document.getElementById('leaderboardList');
+    leaderboardList.innerHTML = ''; // Clear existing entries
+
+    leaderboard.forEach((entry, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${entry.name}: ${entry.score}`;
+        leaderboardList.appendChild(listItem);
+    });
+}
 
 // Wait until the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -414,3 +556,16 @@ function setGridView() {
     container.classList.add('list-view');
   }
   
+  const leaderboardDiv = document.getElementById("leaderboard");
+  const storedData = JSON.parse(localStorage.getItem("yuukaLeaderboard")) || [];
+
+  if (storedData.length === 0) {
+    leaderboardDiv.innerHTML = "<p>No scores yet. Play the quiz first!</p>";
+  } else {
+    storedData.forEach((entry, index) => {
+      const div = document.createElement("div");
+      div.className = "entry";
+      div.textContent = `${index + 1}. ${entry.name} - ${entry.score} pts`;
+      leaderboardDiv.appendChild(div);
+    });
+  }

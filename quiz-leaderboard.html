@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuuka Quiz Leaderboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="IMG_3446.ico" type="image/x-icon">
+    <style>
+  .leaderboard {
+    margin-top: 20px;
+    background: gray;
+    padding: 1em;
+    border-radius: 10px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .entry {
+    padding: 0.5em 0;
+    border-bottom: 1px solid #ccc;
+  }
+  .entry:last-child {
+    border-bottom: none;
+  }
+  .home-button {
+    margin-top: 2em;
+    padding: 10px 20px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  .home-button:hover {
+    background: #1976D2;
+  }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+        <nav>
+          <ul class="menu" id="nav-menu">
+            <li>
+              <a href="hayase-yuuka-photos.html"><i class="fa fa-camera"></i> All Hayase Yuuka Photos</a>
+            </li>
+
+            <li>
+              <a href="index.html"><i class="fa fa-home"></i> Home</a>
+            </li>
+      
+            <li>
+              <a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a>
+            </li>
+
+            <li>
+                <a href="quiz-leaderboard.html"><i class="fa fa-trophy"></i> Leaderboard For Hayase Yuuka Quiz</a>
+            </li>
+          </ul>
+        </nav>
+      </header> 
+
+      <div class="container">
+      <h2>Yuuka Quiz Leaderboard</h2>
+      <div class="leaderboard" id="leaderboard"></div>
+      </div>
+
+   <script src="script.js"></script>
+</body>
+</html>
