@@ -438,6 +438,12 @@ function displayLeaderboard() {
     });
 }
 
+window.addEventListener("DOMContentLoaded", () => {
+    if (window.location.pathname.endsWith("leaderboard.html")) {
+        displayLeaderboard();
+    }
+});
+
 // Wait until the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     const music = document.getElementById('bg-music');
