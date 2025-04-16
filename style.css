@@ -7,13 +7,14 @@
 
 /* Body styling */
 body {
+    margin: 0;
     font-family: 'Poppins', sans-serif;
     background-color: blueviolet;
     text-align: center;
     padding: 20px;
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;  /* Align items horizontally in the center */
+    align-items: center;  /* Align items vertically in the center */
     flex-direction: column; /* Stack items vertically */
     min-height: 100vh;
     font-size: 16px;
@@ -121,49 +122,61 @@ p {
     width: 100%;
     z-index: 1000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Menu styling */
-  .menu {
+}
+
+/* Main container styling */
+.container {
+    margin-top: 80px; /* Shift content down to avoid header overlap */
+}
+
+/* Menu styling */
+.menu {
     display: flex;
+    flex-direction: row;
     gap: 25px;
     list-style: none;
-  }
-  
-  .menu li {
+    margin: 0;
+    padding: 0;
+}
+
+.menu-toggle {
     position: relative;
-  }
-  
-  .menu a {
+    z-index: 1000;  /* Make sure the button is above other elements */
+}
+
+.menu li {
+    position: relative;
+    margin: 0 10px;
+}
+
+.menu a {
     text-decoration: none;
     color: white;
     padding: 8px 12px;
     font-size: 16px;
     border-radius: 6px;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
-  }
-  
-  .menu a:hover {
+}
+
+.menu a:hover {
     background-color: cyan;
     color: #222;
     transform: scale(1.05);
-  }
-  
-  /* Active link effect */
-  .menu a.active {
+}
+
+/* Active link */
+.menu a.active {
     background-color: cyan;
     color: #222;
     font-weight: bold;
-  }
-  
+}
 
-  /* Dropdown wrapper */
+/* Dropdown styles */
 .dropdown {
     position: relative;
-  }
-  
-  /* Hidden dropdown menu */
-  .dropdown-menu {
+}
+
+.dropdown-menu {
     display: none;
     position: absolute;
     top: 100%;
@@ -175,48 +188,79 @@ p {
     padding: 8px 0;
     z-index: 999;
     flex-direction: column;
-  }
-  
-  .dropdown-menu li {
+}
+
+.dropdown-menu li {
     padding: 0;
     margin: 0;
-  }
-  
-  .dropdown-menu a {
+}
+
+.dropdown-menu a {
     display: block;
     padding: 10px 15px;
     color: white;
     text-align: left;
     font-size: 15px;
-  }
-  
-  .dropdown-menu a:hover {
+}
+
+.dropdown-menu a:hover {
     background-color: cyan;
     color: #222;
-  }
-  
-  /* Show dropdown on hover for desktop */
-  .dropdown:hover .dropdown-menu {
-    display: flex;
-  }
-  
-  /* Mobile: dropdown open class */
-  @media (max-width: 768px) {
-    .dropdown-menu {
-      position: relative;
-      top: auto;
-      left: auto;
-      width: 100%;
-      display: none;
-      box-shadow: none;
-      background-color: #333;
-    }
-  
-    .dropdown.open .dropdown-menu {
-      display: flex;
-    }
-  }
+}
 
+/* Show dropdown on hover for desktop */
+.dropdown:hover .dropdown-menu {
+    display: flex;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .menu {
+        display: none;
+        flex-direction: column;
+        background-color: #222;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        border-top: 1px solid #444;
+        padding: 10px;
+    }
+
+    .menu.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+    }
+
+    .dropdown-menu {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .dropdown.open .dropdown-menu {
+        display: flex;
+    }
+}
+
+/* Hide menu toggle on desktop */
+@media (min-width: 769px) {
+    .menu-toggle {
+        display: none;
+    }
+}
+
+/* Media Container Styles */
   .media-container {
     display: grid;
     gap: 1rem;
@@ -636,3 +680,121 @@ h1 {
     height: auto;
     display: block;
   }
+
+/* Container styling */
+#game-container,
+#results-container {
+    text-align: center;
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+button#easy-btn {
+    background-color: green;
+    color: white;
+}
+
+button#normal-btn {
+    background-color: yellow;
+    color: black;
+}
+
+button#hard-btn {
+    background-color: red;
+    color: white;
+}
+
+/* Game grid */
+#game-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Cells */
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: brown;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+/* Mole appearance */
+.cell.mole {
+    background-image: url('IMG_6281.JPG'); /* Replace with your actual mole image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.cell.bad-mole {
+    background-image: url('IMG_4161.JPG'); /* Choose a different image to represent the 'bad' mole */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Game results section */
+#game-result {
+    display: none;
+    margin-top: 20px;
+}
+
+#result-image {
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+}
+
+/* Results gallery */
+#results {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.result-item {
+    padding: 10px;
+    border: 2px solid #ccc;
+    background-color: white;
+    text-align: center;
+}
+
+.result-item img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+#player-name {
+    padding: 8px;
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+#timer {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#download-btn {
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+}

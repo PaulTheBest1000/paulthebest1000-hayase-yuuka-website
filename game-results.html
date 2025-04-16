@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hayase Yuuka Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
+    <style>
+      .gallery-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 20px;
+      }
+
+      .gallery-item {
+          background: #fff;
+          border: 1px solid #ccc;
+          padding: 10px;
+          width: 300px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      }
+
+      .gallery-item img {
+          max-width: 100%;
+          height: auto;
+      }
+
+      .details {
+          margin-top: 10px;
+          font-size: 14px;
+          color: #333;
+      }
+      
+      .filters {
+          margin-bottom: 20px;
+      }
+
+      select {
+          padding: 5px 10px;
+      }
+
+      #clearGalleryBtn {
+          display: none;
+          background-color: #e74c3c;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          font-size: 16px;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+      }
+
+      #clearGalleryBtn:hover {
+          background-color: #c0392b;
+      }
+
+      #clearGalleryBtn:focus {
+          outline: none;
+      }
+    </style>
+</head>
+<body>
+  <header class="header">
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <nav>
+      <ul class="menu" id="nav-menu">
+        <li><a href="hayase-yuuka-photos.html"><i class="fa fa-camera"></i> All Hayase Yuuka Photos</a></li>
+        <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a></li>
+        <li><a href="game-results.html"><i class="fa fa-trophy"></i> Results For Hayase Yuuka Game</a></li>
+        <li><a href="wack-a-yuuka-weasel.html"><i class="fa fa-gamepad"></i> Play Whack A Hayase Yuuka Weasel</a></li>
+      </ul>
+    </nav>
+  </header> 
+
+  <div class="container">
+    <h2>Yuuka Games Gallery</h2>
+    <div id="time">Loading time...</div>
+    <div id="calendar">Loading calendar...</div>
+    <div class="filters">
+        <label for="sortBy">Sort By: </label>
+        <select id="sortBy">
+            <option value="score">Top Scores</option>
+            <option value="date">Date</option>
+        </select>
+    </div>
+    <div class="gallery-container" id="gallery-container">
+        <!-- Gallery items will be dynamically inserted here -->
+    </div>
+    <div class="view-toggle">
+        <button id="clearGalleryBtn">Clear Gallery!</button>
+    </div>
+  </div>
+
+  <div id="results-container">
+    <h1>Game Results</h1>
+
+      <!-- Results Gallery -->
+      <div id="results"></div>
+</div>
+
+  <script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const galleryContainer = document.getElementById("gallery-container");
+    const sortBySelect = document.getElementById("sortBy");
+    const savedGallery = JSON.parse(localStorage.getItem("yuukaResultGallery")) || [];
+
+    const adminPassword = "YuukaLovesYouAlways!";
+    const clearGalleryBtn = document.getElementById("clearGalleryBtn");
+
+    clearGalleryBtn.style.display = "none";
+
+    document.addEventListener("keydown", (event) => {
+      if (event.ctrlKey && event.key === "Enter") {
+        const inputPassword = prompt("Enter the admin password to access the gallery settings:");
+        if (inputPassword === null) return;
+
+        if (inputPassword === adminPassword) {
+          clearGalleryBtn.style.display = "block";
+          clearGalleryBtn.addEventListener("click", () => {
+            const accessCode = prompt("Enter admin code to clear the gallery:");
+            if (accessCode === null) return;
+
+            if (accessCode === adminPassword) {
+              localStorage.removeItem("yuukaResultGallery");
+              alert("Gallery has been cleared.");
+              location.reload();
+            } else {
+              alert("Access denied. Incorrect admin code.");
+            }
+          });
+        }
+      }
+    });
+
+    function renderGallery(gallery) {
+      galleryContainer.innerHTML = "";
+
+      gallery.forEach((entry, index) => {
+        const item = document.createElement("div");
+        item.className = "gallery-item";
+
+        const img = document.createElement("img");
+        img.src = entry.image;
+        img.alt = `Result for ${entry.name}`;
+
+        const details = document.createElement("div");
+        details.className = "details";
+        details.innerHTML = `
+          <strong>${entry.name}</strong><br>
+          Score: ${entry.score}<br>
+          <em>${entry.timestamp}</em>
+        `;
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = entry.image;
+        downloadLink.download = `Yuuka_Quiz_Result_${entry.name}_${index + 1}.png`;
+        downloadLink.textContent = "⬇️ Download Image";
+        downloadLink.className = "download-link";
+
+        item.appendChild(img);
+        item.appendChild(details);
+        item.appendChild(downloadLink);
+        galleryContainer.appendChild(item);
+      });
+    }
+
+    function sortGallery() {
+      const sortBy = sortBySelect.value;
+      let sortedGallery;
+
+      if (sortBy === "score") {
+        sortedGallery = [...savedGallery].sort((a, b) => b.score - a.score);
+      } else {
+        sortedGallery = [...savedGallery].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      }
+
+      renderGallery(sortedGallery);
+    }
+
+    sortGallery();
+    sortBySelect.addEventListener("change", sortGallery);
+  });
+</script>
+
+  <script src="extra.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

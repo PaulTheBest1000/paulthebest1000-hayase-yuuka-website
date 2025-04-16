@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hayase Yuuka Website</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="IMG_3446.ico" type="image/x-icon">
-
-    <style>
-        #quiz-timer {
-            font-size: 30px;
-            font-weight: bold;
-        }
-    </style>
 
     <!-- Open Graph tags --> 
     <meta property="og:title" content="Hayase Yuuka Website" />
@@ -29,206 +22,204 @@
     <meta name="twitter:description" content="Hayase Yuuka from Blue Archive is my favorite!" />
     <meta property="twitter:image" content="https://raw.githubusercontent.com/PaulTheBest1000/paulthebest1000-hayase-yuuka-website/refs/heads/main/bandicam%202025-01-03%2018-10-11-073.jpg" />
     <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />
-
-    <audio id="correct-sound" src="correct.mp3"></audio>
-    <audio id="wrong-sound" src="wrong.mp3"></audio>
-
 </head>
 <body>
+    <!-- Header Section -->
+    <header class="header">
+        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+        <nav>
+          <ul class="menu" id="nav-menu">
+            <li><a href="hayase-yuuka-photos.html"><i class="fa fa-camera"></i> All Hayase Yuuka Photos</a></li>
+            <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a></li>
+            <li><a href="game-results.html"><i class="fa fa-trophy"></i> Results For Hayase Yuuka Games</a></li>
+            <li><a href="wack-a-yuuka-weasel.html"><i class="fa fa-gamepad"></i> Play Whack A Hayase Yuuka Weasel</a></li>
+          </ul>
+        </nav>
+      </header> 
+
+    <!-- Quiz Modal -->
     <div id="quiz-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="close-modal-btn">&times;</span>
             <h1>Yuuka Quiz Game</h1>
-    
             <div id="question-container">
                 <p id="question">Who is Hayase Yuuka?</p>
             </div>
-    
             <div id="answers-container">
                 <button class="answer" onclick="checkAnswer('Treasurer of Seminar')">Treasurer of Seminar</button>
                 <button class="answer" onclick="checkAnswer('100KG')">100KG</button>
                 <button class="answer" onclick="checkAnswer('I Do not know')">I Do not know</button>
                 <button class="answer" onclick="checkAnswer('Strict financial girl')">Strict financial girl</button>
             </div>
-    
             <div id="score-container">
                 <p id="score">Score: 0</p>
             </div>
-    
             <div id="timer-container">
                 <p id="quiz-timer">Time Left: 00:00</p>
             </div>
-    
-            <!-- ✨ This is where the end game message and GIF will go -->
             <div id="score-message-container"></div>
         </div>
     </div>
-    
 
-    <!-- Time and Calendar with additional buttons and audio player with Sidebar menu -->
-    <header class="header">
-        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
-        <nav>
-          <ul class="menu" id="nav-menu">
-            <li>
-              <a href="hayase-yuuka-photos.html"><i class="fa fa-camera"></i> All Hayase Yuuka Photos</a>
-            </li>
-
-            <li>
-              <a href="index.html"><i class="fa fa-home"></i> Home</a>
-            </li>
-      
-            <li>
-              <a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a>
-            </li>
-
-            <li>
-                <a href="quiz-leaderboard.html"><i class="fa fa-trophy"></i> Leaderboard For Hayase Yuuka Quiz</a>
-            </li>
-          </ul>
-        </nav>
-      </header>      
+    <!-- Background Music -->
+    <audio id="correct-sound" src="correct.mp3"></audio>
+    <audio id="wrong-sound" src="wrong.mp3"></audio>
 
     <!-- Main Content Section -->
-      <div class="container">
-      <div id="gif-container" style="display:none;">
-      <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
-      </div>            
+    <div class="container">
+        <div id="gif-container" style="display:none;">
+            <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
+        </div>
 
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
         <button id="open-modal-btn" class="quiz-btn" onclick="startQuiz()">Start Yuuka Quiz</button>
+        <div class="view-toggle">
 
         <h2>Welcome to My Hayase Yuuka Website!</h2>
         <p class="paragraph-1">This is my second website using VS Code.</p>
-        <p> <div style="color: cyan">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar". </style></p>
+        <p style="color: cyan;">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar".</p>
 
-            <p>If you love Hayase Yuuka, click the button below:</p>
-            <button class="button" onclick="showMessage()">Click Me!</button>
+        <p>If you love Hayase Yuuka, click the button below:</p>
+        <button class="button" onclick="showMessage()">Click Me!</button>
 
-            <div id="music-player">
-                <audio id="bg-music" loop>
-                    <source src="Blue Archive OST 17. Irasshaimase.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-                <button id="music-toggle-btn">Play Music</button>
-                <progress id="progress-bar" value="0" max="100"></progress>
-                <span id="time-display">0:00 / 0:00</span>
-                <div id="message"></div> <!-- Container for custom messages -->
-            </div>
+        <div id="music-player">
+            <audio id="bg-music" loop>
+                <source src="Blue Archive OST 17. Irasshaimase.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <button id="music-toggle-btn">Play Music</button>
+            <progress id="progress-bar" value="0" max="100"></progress>
+            <span id="time-display">0:00 / 0:00</span>
+            <div id="message"></div>
+        </div>
 
+        
         <div class="img-responsive image-container carousel">
-    <div class="image-item">
-        <img src="IMG_3441.GIF" alt="Nice Yuuka" class="image wiggle">
-        <div class="text" style="color: cyan;">This is Yuuka from Blue Archive!</div>
-    </div>
-    <div class="image-item">
-        <img src="IMG_2490.GIF" alt="Peeking Yuuka" class="image zoom">
-        <div class="text" style="color: violet;">Yuuka is peeking around and leaving!</div>
-    </div>
-    <div class="image-item">
-        <img src="IMG_3794.JPG" alt="Cute Yuuka" class="image wiggle">
-        <div class="text" style="color: violet;">Yuuka is so cute!</div>
-    </div>
+            <div class="image-item">
+                <img src="IMG_3441.GIF" alt="Nice Yuuka" class="image wiggle">
+                <div class="text" style="color: cyan;">This is Yuuka from Blue Archive!</div>
+            </div>
+            <div class="image-item">
+                <img src="IMG_2490.GIF" alt="Peeking Yuuka" class="image zoom">
+                <div class="text" style="color: violet;">Yuuka is peeking around and leaving!</div>
+            </div>
+            <div class="image-item">
+                <img src="IMG_3794.JPG" alt="Cute Yuuka" class="image wiggle">
+                <div class="text" style="color: violet;">Yuuka is so cute!</div>
+            </div>
+        </div>
+
+        <script>
+            const images = document.querySelectorAll('.carousel .image-item');
+            let index = 0;
+        
+            // Initially display only the first image
+            images.forEach((item, i) => {
+                item.style.display = i === 0 ? 'block' : 'none';
+            });
+        
+            setInterval(() => {
+                images[index].style.display = 'none'; // Hide the current image
+                index = (index + 1) % images.length; // Move to the next index
+                images[index].style.display = 'block'; // Show the next image
+            }, 3000); // Change every 3 seconds
+        </script>
+        
+        <style>
+            .carousel {
+                position: relative;
+            }
+            .image-item {
+                text-align: center;
+            }
+            .image {
+                max-width: 100%;
+                height: auto;
+            }
+            .text {
+                margin-top: 10px;
+                font-size: 1.2em;
+            }
+        </style>
+
+<div class="box">
+    <button class="button1" onclick="setGridView()">Grid View</button>
+  </div>
+  <div class="box">
+    <button class="button2" onclick="setListView()">List View</button>
+  </div>
 </div>
 
-<script>
-    const images = document.querySelectorAll('.carousel .image-item');
-    let index = 0;
-
-    // Initially display only the first image
-    images.forEach((item, i) => {
-        item.style.display = i === 0 ? 'block' : 'none';
-    });
-
-    setInterval(() => {
-        images[index].style.display = 'none'; // Hide the current image
-        index = (index + 1) % images.length; // Move to the next index
-        images[index].style.display = 'block'; // Show the next image
-    }, 3000); // Change every 3 seconds
-</script>
-
-<style>
-    .carousel {
-        position: relative;
-    }
-    .image-item {
-        text-align: center;
-    }
-    .image {
-        max-width: 100%;
-        height: auto;
-    }
-    .text {
-        margin-top: 10px;
-        font-size: 1.2em;
-    }
-</style>
-
-        <div class="img-responsive image-container">
+    <div class=" media-container grid-view">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_2432.GIF" alt="Angry Yuuka" class="image zoom">
             <div class="text" style="color: violet;">You angered Yuuka because you spend too much on impulsive purchases!</div>
         </div>
 
-        <div class="img-responsive image-container">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_3850.JPG" alt="Glasses Yuuka" class="image zoom">
             <div class="text" style="color: blueviolet;">Yuuka has red glasses?</div>
         </div>
 
-        <div class="img-responsive image-container">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_3852.JPG" alt="Yuuka's Test Results" class="image zoom">
             <div class="text" style="color: cyan;">Yuuka is showing you her math test results! (Can't understand it though)</div>
         </div>
 
-        <div class="img-responsive image-container">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_2496.GIF" alt="Yuuka with a dog" class="image zoom">
             <div class="text" style="color: violet;">Yuuka has a robot dog!</div>
         </div>
 
-        <div class="img-responsive image-container">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_2487.GIF" alt="Happy Yuuka" class="image zoom">
             <div class="text" style="color: blueviolet;">Yuuka is Happy!</div>
         </div>
+    </div>
 
         <p style="color: blue; background-color: pink; font-size: 18px; font: bold; margin: 20px; padding: 10px;">More Yuuka Photos Below</p>
 
-        <div class="img-responsive image-container">
+    <div class=" media-container grid-view">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_3793.JPG" alt="Yuuka has coffee" class="image wiggle">
             <div class="text" style="color: cyan;">Yuuka is serving you coffee!</div>
         </div>
 
-        <div class="img-responsive image-container">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_4090.JPG" alt="Yuuka is sleeping" class="image zoom">
             <div class="text" style="color: violet;">Be quiet Yuuka is sleeping and Noa is there too!</div>
         </div>
 
-        <div class="img-responsive image-container">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_4091.JPG" alt="Wake up with Yuuka" class="image zoom">
             <div class="text" style="color: blueviolet;">Yuuka is awake!</div>
         </div>
 
-        <div class="img-responsive image-container">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_4020.JPG" alt="Yuuka has a birthday present" class="image wiggle">
             <div class="text" style="color: cyan;">Yuuka has a birthday present!</div>
         </div>
 
-        <div class="img-responsive image-container">
+        <div class="img-responsive image-container media-item">
             <img src="IMG_4095.JPG" alt="Cute Yuuka maid" class="image wiggle">
             <div class="text" style="color: blueviolet;">Yuuka is a cute maid!</div>
         </div>
+    </div>
 
         <p> <div style="color: pink">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</style></p>
     </div>
 </div>
 
-<div id="easter-egg" onclick="showSecret()" style="color: #8527dd;">Click me for a surprise!</div>
-<script>
-    function showSecret() {
-        alert('You found the secret! Hayase Yuuka says hello!');
-    }
-</script>
+        <div id="easter-egg" onclick="showSecret()" style="color: #8527dd;">Click me for a surprise!</div>
+        <script>
+            function showSecret() {
+                alert('You found the secret! Hayase Yuuka says hello!');
+            }
+        </script>
 
-    <!-- External JavaScript File -->
     <script src="script.js"></script>
+    <script src="extra.js"></script>
 </body>
 </html>

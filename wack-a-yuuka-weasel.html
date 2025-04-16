@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hayase Yuuka Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <audio id="happy-sound" src="happy.mp3" preload="auto"></audio>
+    <audio id="angry-sound" src="angry.mp3" preload="auto"></audio>
+
+    <header class="header">
+        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+        <nav>
+            <ul class="menu" id="nav-menu">
+                <li><a href="hayase-yuuka-photos.html"><i class="fa fa-camera"></i> All Hayase Yuuka Photos</a></li>
+                <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a></li>
+                <li><a href="game-results.html"><i class="fa fa-trophy"></i> Results For Hayase Yuuka Games</a></li>
+                <li><a href="wack-a-yuuka-weasel.html"><i class="fa fa-gamepad"></i> Play Whack A Hayase Yuuka Weasel</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Whack-a-Yuuka-Weasel!</h1>
+
+        <div id="time">Loading time...</div>
+        <div id="calendar">Loading calendar...</div>
+
+        <div class="game-instructions">
+            <h2>How to Play</h2>
+            <p>Click on the Yuuka weasel when it pops up to score points! But don't click on the real cute Yuuka or you'll lose points!</p>
+            <p>Try to score as many points as you can in 2 minutes and 30 seconds!</p>
+        </div>
+
+        <!-- Timer -->
+        <div id="timer">Time Left: 150s</div>
+
+        <!-- Score -->
+        <div>Score: <span id="score">0</span></div>
+
+        <!-- Name Input -->
+        <input type="text" id="player-name" placeholder="Enter your name">
+
+        <!-- Difficulty Buttons -->
+        <div class="difficulty-buttons">
+            <button id="easy-btn">Easy</button>
+            <button id="normal-btn">Normal</button>
+            <button id="hard-btn">Hard</button>
+        </div>
+
+        <!-- Game Grid -->
+        <div id="game-grid">
+            <!-- 9 clickable cells -->
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+
+        <!-- Game Result Section -->
+        <div id="game-result" style="display: none;">
+            <p id="final-message"></p>
+            <img id="result-image" src="" alt="Result Image">
+            <button id="download-btn">Download Result</button>
+        </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script src="extra.js"></script>
+</body>
+</html>

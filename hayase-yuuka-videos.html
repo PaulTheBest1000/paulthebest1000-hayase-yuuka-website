@@ -6,7 +6,170 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hayase Yuuka Website</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="IMG_3446.ico" type="image/x-icon">
+    <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
+    <style>
+/* General Styles for the container */
+.container {
+    display: flex;
+    flex-direction: column; /* Stack items vertically by default */
+    gap: 20px; /* Space between items */
+}
+
+/* Background image with soft overlay */
+.container {
+    background: 
+        linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
+        url('https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7') center top/cover no-repeat;
+    /* Glassmorphism effect */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    /* Shadow for elevation */
+    box-shadow: 0 8px 24px rgba(102, 153, 255, 0.2);
+}
+
+/* For grid layout */
+.container.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Create a responsive grid */
+    gap: 20px; /* Space between items */
+}
+
+/* For list layout */
+.container.list {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 10px; /* Space between items */
+}
+
+/* Style for individual items */
+.item {
+    background: rgba(255, 255, 255, 0.9); /* Light background for each item */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect for items */
+.item:hover {
+    transform: translateY(-5px);
+}
+
+/* Optional: Adjusting container for both list/grid on small screens */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .container.grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adapt to smaller screens */
+    }
+}
+
+#passwordPrompt {
+    margin: 40px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border: 2px solid #a6c8ff;
+    border-radius: 16px;
+    text-align: center;
+}
+
+#passwordPrompt input[type="password"] {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #a6c8ff;
+    width: 80%;
+    margin-top: 10px;
+}
+
+#passwordPrompt button {
+    padding: 10px 20px;
+    background-color: #6a9eff; /* Millennium-themed button */
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#passwordPrompt button:hover {
+    background-color: #4f7be8;
+}
+
+#content {
+    display: none; /* Hidden initially */
+    margin-top: 20px;
+    background: 
+        linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
+        url('https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7') center top/cover no-repeat;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* For grid layout */
+.media-container.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Create a responsive grid */
+    gap: 20px; /* Space between items */
+}
+
+/* For list layout */
+.media-container.list-view {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 10px; /* Space between items */
+}
+
+/* Styling for each media-item */
+.media-item {
+    background-color: #e0e8f9;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
+    text-align: center;
+}
+
+.media-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Styling for the toggle buttons */
+.view-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.view-toggle .box {
+    display: inline-block;
+}
+
+.view-toggle .button1, .view-toggle .button2 {
+    background-color: #4b89b8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.view-toggle .button1:hover, .view-toggle .button2:hover {
+    background-color: #3872a4;
+}
+
+  </style>
 </head>
 <body>
     <header class="header">
@@ -24,11 +187,34 @@
             <li>
               <a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a>
             </li>
+
+            <li>
+              <a href="game-results.html"><i class="fa fa-trophy"></i> Results For Hayase Yuuka Games</a>
+            </li>
+
+            <li>
+              <a href="wack-a-yuuka-weasel.html"><i class="fa fa-gamepad"></i> Play Whack A Hayase Yuuka Weasel</a>
+            </li>
           </ul>
         </nav>
       </header> 
 
     <div class="container">
+    <!-- Password Prompt Section -->
+    <div id="passwordPrompt">
+      <h2>Enter the password to access this page</h2>
+      <input type="password" id="passwordInput" placeholder="Enter Password">
+      <button onclick="checkPassword()">Submit</button>
+  </div>
+
+  <div id="time">Loading time...</div>
+  <div id="calendar">Loading calendar...</div>
+
+  <!-- Content Section (Hidden by default) -->
+  <div id="content" style="display: none;">
+      <h1>Welcome to Hayase Yuuka photos!</h1>
+      <p>This page is password protected. You have successfully entered the correct password!</p>
+
 <div class="view-toggle">
   <div class="box">
     <button class="button1" onclick="setGridView()">Grid View</button>
@@ -54,6 +240,26 @@
         </video>
     </div>
   </div>
+</div>
+    
+    <script>
+      const correctPassword = "YuukaSendsYouHugs!"; // The correct password
+    
+      function checkPassword() {
+        const enteredPassword = document.getElementById("passwordInput").value;
+
+        if (enteredPassword === correctPassword) {
+            // Show the content and hide the password prompt
+            document.getElementById("content").style.display = "block";
+            document.getElementById("passwordPrompt").style.display = "none";
+        } else {
+            alert("Incorrect password. Please try again.");
+        }
+    }
+</script>
+ 
+  </div>
+<script src="extra.js"></script>
 <script src="script.js"></script>
 </body>  
 </div>
