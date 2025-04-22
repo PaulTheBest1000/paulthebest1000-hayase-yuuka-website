@@ -18,7 +18,7 @@ let moleTimer = null;
 let countdownTimer = null;
 let timeInterval = 1000; // Default to easy
 let gameStarted = false;
-let timeLeft = 150;
+let timeLeft = 75;
 
 const images = [
   "IMG_2432.GIF", // low score
@@ -36,11 +36,11 @@ function showWeasel() {
     cells.forEach(cell => cell.classList.remove('mole', 'bad-mole'));
     currentCellIndex = null;
 
-    // Decide if good mole appears (e.g., 20% chance)
-    const goodAppears = Math.random() < 0.2;
+    // Decide if good mole appears (e.g., 50% chance)
+    const goodAppears = Math.random() < 0.5;
 
-    // Decide if bad mole appears (e.g., 15% chance)
-    const badAppears = Math.random() < 0.15;
+    // Decide if bad mole appears (e.g., 25% chance)
+    const badAppears = Math.random() < 0.25;
 
     const availableIndexes = [...Array(cells.length).keys()];
 
@@ -62,7 +62,7 @@ function startGame() {
   gameStarted = true;
   score = 0;
   scoreBoard.textContent = score;
-  timeLeft = 150;
+  timeLeft = 75;
   gameResultSection.style.display = 'none';
 
   countdownTimer = setInterval(() => {
@@ -105,11 +105,11 @@ function stopGame() {
   const playerName = playerNameInput.value || "Anonymous";
   let resultImageSrc = images[0]; // Default to low score
 
-  if (score >= 30) {
+  if (score >= 32) {
       resultImageSrc = images[3]; // High score
-  } else if (score >= 20) {
+  } else if (score >= 24) {
       resultImageSrc = images[2]; // Mid-high
-  } else if (score >= 10) {
+  } else if (score >= 16) {
       resultImageSrc = images[1]; // Mid-low
   }
 
@@ -179,7 +179,7 @@ function displayResults() {
   localStorage.setItem('gameResults', JSON.stringify(results));
 
   // Redirect to the results page (results.html)
-  window.location.href = 'results.html';
+  window.location.href = 'game-results.html';
 }
 
 function downloadResult() {
