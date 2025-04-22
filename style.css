@@ -109,19 +109,20 @@ p {
 }
 
 /* Header styles */
-.header {
+.header { 
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #222;
-    padding: 15px 30px;
+    padding: 25px 40px;
+    font-size: clamp(1rem, 2vw, 1.5rem); /* Responsive font size */
     color: white;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
 }
 
 /* Main container styling */
@@ -129,137 +130,64 @@ p {
     margin-top: 80px; /* Shift content down to avoid header overlap */
 }
 
-/* Menu styling */
-.menu {
+/* Header base style */
+.header {
+    background-color: #222;
+    padding: 10px 20px;
     display: flex;
-    flex-direction: row;
-    gap: 25px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  /* Hamburger menu */
+  .hamburger {
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: none; /* hidden on desktop */
+  }
+  
+  /* Menu */
+  .menu ul {
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-.menu-toggle {
-    position: relative;
-    z-index: 1000;  /* Make sure the button is above other elements */
-}
-
-.menu li {
-    position: relative;
-    margin: 0 10px;
-}
-
-.menu a {
-    text-decoration: none;
-    color: white;
-    padding: 8px 12px;
-    font-size: 16px;
-    border-radius: 6px;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
-}
-
-.menu a:hover {
-    background-color: cyan;
-    color: #222;
-    transform: scale(1.05);
-}
-
-/* Active link */
-.menu a.active {
-    background-color: cyan;
-    color: #222;
-    font-weight: bold;
-}
-
-/* Dropdown styles */
-.dropdown {
-    position: relative;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #333;
-    border-radius: 6px;
-    min-width: 160px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-    padding: 8px 0;
-    z-index: 999;
-    flex-direction: column;
-}
-
-.dropdown-menu li {
-    padding: 0;
-    margin: 0;
-}
-
-.dropdown-menu a {
-    display: block;
-    padding: 10px 15px;
-    color: white;
-    text-align: left;
-    font-size: 15px;
-}
-
-.dropdown-menu a:hover {
-    background-color: cyan;
-    color: #222;
-}
-
-/* Show dropdown on hover for desktop */
-.dropdown:hover .dropdown-menu {
     display: flex;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-    .menu {
-        display: none;
-        flex-direction: column;
-        background-color: #222;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
-        border-top: 1px solid #444;
-        padding: 10px;
+    gap: 20px;
+  }
+  
+  .menu a {
+    color: cyan;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .hamburger {
+      display: block;
     }
-
-    .menu.active {
-        display: flex;
+  
+    .menu ul {
+      display: none;
+      flex-direction: column;
+      background-color: #333;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      padding: 10px;
     }
-
-    .menu-toggle {
-        display: block;
-        font-size: 24px;
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
+  
+    .menu ul.active {
+      display: flex;
     }
-
-    .dropdown-menu {
-        position: relative;
-        top: auto;
-        left: auto;
-        width: 100%;
-        box-shadow: none;
-    }
-
-    .dropdown.open .dropdown-menu {
-        display: flex;
-    }
-}
-
-/* Hide menu toggle on desktop */
-@media (min-width: 769px) {
-    .menu-toggle {
-        display: none;
-    }
-}
-
+  }
+  
 /* Media Container Styles */
   .media-container {
     display: grid;
@@ -629,24 +557,28 @@ h1 {
     height: 8px;
     margin: 0 4px;
     border-radius: 50%;
-    background-color: #4caf50;
+    background-color: #4caf50;  /* Color of the circles */
     animation: bounce 0.6s ease-in-out infinite alternate;
 }
 
 .music-animation span:nth-child(2) {
-    animation-delay: 0.2s;
+    animation-delay: 0.2s;  /* Delay for the second circle */
 }
 
 .music-animation span:nth-child(3) {
-    animation-delay: 0.4s;
+    animation-delay: 0.4s;  /* Delay for the third circle */
 }
 
+/* Keyframes for the bouncing effect */
 @keyframes bounce {
     0% {
-        transform: translateY(0);
+        transform: scale(1); /* Original size */
+    }
+    50% {
+        transform: scale(1.5); /* Increase size for bounce effect */
     }
     100% {
-        transform: translateY(-10px);
+        transform: scale(1); /* Return to original size */
     }
 }
 
@@ -688,49 +620,67 @@ h1 {
     width: 80%;
     max-width: 600px;
     margin: auto;
+    font-family: 'Arial', sans-serif; /* Clean, modern font */
+    background-color: #f4d1f7; /* Soft pastel pink background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
+/* Button styles */
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     border: none;
     cursor: pointer;
     font-size: 16px;
-    margin: 5px;
-    border-radius: 5px;
+    margin: 8px;
+    border-radius: 10px;
+    transition: background-color 0.3s, transform 0.2s ease;
+    font-weight: bold;
 }
 
+/* Difficulty buttons */
 button#easy-btn {
-    background-color: green;
-    color: white;
+    background-color: #a4e3b5; /* Soft mint green */
+    color: #3d4f33; /* Dark green text for contrast */
 }
 
 button#normal-btn {
-    background-color: yellow;
-    color: black;
+    background-color: #f9e84e; /* Light pastel yellow */
+    color: #4a3a00; /* Darker yellow for text */
 }
 
 button#hard-btn {
-    background-color: red;
-    color: white;
+    background-color: #f1a7c7; /* Light pink */
+    color: #9b3d62; /* Deep pinkish-purple for contrast */
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #c1a3c0; /* Darker shade on click */
 }
 
 /* Game grid */
 #game-grid {
     display: grid;
     grid-template-columns: repeat(3, 100px);
-    grid-gap: 10px;
+    grid-gap: 15px;
     justify-content: center;
-    margin: 20px 0;
+    margin: 25px 0;
 }
 
 /* Cells */
 .cell {
     width: 100px;
     height: 100px;
-    background-color: brown;
-    border: 2px solid black;
+    background-color: #f4d1f7; /* Soft pastel pink */
+    border: 3px solid #b69acc; /* Light purple border */
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s ease;
+    border-radius: 10px;
 }
 
 /* Mole appearance */
@@ -752,12 +702,17 @@ button#hard-btn {
 #game-result {
     display: none;
     margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #result-image {
     width: 100px;
     height: 100px;
     margin-top: 10px;
+    border-radius: 8px;
 }
 
 /* Results gallery */
@@ -769,32 +724,44 @@ button#hard-btn {
 }
 
 .result-item {
-    padding: 10px;
-    border: 2px solid #ccc;
-    background-color: white;
+    padding: 12px;
+    border: 2px solid #b69acc; /* Soft purple border */
+    background-color: #f9e84e; /* Light yellow background for contrast */
     text-align: center;
+    border-radius: 10px;
 }
 
 .result-item img {
     width: 80px;
     height: 80px;
     margin-bottom: 10px;
+    border-radius: 50%;
 }
 
 #player-name {
     padding: 8px;
-    font-size: 16px;
+    font-size: 18px;
     margin: 10px 0;
+    color: #4a3a00; /* Dark green text */
 }
 
 #timer {
     font-size: 20px;
     font-weight: bold;
     margin-top: 10px;
+    color: #9b3d62; /* Deep pinkish-purple text */
 }
 
 #download-btn {
     margin-top: 20px;
-    background-color: #007bff;
+    background-color: #c4a2d9; /* Soft purple */
     color: white;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#download-btn:hover {
+    background-color: #9b3d62; /* Darker purple on hover */
 }

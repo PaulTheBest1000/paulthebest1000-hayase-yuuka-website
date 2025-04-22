@@ -1,30 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const menuToggle = document.querySelector(".menu-toggle");
-    const navMenu = document.getElementById("nav-menu");
-    const menu = document.querySelector(".menu");
-
-    // Toggle menu visibility on mobile
-    if (menuToggle && navMenu) {
-        menuToggle.addEventListener("click", () => {
-            menu.classList.toggle("active");
-            console.log("Menu toggled");
-        });
-    } else {
-        console.log("Elements not found!");
-    }
-
-    // Handle Dropdown in Mobile
-    document.querySelectorAll('.menu li').forEach(item => {
-        item.addEventListener('click', () => {
-            const dropdown = item.querySelector('.dropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('open');
-                item.classList.toggle('active');
-            }
-        });
-    });
-});
-
+// Extra.js - A simple Whack-a-Mole game with difficulty levels and score tracking
 const cells = document.querySelectorAll('.cell');
 const scoreBoard = document.getElementById('score');
 const easyBtn = document.getElementById('easy-btn');
@@ -112,6 +86,22 @@ function stopGame() {
     cells[currentCellIndex].classList.remove('mole');
   }
 
+  // Stop all music when the game ends
+  const musicElements = document.querySelectorAll('audio');
+  musicElements.forEach(music => {
+    music.pause();
+    music.currentTime = 0; // Reset to the start
+  });
+
+  // Stop background music after it's done
+  const bgMusic = document.querySelector('audio'); // Assuming background music is the first audio element
+  if (bgMusic) {
+    bgMusic.onended = function() {
+      bgMusic.pause();
+      bgMusic.currentTime = 0; // Reset the background music
+    };
+  }
+
   const playerName = playerNameInput.value || "Anonymous";
   let resultImageSrc = images[0]; // Default to low score
 
@@ -141,13 +131,40 @@ function stopGame() {
   displayResults();
 }
 
-function setDifficulty(difficulty) {
+function setDifficulty(difficulty) { 
+  // Stop any currently playing music
+  const musicElements = document.querySelectorAll('audio');
+  musicElements.forEach(music => music.pause());
+
+  let bgMusic;
+
   switch (difficulty) {
-    case 'easy': timeInterval = 1000; break;
-    case 'normal': timeInterval = 750; break;
-    case 'hard': timeInterval = 500; break;
-    default: timeInterval = 1000;
+    case 'easy': 
+      timeInterval = 1000;
+      bgMusic = document.getElementById('easy-music');
+      break;
+    case 'normal': 
+      timeInterval = 750;
+      bgMusic = document.getElementById('normal-music');
+      break;
+    case 'hard': 
+      timeInterval = 500;
+      bgMusic = document.getElementById('hard-music');
+      break;
   }
+
+  // Lower the volume to 40%
+  bgMusic.volume = 0.4;
+
+  // Play the background music
+  bgMusic.play();
+
+  // Add an event listener to stop the music once it's done
+  bgMusic.onended = function() {
+    // Stop the music once it finishes
+    bgMusic.pause();
+    bgMusic.currentTime = 0; // Reset to the start
+  };
 
   if (gameStarted) {
     clearInterval(moleTimer);
@@ -155,19 +172,14 @@ function setDifficulty(difficulty) {
   }
 }
 
-function displayResults() {
+function displayResults() { 
   const results = JSON.parse(localStorage.getItem('gameResults')) || [];
-  resultsContainer.innerHTML = '';
-  results.forEach(result => {
-    const resultDiv = document.createElement('div');
-    resultDiv.classList.add('result-item');
-    resultDiv.innerHTML = `
-      <p><strong>${result.name}</strong> scored ${result.score} points</p>
-      <img src="${result.image}" alt="${result.name}'s Result">
-      <p>${new Date(result.timestamp).toLocaleString()}</p>
-    `;
-    resultsContainer.appendChild(resultDiv);
-  });
+  
+  // Save the results to localStorage before navigating
+  localStorage.setItem('gameResults', JSON.stringify(results));
+
+  // Redirect to the results page (results.html)
+  window.location.href = 'results.html';
 }
 
 function downloadResult() {
@@ -211,7 +223,7 @@ hardBtn.addEventListener('click', () => {
   startGame();
 });
 
-const happySound = document.getElementById('happy-sound');
+const happySound = document.getElementById('happy-sound'); 
 const angrySound = document.getElementById('angry-sound');
 
 cells.forEach(cell => {
@@ -220,17 +232,23 @@ cells.forEach(cell => {
             score++;
             scoreBoard.textContent = score;
             event.target.classList.remove('mole');
-            happySound.currentTime = 0;
-            happySound.play();
+
+            if (happySound.paused || happySound.ended) {
+                happySound.currentTime = 0;
+                happySound.play();
+            }
+
         } else if (event.target.classList.contains('bad-mole')) {
             score = Math.max(0, score - 1);
             scoreBoard.textContent = score;
             event.target.classList.remove('bad-mole');
-            angrySound.currentTime = 0;
-            angrySound.play();
+
+            if (angrySound.paused || angrySound.ended) {
+                angrySound.currentTime = 0;
+                angrySound.play();
+            }
         }
     });
-});
-
+})
 
 downloadBtn.addEventListener('click', downloadResult);

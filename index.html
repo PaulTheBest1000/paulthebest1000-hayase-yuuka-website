@@ -21,68 +21,96 @@
     <meta name="twitter:title" content="Hayase Yuuka Website" />
     <meta name="twitter:description" content="Hayase Yuuka from Blue Archive is my favorite!" />
     <meta property="twitter:image" content="https://raw.githubusercontent.com/PaulTheBest1000/paulthebest1000-hayase-yuuka-website/refs/heads/main/bandicam%202025-01-03%2018-10-11-073.jpg" />
-    <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />
+    <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />       
 </head>
 <body>
-    <!-- Header Section -->
     <header class="header">
-        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
-        <nav>
-          <ul class="menu" id="nav-menu">
-            <li><a href="hayase-yuuka-photos.html"><i class="fa fa-camera"></i> All Hayase Yuuka Photos</a></li>
-            <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
-            <li><a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a></li>
-            <li><a href="game-results.html"><i class="fa fa-trophy"></i> Results For Hayase Yuuka Games</a></li>
-            <li><a href="wack-a-yuuka-weasel.html"><i class="fa fa-gamepad"></i> Play Whack A Hayase Yuuka Weasel</a></li>
+        <!-- Hamburger button -->
+        <button class="hamburger" aria-label="Toggle Menu" aria-expanded="false">
+          ☰
+        </button>
+      
+        <!-- Navigation menu -->
+        <nav class="menu">
+          <ul>
+            <li><a href="game-results.html"><i class="fas fa-trophy"></i>Hayase Yuuka Game Results</a></li>
+            <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i>All Hayase Yuuka Photos</a></li>
+            <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i>All Hayase Yuuka Videos</a></li>
+            <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-gamepad"></i>Play Whack-A-Yuuka Game</a></li>
           </ul>
         </nav>
-      </header> 
+      </header>
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const hamburger = document.querySelector(".hamburger");
+          const menu = document.querySelector(".menu ul");
+      
+          hamburger.addEventListener("click", () => {
+            menu.classList.toggle("active");
+            hamburger.setAttribute("aria-expanded", menu.classList.contains("active"));
+          });
+        });
+      </script>           
+    
+<!-- Modal Structure -->
+<div id="quiz-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="close-modal-btn">&times;</span>
+        <h1>Yuuka Quiz Game</h1>
 
-    <!-- Quiz Modal -->
-    <div id="quiz-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="close-modal-btn">&times;</span>
-            <h1>Yuuka Quiz Game</h1>
-            <div id="question-container">
-                <p id="question">Who is Hayase Yuuka?</p>
-            </div>
-            <div id="answers-container">
-                <button class="answer" onclick="checkAnswer('Treasurer of Seminar')">Treasurer of Seminar</button>
-                <button class="answer" onclick="checkAnswer('100KG')">100KG</button>
-                <button class="answer" onclick="checkAnswer('I Do not know')">I Do not know</button>
-                <button class="answer" onclick="checkAnswer('Strict financial girl')">Strict financial girl</button>
-            </div>
-            <div id="score-container">
-                <p id="score">Score: 0</p>
-            </div>
-            <div id="timer-container">
-                <p id="quiz-timer">Time Left: 00:00</p>
-            </div>
-            <div id="score-message-container"></div>
+        <!-- Static Question -->
+        <div id="question-container">
+            <p id="question">What is Yuuka's favorite color?</p>
         </div>
-    </div>
 
-    <!-- Background Music -->
+        <!-- Static Answer Options -->
+        <div id="answers-container">
+            <button class="answer">Red</button>
+            <button class="answer">Blue</button>
+            <button class="answer">Green</button>
+            <button class="answer">Yellow</button>
+        </div>
+
+        <!-- Static Score -->
+        <div id="score-container">
+            <p id="score">Score: 0</p>
+        </div>
+
+        <!-- Static Timer -->
+        <div id="timer-container">
+            <p id="quiz-timer">Time Left: 00:00</p>
+        </div>
+
+        <!-- Static Score Message -->
+        <div id="score-message-container"></div>
+    </div>
+</div>
+
+    <!-- Correct and Wrong -->
     <audio id="correct-sound" src="correct.mp3"></audio>
     <audio id="wrong-sound" src="wrong.mp3"></audio>
 
     <!-- Main Content Section -->
     <div class="container">
-        <div id="gif-container" style="display:none;">
-            <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
-        </div>
-
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
-        <button id="open-modal-btn" class="quiz-btn" onclick="startQuiz()">Start Yuuka Quiz</button>
-        <div class="view-toggle">
-
+        <button id="open-modal-btn" class="quiz-btn">Start Yuuka Quiz</button>
+        <div id="view-toggle" class="view-toggle">
+            <!-- Content for view toggle -->
+        </div>
+        
         <h2>Welcome to My Hayase Yuuka Website!</h2>
         <p class="paragraph-1">This is my second website using VS Code.</p>
         <p style="color: cyan;">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar".</p>
 
         <p>If you love Hayase Yuuka, click the button below:</p>
         <button class="button" onclick="showMessage()">Click Me!</button>
+
+        <div id="gif-container" style="display:none;">
+            <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
+        </div>
 
         <div id="music-player">
             <audio id="bg-music" loop>
@@ -92,10 +120,73 @@
             <button id="music-toggle-btn">Play Music</button>
             <progress id="progress-bar" value="0" max="100"></progress>
             <span id="time-display">0:00 / 0:00</span>
-            <div id="message"></div>
+            <div id="message"></div> <!-- Container for custom messages -->
         </div>
-
         
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log("DOM loaded");
+        
+                const music = document.getElementById('bg-music');
+                const toggleButton = document.getElementById('music-toggle-btn');
+                const progressBar = document.getElementById('progress-bar');
+                const timeDisplay = document.getElementById('time-display');
+                const message = document.getElementById('message');
+        
+                if (!toggleButton) {
+                    console.error("Toggle button not found!");
+                    return;
+                }
+        
+                // Function to format time
+                function formatTime(seconds) {
+                    const mins = Math.floor(seconds / 60) || 0;
+                    const secs = Math.floor(seconds % 60) || 0;
+                    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                }
+        
+                // Toggle music play/pause function
+                function toggleMusic() {
+                    if (music.paused) {
+                        music.play().then(() => {
+                            toggleButton.textContent = "Pause Music";
+                            message.innerHTML = `
+                                Music is now playing. Enjoy the melody! <br>
+                                Blue Archive OST 17. Irasshaimase
+                                <div class="music-animation">
+                                    <span></span><span></span><span></span>
+                                </div>`;
+                        }).catch(err => {
+                            console.error("Music play failed:", err);
+                            message.innerHTML = "Autoplay blocked. Click again to play.";
+                        });
+                    } else {
+                        music.pause();
+                        toggleButton.textContent = "Play Music";
+                        message.innerHTML = `Music is paused. Take a break! <br> 
+                            <a href="https://www.youtube.com/watch?v=jHSozMn7GgA" target="_blank" style="color: blue; text-decoration: underline;">
+                                [Original Blue Archive OST 17. Irasshaimase on YouTube]
+                            </a>`;
+                    }
+                }
+        
+                // Update the progress bar and time display
+                music.addEventListener('timeupdate', () => {
+                    const progress = (music.currentTime / music.duration) * 100;
+                    progressBar.value = progress || 0;
+                    timeDisplay.textContent = `${formatTime(music.currentTime)} / ${formatTime(music.duration)}`;
+                });
+        
+                // Update music playback time when user interacts with progress bar
+                progressBar.addEventListener('input', () => {
+                    music.currentTime = (progressBar.value / 100) * music.duration;
+                });
+        
+                // Attach event listener for the music toggle button
+                toggleButton.addEventListener('click', toggleMusic);
+            });
+        </script>        
+
         <div class="img-responsive image-container carousel">
             <div class="image-item">
                 <img src="IMG_3441.GIF" alt="Nice Yuuka" class="image wiggle">
@@ -179,7 +270,7 @@
         </div>
     </div>
 
-        <p style="color: blue; background-color: pink; font-size: 18px; font: bold; margin: 20px; padding: 10px;">More Yuuka Photos Below</p>
+        <p style="color: blue; background-color: pink; font-size: 18px; font-weight: bold; margin: 20px; padding: 10px;">More Yuuka Photos Below</p>
 
     <div class=" media-container grid-view">
         <div class="img-responsive image-container media-item">
@@ -208,7 +299,7 @@
         </div>
     </div>
 
-        <p> <div style="color: pink">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</style></p>
+        <div style="color: pink">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</div>
     </div>
 </div>
 

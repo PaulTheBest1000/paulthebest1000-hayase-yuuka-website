@@ -172,33 +172,37 @@
   </style>
 </head>
 <body>
-    <header class="header">
-        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
-        <nav>
-          <ul class="menu" id="nav-menu">
-            <li>
-              <a href="hayase-yuuka-photos.html"><i class="fa fa-camera"></i> All Hayase Yuuka Photos</a>
-            </li>
-
-            <li>
-              <a href="index.html"><i class="fa fa-home"></i> Home</a>
-            </li>
-      
-            <li>
-              <a href="hayase-yuuka-videos.html"><i class="fa fa-desktop"></i> All Hayase Yuuka Videos</a>
-            </li>
-
-            <li>
-              <a href="game-results.html"><i class="fa fa-trophy"></i> Results For Hayase Yuuka Games</a>
-            </li>
-
-            <li>
-              <a href="wack-a-yuuka-weasel.html"><i class="fa fa-gamepad"></i> Play Whack A Hayase Yuuka Weasel</a>
-            </li>
-          </ul>
-        </nav>
-      </header> 
-
+  <header class="header">
+    <!-- Hamburger button -->
+    <button class="hamburger" aria-label="Toggle Menu" aria-expanded="false">
+      ☰
+    </button>
+  
+    <!-- Navigation menu -->
+    <nav class="menu">
+      <ul>
+        <li><a href="game-results.html"><i class="fas fa-trophy"></i>Hayase Yuuka Game Results</a></li>
+        <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i>All Hayase Yuuka Photos</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i>All Hayase Yuuka Videos</a></li>
+        <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-gamepad"></i>Play Whack-A-Yuuka Game</a></li>
+      </ul>
+    </nav>
+  </header>
+        
+        <script>
+          const hamburger = document.querySelector('.hamburger');
+          const menu = document.querySelector('.menu');
+        
+          hamburger.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        
+            // Accessibility toggle
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+          });
+        </script>
+          
     <div class="container">
     <!-- Password Prompt Section -->
     <div id="passwordPrompt">
@@ -258,8 +262,8 @@
     }
 </script>
  
-  </div>
-<script src="extra.js"></script>
-<script src="script.js"></script>
+    </div>
+  <script src="script.js"></script>
+  <script src="extra.js"></script>
 </body>  
 </div>
