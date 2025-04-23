@@ -111,11 +111,11 @@ p {
 /* Header styles */
 .header { 
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center items horizontally */
     align-items: center;
     background-color: #222;
     padding: 25px 40px;
-    font-size: clamp(1rem, 2vw, 1.5rem); /* Responsive font size */
+    font-size: clamp(0.7rem, 1vw, 0.95rem);
     color: white;
     position: fixed;
     top: 0;

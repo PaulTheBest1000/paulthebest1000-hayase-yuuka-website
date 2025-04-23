@@ -105,11 +105,11 @@ function stopGame() {
   const playerName = playerNameInput.value || "Anonymous";
   let resultImageSrc = images[0]; // Default to low score
 
-  if (score >= 32) {
+  if (score >= 60) {
       resultImageSrc = images[3]; // High score
-  } else if (score >= 24) {
+  } else if (score >= 40) {
       resultImageSrc = images[2]; // Mid-high
-  } else if (score >= 16) {
+  } else if (score >= 20) {
       resultImageSrc = images[1]; // Mid-low
   }
 
