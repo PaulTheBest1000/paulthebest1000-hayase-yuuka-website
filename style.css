@@ -108,7 +108,12 @@ p {
     color: greenyellow;
 }
 
-/* Header styles */
+/* Main container styling */
+.container {
+    margin-top: 80px; /* Shift content down to avoid header overlap */
+}
+
+/* Header base style */
 .header { 
     display: flex;
     justify-content: center; /* Center items horizontally */
@@ -120,27 +125,12 @@ p {
     position: fixed;
     top: 0;
     left: 0;
+    flex-wrap: wrap;
     width: 100%;
     z-index: 1000;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
 }
 
-/* Main container styling */
-.container {
-    margin-top: 80px; /* Shift content down to avoid header overlap */
-}
-
-/* Header base style */
-.header {
-    background-color: #222;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-  
   /* Hamburger menu */
   .hamburger {
     font-size: 24px;
