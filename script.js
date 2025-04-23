@@ -1,54 +1,4 @@
 // script.js
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-            .then((registration) => {
-                console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch((error) => {
-                console.log('Service Worker registration failed:', error);
-            });
-    });
-  }
-  
-  // main.js (or your script.js file)
-  
-  const startOfflineTime = new Date();
-  startOfflineTime.setHours(12, 0, 0, 0); // Set 12:00 PM
-  
-  const endOfflineTime = new Date();
-  endOfflineTime.setHours(19, 30, 0, 0); // Set 7:30 PM
-  
-  function checkOfflinePeriod() {
-      const currentTime = new Date();
-  
-      // Check if the current time is between the offline start and end time
-      if (currentTime >= startOfflineTime && currentTime <= endOfflineTime) {
-          // Enable offline behavior
-          enableOfflineMode();
-      } else {
-          // Disable offline behavior
-          disableOfflineMode();
-      }
-  }
-  
-  function enableOfflineMode() {
-      console.log("Website is in offline mode.");
-      // Optionally, show a message or activate service worker's caching behavior
-  }
-  
-  function disableOfflineMode() {
-      console.log("Website is back online.");
-      // Reset to normal behavior
-  }
-  
-  // Check if the site should be offline immediately
-  checkOfflinePeriod();
-  
-  // Optionally, check every minute
-  setInterval(checkOfflinePeriod, 60000);
-  
   // Function to update the time
   function updateTime() {
       const timeElement = document.getElementById('time');
@@ -463,3 +413,25 @@ questions.forEach(question => {
       gallery.push(result);
       localStorage.setItem("yuukaResultGallery", JSON.stringify(gallery));
   }
+
+  // Example: Highlight the active menu item on click
+document.querySelectorAll('.menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.menu a.active')?.classList.remove('active');
+        link.classList.add('active');
+    });
+});
+
+document.querySelectorAll('.menu li').forEach(item => {
+    item.addEventListener('click', () => {
+        const dropdown = item.querySelector('.dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('open');
+        }
+    });
+});
+
+function toggleMenu() {
+    document.getElementById('nav-menu').classList.toggle('active');
+  }
+  

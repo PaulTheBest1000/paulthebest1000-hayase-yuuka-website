@@ -66,35 +66,28 @@
 </head>
 <body>
   <header class="header">
-    <!-- Hamburger button -->
-    <button class="hamburger" aria-label="Toggle Menu" aria-expanded="false">
-      ☰
-    </button>
-  
-    <!-- Navigation menu -->
-    <nav class="menu">
-      <ul>
-        <li><a href="game-results.html"><i class="fas fa-trophy"></i>Hayase Yuuka Game Results</a></li>
-        <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i>All Hayase Yuuka Photos</a></li>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i>All Hayase Yuuka Videos</a></li>
-        <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-gamepad"></i>Play Whack-A-Yuuka Game</a></li>
-      </ul>
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <nav>
+      <ul class="menu">
+        <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="game-results.html"><i class="fas fa-trophy"></i> Hayase Yuuka Game Results</a></li>
+        <li>
+            <a href=""><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
+            <ul class="dropdown">
+                <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i> All Hayase Yuuka Photos</a></li>
+                <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i> All Hayase Yuuka Videos</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href=""><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
+            <ul class="dropdown">
+                <li><a href="maze.html"><i class="fas fa-desktop"></i> Yuuka's Maze Game</a></li>
+                <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-desktop"></i> Play Whack-A-Yuuka Game</a></li>
+            </ul>
+          </li>
+    </ul>
     </nav>
-  </header>
-        
-        <script>
-          const hamburger = document.querySelector('.hamburger');
-          const menu = document.querySelector('.menu');
-        
-          hamburger.addEventListener('click', () => {
-            menu.classList.toggle('active');
-        
-            // Accessibility toggle
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-          });
-        </script>
+</header>
       
   <div class="container">
     <h2>Yuuka Games Gallery</h2>

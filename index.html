@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hayase Yuuka Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
 
     <!-- Open Graph tags --> 
     <meta property="og:title" content="Hayase Yuuka Website" />
@@ -25,35 +26,29 @@
 </head>
 <body>
     <header class="header">
-        <!-- Hamburger button -->
-        <button class="hamburger" aria-label="Toggle Menu" aria-expanded="false">
-          ☰
-        </button>
-      
-        <!-- Navigation menu -->
-        <nav class="menu">
-          <ul>
-            <li><a href="game-results.html"><i class="fas fa-trophy"></i>Hayase Yuuka Game Results</a></li>
-            <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i>All Hayase Yuuka Photos</a></li>
-            <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-            <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i>All Hayase Yuuka Videos</a></li>
-            <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-gamepad"></i>Play Whack-A-Yuuka Game</a></li>
-          </ul>
+        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+        <nav>
+          <ul class="menu">
+            <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="game-results.html"><i class="fas fa-trophy"></i> Hayase Yuuka Game Results</a></li>
+            <li>
+                <a href=""><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
+                <ul class="dropdown">
+                    <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i> All Hayase Yuuka Photos</a></li>
+                    <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i> All Hayase Yuuka Videos</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
+                <ul class="dropdown">
+                    <li><a href="maze.html"><i class="fas fa-desktop"></i> Yuuka's Maze Game</a></li>
+                    <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-desktop"></i> Play Whack-A-Yuuka Game</a></li>
+                </ul>
+              </li>
+        </ul>
         </nav>
-      </header>
-      
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const hamburger = document.querySelector(".hamburger");
-          const menu = document.querySelector(".menu ul");
-      
-          hamburger.addEventListener("click", () => {
-            menu.classList.toggle("active");
-            hamburger.setAttribute("aria-expanded", menu.classList.contains("active"));
-          });
-        });
-      </script>           
-    
+    </header>
+
 <!-- Modal Structure -->
 <div id="quiz-modal" class="modal">
     <div class="modal-content">

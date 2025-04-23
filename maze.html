@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hayase Yuuka Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extra.css">
+    <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+        <nav>
+          <ul class="menu">
+            <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="game-results.html"><i class="fas fa-trophy"></i> Hayase Yuuka Game Results</a></li>
+            <li>
+                <a href=""><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
+                <ul class="dropdown">
+                    <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i> All Hayase Yuuka Photos</a></li>
+                    <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i> All Hayase Yuuka Videos</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
+                <ul class="dropdown">
+                    <li><a href="maze.html"><i class="fas fa-desktop"></i> Yuuka's Maze Game</a></li>
+                    <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-desktop"></i> Play Whack-A-Yuuka Game</a></li>
+                </ul>
+              </li>
+        </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="time">Loading time...</div>
+        <div id="calendar">Loading calendar...</div>
+    </div>
+
+<!-- Start Screen -->
+<div id="start-screen">
+    <h1>Welcome to Yuuka's Maze Game!</h1>
+    <p>Can you help Yuuka find her calculator?</p>
+    <input type="text" id="user-name" placeholder="Enter your name" />
+    <button id="start-btn">Start Game</button>
+  </div>
+  
+  <!-- Game Area -->
+  <div id="game-area" style="display:none;">
+    <div id="player"></div>
+    <div id="minimap"></div>
+    <img id="resultImage" src="IMG_6212.JPG" style="display:none;">
+    <p id="finalMessage" style="display:none;"></p>
+    <button id="downloadBtn">Download Result</button>
+  </div>
+
+  <div id="move-counter" style="color: #fff; font-size: 18px; text-align: center; margin-top: 10px;">
+    Moves: 0
+  </div>
+  
+  <script>
+    // Game initialization
+    const cols = 24;
+    const rows = 13;
+    const cellSize = 40;
+    const gameArea = document.getElementById('game-area');
+    const player = document.getElementById('player');
+    const maze = [];
+    let playerPos = { x: 0, y: 0 };
+    let moveCount = 0;
+    const moveCounterDisplay = document.getElementById('move-counter');
+    let startTime, endTime;
+    
+    // Generate maze using Recursive Backtracking
+    function generateMaze() {
+      const grid = [];
+      for (let y = 0; y < rows; y++) {
+        grid[y] = [];
+        for (let x = 0; x < cols; x++) {
+          grid[y][x] = 1; // Wall
+        }
+      }
+    
+      function carve(x, y) {
+        const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+        dirs.sort(() => Math.random() - 0.5);
+        for (const [dx, dy] of dirs) {
+          const nx = x + dx * 2;
+          const ny = y + dy * 2;
+          if (nx >= 0 && ny >= 0 && nx < cols && ny < rows && grid[ny][nx] === 1) {
+            grid[y + dy][x + dx] = 0;
+            grid[ny][nx] = 0;
+            carve(nx, ny);
+          }
+        }
+      }
+    
+      grid[0][0] = 0;
+      carve(0, 0);
+      grid[rows - 1][cols - 1] = 0; // Make sure the end is accessible
+      return grid;
+    }
+    
+    maze.push(...generateMaze());
+    
+    maze.forEach((row, y) => {
+      row.forEach((cell, x) => {
+        const div = document.createElement('div');
+        div.className = 'cell';
+        div.style.left = `${x * cellSize}px`;
+        div.style.top = `${y * cellSize}px`;
+        if (cell === 1) div.classList.add('wall');
+        if (x === cols - 1 && y === rows - 1) div.classList.add('end');
+        gameArea.appendChild(div);
+      });
+    });
+    
+    // Movement
+    function canMove(x, y) {
+      const gx = Math.floor(x / cellSize);
+      const gy = Math.floor(y / cellSize);
+      return maze[gy] && maze[gy][gx] === 0;
+    }
+    
+    document.addEventListener('keydown', e => {
+      let newX = playerPos.x;
+      let newY = playerPos.y;
+    
+      switch (e.key) {
+        case 'ArrowUp': case 'w': case 'W': newY -= cellSize; break;
+        case 'ArrowDown': case 's': case 'S': newY += cellSize; break;
+        case 'ArrowLeft': case 'a': case 'A': newX -= cellSize; break;
+        case 'ArrowRight': case 'd': case 'D': newX += cellSize; break;
+      }
+    
+      if (canMove(newX, newY)) {
+      playerPos.x = newX;
+      playerPos.y = newY;
+
+      // Increment move counter
+      moveCount++;
+      moveCounterDisplay.textContent = `Moves: ${moveCount}`;
+
+      // Update player position
+      player.style.left = newX + 'px';
+      player.style.top = newY + 'px';
+
+        // Reached the end?
+        if (Math.floor(newX / cellSize) === cols - 1 && Math.floor(newY / cellSize) === rows - 1) {
+          endTime = new Date();
+          const timeTaken = Math.floor((endTime - startTime) / 1000); // In seconds
+          showThankYouMessage(timeTaken);
+        }
+      }
+    });
+    
+    // Start the game when the user enters their name
+    document.getElementById('start-btn').addEventListener('click', () => {
+      const userName = document.getElementById('user-name').value.trim();
+    
+      if (userName) {
+        // Save the name to localStorage
+        localStorage.setItem('playerName', userName);
+    
+        // Hide the start screen and show the game area
+        document.getElementById('start-screen').style.display = 'none';
+        gameArea.style.display = 'block';
+    
+        // Start the timer and game
+        startTime = new Date();
+        startGame();
+      } else {
+        alert('Please enter your name.');
+      }
+    });
+    
+    // Game start function
+    function startGame() {
+      moveCount = 0;
+      moveCounterDisplay.textContent = `Moves: ${moveCount}`;
+      playerPos = { x: 0, y: 0 };
+      player.style.left = playerPos.x + 'px';
+      player.style.top = playerPos.y + 'px';
+    }
+    
+    // Show thank you message with time taken
+    function showThankYouMessage(timeTaken) {
+  const playerName = localStorage.getItem('playerName') || 'Player';
+
+  const thankYouMessage = document.createElement('div');
+  thankYouMessage.className = 'thank-you-message';
+  thankYouMessage.innerHTML = `
+    <h2>Yuuka: "Yay! You made it, ${playerName}! 🎉"</h2>
+    <p>Thank you for playing! You're amazing! 😘</p>
+    <p>It took you ${timeTaken} seconds to finish the maze. Well done! ⏱️</p>
+    <button id="play-again">Play Again</button>
+    <button id="downloadBtn">Download Result</button>
+    <img id="resultImage" src="assets/yuuka-clear.png" style="display:none;">
+    <p id="finalMessage" style="display:none;"></p>
+  `;
+
+  document.body.appendChild(thankYouMessage);
+
+// Set result message and image
+const resultImage = document.getElementById('resultImage');
+const finalMessage = document.getElementById('finalMessage');
+resultImage.src = 'IMG_6212.JPG'; // Replace with your actual image path
+finalMessage.style.display = 'block';
+finalMessage.textContent = `Yuuka is proud of you, ${playerName}! You completed it in ${timeTaken} seconds with ${moveCount} moves!`;
+
+// Save and redirect to results
+saveAndShowResults(playerName, moveCount, resultImage.src);
+
+  // Play Again button functionality
+  const playAgainBtn = document.getElementById('play-again');
+  playAgainBtn.addEventListener('click', () => {
+    localStorage.removeItem('playerName');
+    location.reload();
+  });
+
+  // Bind download logic
+  const downloadBtn = document.getElementById('downloadBtn');
+  downloadBtn.addEventListener('click', downloadResult);
+}
+
+const resultImage = document.getElementById('resultImage');
+const finalMessage = document.getElementById('finalMessage');
+
+downloadBtn.addEventListener('click', downloadResult);
+
+function displayResults() {
+  const results = JSON.parse(localStorage.getItem('gameResults')) || [];
+  localStorage.setItem('gameResults', JSON.stringify(results));
+
+  setTimeout(() => {
+    window.location.href = 'game-results.html';
+  }, 10000); // 10000ms = 10 seconds
+}
+
+function downloadResult() {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = 500;
+  canvas.height = 300;
+
+  context.fillStyle = '#fff';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = '#000';
+  context.font = '30px Arial';
+  context.fillText(finalMessage.textContent, 20, 50);
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = resultImage.src;
+  img.onload = () => {
+    context.drawImage(img, 20, 80, 100, 100);
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL();
+    link.download = 'game_result.png';
+    link.click();
+  };
+}
+
+function saveAndShowResults(playerName, score, resultImageSrc) {
+  const resultData = {
+    name: playerName,
+    score: score,
+    image: resultImageSrc,
+    timestamp: new Date().toISOString(),
+  };
+
+  let results = JSON.parse(localStorage.getItem('gameResults')) || [];
+  results.push(resultData);
+  localStorage.setItem('gameResults', JSON.stringify(results));
+
+  displayResults();
+}
+    </script>
+
+      <input type="password" id="minimap-password" placeholder="Enter secret password" style="position:absolute; top:10px; right:10px; z-index:999;">
+      <div id="minimap" style="display:none; position:absolute; top:50px; right:10px; width:150px; height:150px; background:#222; opacity:0.8; border:2px solid #fff; z-index:999;"></div>
+
+      <script src="script.js"></script>
+      <script src="extra.js"></script>
+</body>
+</html>

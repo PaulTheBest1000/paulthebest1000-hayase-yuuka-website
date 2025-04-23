@@ -1,0 +1,81 @@
+    /* Style for game area */
+    #game-area {
+        position: relative;
+        width: 961px;
+        height: 523px;
+        background: linear-gradient(135deg, #f8bbd0, #f0c7ff); /* Soft pink to lavender gradient */
+        margin: 20px auto;
+        border: 2px solid #ff66cc; /* Light pink border */
+        border-radius: 10px; /* Round the corners for a smoother, cuter feel */
+        box-shadow: 0 0 20px rgba(255, 105, 180, 0.3); /* Soft pink glow around the game area */
+      }      
+  
+      /* Style for player */
+      #player {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+            background: url('yuuka.png') no-repeat center center;
+            background-size: cover; /* Ensures the image covers the entire area */
+        border-radius: 50%;
+        transition: transform 0.2s ease-in-out;
+        z-index: 1; /* Ensures the player is on top of the maze */
+      }
+  
+      /* Style for the maze cells */
+      .cell {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+      }
+  
+      .wall {
+        background-color: #f8bbd0; /* Soft pastel pink */
+        border: 2px solid #ff66cc; /* A cute pink border to outline the walls */
+        box-shadow: 0 0 10px rgba(255, 105, 180, 0.5); /* Soft glow to make it feel warmer */
+      }      
+  
+      .end {
+        background: url('calculator.png') no-repeat center center;
+        background-size: cover; /* Ensures the image covers the entire area */
+        border-radius: 50%;
+        z-index: 2; /* Ensures the end point is on top of the maze */
+      }
+  
+      /* Style for thank you message */
+      .thank-you-message {
+        text-align: center;
+        background-color: gray;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+  
+      #start-screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+      }
+  
+      #user-name {
+        padding: 10px;
+        margin: 10px;
+        font-size: 16px;
+      }
+  
+      #start-btn {
+        padding: 10px 20px;
+        font-size: 18px;
+        background-color: #ff66cc;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }

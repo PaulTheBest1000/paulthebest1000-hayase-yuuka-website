@@ -1,4 +1,4 @@
-// Extra.js - A simple Whack-a-Mole game with difficulty levels and score tracking
+// Extra.js
 const cells = document.querySelectorAll('.cell');
 const scoreBoard = document.getElementById('score');
 const easyBtn = document.getElementById('easy-btn');
@@ -252,3 +252,22 @@ cells.forEach(cell => {
 })
 
 downloadBtn.addEventListener('click', downloadResult);
+
+const passwordInput = document.getElementById('minimap-password');
+const minimap = document.getElementById('minimap');
+const secretPassword = "CutieYuuka♥Lab";
+
+// Listen for the keydown event
+document.addEventListener('keydown', (event) => {
+  // Check if the Ctrl key and Enter key are pressed together
+  if (event.ctrlKey && event.key === 'Enter') {
+    // If the password is correct, show the minimap
+    if (passwordInput.value === secretPassword) {
+      minimap.style.display = "block";
+      passwordInput.style.display = "none"; // Hide input after correct password
+      generateMinimap(); // Optional: populate the minimap here
+    } else {
+      alert("Wrong password!");
+    }
+  }
+});
