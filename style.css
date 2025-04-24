@@ -324,16 +324,18 @@ body, ul, li {
     margin: 20px 0;
 }
 
-/* Time and Calendar Styling */
 #time, #calendar {
-    font-size: 1.2rem; /* Increase font size slightly */
+    display: inline-block;
+    font-size: 1rem; /* Smaller font for better scaling */
     color: violet;
     background-color: cyan;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 8px;
     margin: 5px;
-    width: 80%; /* Adjust width for mobile */
-    max-width: 300px; /* Ensure they don't exceed screen width */
+    max-width: 90vw;
+    text-align: center;
+    box-sizing: border-box;
+    word-wrap: break-word; /* Allows long words to break if needed */
 }
 
 /* Mobile-specific adjustments */
@@ -362,12 +364,6 @@ body, ul, li {
         font-size: 1.1rem; /* Slightly smaller font size for mobile */
         width: 90%; /* Allow the time and calendar to adjust to screen */
         max-width: 90%; /* Keep it from getting too wide */
-    }
-
-    /* Adjust top margin for fixed header */
-    #time-calendar-container {
-        padding: 8px;
-        font-size: 1rem;
     }
 
     .img-responsive img {

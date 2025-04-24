@@ -8,38 +8,16 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
     <style>
-/* General Styles for the container */
+/* Styles for the container */
 .container {
-    display: flex;
-    flex-direction: column; /* Stack items vertically by default */
-    gap: 20px; /* Space between items */
-}
-
-/* Background image with soft overlay */
-.container {
-    background: 
-        linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
-        url('https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7') center top/cover no-repeat;
-    /* Glassmorphism effect */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
-    /* Shadow for elevation */
-    box-shadow: 0 8px 24px rgba(102, 153, 255, 0.2);
-}
-
-/* For grid layout */
-.container.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Create a responsive grid */
-    gap: 20px; /* Space between items */
-}
-
-/* For list layout */
-.container.list {
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    gap: 10px; /* Space between items */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+  border-radius: 20px;
 }
 
 /* Style for individual items */
@@ -72,6 +50,9 @@
     padding: 20px;
     width: 90%;
     max-width: 500px;
+    background: linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
+                url('https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7') center top/cover no-repeat;
+    transition: background-image 1s ease-in-out;
     border: 2px solid #a6c8ff;
     border-radius: 16px;
     text-align: center;
@@ -101,73 +82,132 @@
     background-color: #4f7be8;
 }
 
+/* Ensure content is unaffected */
 #content {
     display: none; /* Hidden initially */
     margin-top: 20px;
-    background: 
-        linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
-        url('https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7') center top/cover no-repeat;
     border-radius: 12px;
+    background: linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
+                url('https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7') center top/cover no-repeat;
+    transition: background-image 1s ease-in-out;
     padding: 20px;
     box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    
+    /* Responsive fit */
+    width: 100%;
+    max-width: 960px;
+    max-height: 85vh;
+    overflow-y: auto; /* Enable scroll if content is too tall */
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
 }
 
-/* For grid layout */
+/* Grid layout for media */
 .media-container.grid-view {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Create a responsive grid */
-    gap: 20px; /* Space between items */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto; /* Allow scrolling if needed */
 }
 
-/* For list layout */
+/* List layout for media */
 .media-container.list-view {
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    gap: 10px; /* Space between items */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
+  align-items: center;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto; /* Allow scrolling if needed */
 }
 
-/* Styling for each media-item */
+/* Common container transition */
+.media-container {
+  transition: all 0.3s ease-in-out;
+  margin: 0 auto;
+  padding: 10px;
+  width: 100%;
+  max-width: 1000px; /* Give the container some upper bound */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+/* Media items */
 .media-item {
-    background-color: #e0e8f9;
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
-    text-align: center;
+  background-color: #e0e8f9;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
+  text-align: center;
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  max-height: 360px;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
+/* Responsive media (video or image) */
+.media-item video,
 .media-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
+  width: 100%;
+  max-height: 250px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+  display: block;
 }
 
-/* Styling for the toggle buttons */
+/* Toggle buttons layout */
 .view-toggle {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .view-toggle .box {
-    display: inline-block;
+  display: inline-block;
 }
 
 .view-toggle .button1, .view-toggle .button2 {
-    background-color: #4b89b8;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  background-color: #4b89b8;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-toggle .button1:hover, .view-toggle .button2:hover {
+  background-color: #3872a4;
 }
 
 .view-toggle .button1:hover, .view-toggle .button2:hover {
     background-color: #3872a4;
 }
+
+#easter-egg {
+    color: transparent;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
 
   </style>
 </head>
@@ -195,33 +235,40 @@
     </ul>
     </nav>
 </header>
- 
-    <div class="container">
+
+<div class="container">
+    <h1>Hayase Yuuka Videos</h1>
+    <div id="time">Loading time...</div>
+    <div id="calendar">Loading calendar...</div>
+    
     <!-- Password Prompt Section -->
     <div id="passwordPrompt">
       <h2>Enter the password to access this page</h2>
       <input type="password" id="passwordInput" placeholder="Enter Password">
       <button onclick="checkPassword()">Submit</button>
-  </div>
-
-  <div id="time">Loading time...</div>
-  <div id="calendar">Loading calendar...</div>
+      
+      <!-- Hidden Easter Egg -->
+      <div id="easter-egg" onclick="showSecret()" style="color: transparent; cursor: pointer; user-select: none;">
+        Click me for a surprise!
+      </div>
+  </div> <!-- Closing for #passwordPrompt -->
 
   <!-- Content Section (Hidden by default) -->
   <div id="content" style="display: none;">
-      <h1>Welcome to Hayase Yuuka photos!</h1>
-      <p>This page is password protected. You have successfully entered the correct password!</p>
+    <h1>Welcome to Hayase Yuuka Videos!</h1>
+    <p>This page is password protected. You have successfully entered the correct password!</p>
 
-<div class="view-toggle">
-  <div class="box">
-    <button class="button1" onclick="setGridView()">Grid View</button>
-  </div>
-  <div class="box">
-    <button class="button2" onclick="setListView()">List View</button>
-  </div>
-</div>
-  <div class="media-container grid-view">
-    <div class="media-item">
+    <div class="view-toggle">
+      <div class="box">
+        <button class="button1" onclick="setGridView()">Grid View</button>
+      </div>
+      <div class="box">
+        <button class="button2" onclick="setListView()">List View</button>
+      </div>
+    </div>
+
+    <div class="media-container grid-view">
+      <div class="media-item">
         <video controls>
           <source src="IMG_4414.mp4" type="video/mp4">
         </video>
@@ -230,32 +277,59 @@
         <video controls>
           <source src="IMG_5232.MP4" type="video/mp4">
         </video>
-    </div>
-    <div class="media-item">
+      </div>
+      <div class="media-item">
         <video controls>
           <source src="IMG_6346.MP4" type="video/mp4">
         </video>
-    </div>
-  </div>
-</div>
-    
-    <script>
-      const correctPassword = "YuukaSendsYouHugs!"; // The correct password
-    
-      function checkPassword() {
-        const enteredPassword = document.getElementById("passwordInput").value;
+      </div>
+    </div> <!-- Closing for .media-container -->
+  </div> <!-- Closing for #content -->
+</div> <!-- Closing for .container -->
 
-        if (enteredPassword === correctPassword) {
-            // Show the content and hide the password prompt
-            document.getElementById("content").style.display = "block";
-            document.getElementById("passwordPrompt").style.display = "none";
-        } else {
-            alert("Incorrect password. Please try again.");
-        }
-    }
+<script>
+// Function to check the password and hide the container
+function checkPassword() {
+  const correctPassword = "YuukaSendsYouHugs!"; // The correct password
+  const enteredPassword = document.getElementById("passwordInput").value;
+
+  if (enteredPassword === correctPassword) {
+    // Hide the background container, but leave the content visible
+    document.getElementById("passwordPrompt").style.display = "none"; // Hide password prompt
+    document.getElementById("content").style.display = "block"; // Show content
+  } else {
+    alert("Incorrect password, please try again.");
+  }
+}
+
+function showSecret() {
+  alert('You found the secret! The password to Hayase Yuuka Videos is YuukaSendsYouHugs!');
+}
+
+const yuukaImages = [
+  "https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7",
+  "https://images5.alphacoders.com/130/1306317.png",
+  "https://images3.alphacoders.com/128/1286131.png",
+  "https://images.alphacoders.com/119/1194700.png",
+  "https://images.alphacoders.com/121/1211388.png",
+];
+
+let promptCurrent = 0;
+
+// Background change for the password prompt (targeted only here)
+setInterval(() => {
+  // Apply the background to both #passwordPrompt and #content
+  document.querySelectorAll("#passwordPrompt, #content").forEach(el => {
+    el.style.background = `
+      linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
+      url('${yuukaImages[promptCurrent]}') center top/cover no-repeat
+    `;
+  });
+
+  promptCurrent = (promptCurrent + 1) % yuukaImages.length; // Cycle through the images
+}, 5000); // Changes every 5 seconds
 </script>
- 
-    </div>
+
   <script src="script.js"></script>
   <script src="extra.js"></script>
 </body>  
