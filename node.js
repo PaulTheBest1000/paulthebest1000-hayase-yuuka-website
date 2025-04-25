@@ -1,20 +1,18 @@
+const cors = require('cors');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-    cors: {
-      origin: 'http://127.0.0.1:5500', // or '*', if you want it open to all
-      methods: ['GET', 'POST']
-    }
-  });  
+const io = socketIo(server);
 
-// Serve static files (frontend)
-const cors = require('cors');
-app.use(cors());
-const chatLog = []; // In-memory chat log
+// Enable CORS
+app.use(cors({
+  origin: 'http://127.0.0.1:5500', // Adjust this to the exact URL of your front-end
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
 
 // When a user connects
 io.on('connection', (socket) => {
