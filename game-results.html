@@ -108,6 +108,20 @@
   <button id="clear-results-btn" style="display: none;">Clear Results!</button>
 </div>
 
+<div id="chat-container">
+  <div id="chat-history"></div>
+  <input type="text" id="chat-input" placeholder="Type a message..." />
+  <button id="send-btn">Send</button>
+  <button id="emoji-btn">😊</button>
+  <input type="text" id="private-msg-to" placeholder="Recipient username" />
+  <button id="private-msg-btn">Send Private</button>
+  <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+</div>
+
+<div>
+  <h3>Online Users</h3>
+  <ul id="online-users"></ul>
+</div>  
 
 <div class="gallery-container" id="gallery-container">
     <!-- Gallery items will be dynamically inserted here -->
@@ -204,5 +218,9 @@
 <script src="script.js"></script>
 <script src="results.js"></script>
 <script src="extra.js"></script>
+
+        <!-- Load Socket.IO script -->
+        <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+        <script src="chat.js"></script>
 </body>
 </html>

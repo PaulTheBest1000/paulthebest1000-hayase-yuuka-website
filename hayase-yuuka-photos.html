@@ -259,6 +259,21 @@
       <h1>Welcome to Hayase Yuuka Photos!</h1>
       <p>This page is password protected. You have successfully entered the correct password!</p>
 
+      <div id="chat-container">
+        <div id="chat-history"></div>
+        <input type="text" id="chat-input" placeholder="Type a message..." />
+        <button id="send-btn">Send</button>
+        <button id="emoji-btn">😊</button>
+        <input type="text" id="private-msg-to" placeholder="Recipient username" />
+        <button id="private-msg-btn">Send Private</button>
+        <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+      </div>
+    
+      <div>
+        <h3>Online Users</h3>
+        <ul id="online-users"></ul>
+      </div>  
+      
         <div class="view-toggle">
             <div class="box">
               <button class="button1" onclick="setGridView()">Grid View</button>
@@ -385,5 +400,9 @@ setInterval(() => {
 </div>
 <script src="script.js"></script>
 <script src="extra.js"></script>
+
+        <!-- Load Socket.IO script -->
+        <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+        <script src="chat.js"></script>
 </body>  
 </div>

@@ -51,6 +51,21 @@
             <p>Try to score as many points as you can in 1 minute and 15 seconds!</p>
         </div>
 
+  <div id="chat-container">
+    <div id="chat-history"></div>
+    <input type="text" id="chat-input" placeholder="Type a message..." />
+    <button id="send-btn">Send</button>
+    <button id="emoji-btn">😊</button>
+    <input type="text" id="private-msg-to" placeholder="Recipient username" />
+    <button id="private-msg-btn">Send Private</button>
+    <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+  </div>
+
+  <div>
+    <h3>Online Users</h3>
+    <ul id="online-users"></ul>
+  </div>  
+  
         <!-- Timer -->
         <div id="timer">Time Left: 75s</div>
 
@@ -91,5 +106,9 @@
     <!-- JavaScript -->
     <script src="script.js"></script>
     <script src="extra.js"></script>
+
+            <!-- Load Socket.IO script -->
+            <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+            <script src="chat.js"></script>
 </body>
 </html>

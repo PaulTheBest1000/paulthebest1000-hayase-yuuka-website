@@ -10,18 +10,31 @@
         box-shadow: 0 0 20px rgba(255, 105, 180, 0.3); /* Soft pink glow around the game area */
       }      
   
-      /* Style for player */
-      #player {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-            background: url('yuuka.png') no-repeat center center;
-            background-size: cover; /* Ensures the image covers the entire area */
-        border-radius: 50%;
-        transition: transform 0.2s ease-in-out;
-        z-index: 1; /* Ensures the player is on top of the maze */
-      }
-  
+/* Style for player */
+#player {
+  width: 40px; /* Adjust to the size of your maze cells */
+  height: 40px; /* Adjust to the size of your maze cells */
+  background: url('yuuka.png') no-repeat center center; /* Player image */
+  background-size: cover; /* Ensures the image covers the entire area */
+  border-radius: 50%; /* Circular player icon */
+  position: absolute; /* Position it absolutely within the maze */
+  z-index: 10; /* Ensure the player is above other elements */
+  transition: top 0.2s ease, left 0.2s ease; /* Smooth transition for movement */
+}
+
+/* Bump animation for when player hits a wall */
+@keyframes bump {
+  0%   { transform: translate(0, 0) scale(1); }
+  30%  { transform: translate(var(--bump-x), var(--bump-y)) scale(0.9, 1.1); }
+  60%  { transform: translate(var(--bump-x), var(--bump-y)) scale(1.1, 0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* Apply bump animation */
+#player.bump {
+  animation: bump 0.25s ease;
+}
+
       /* Style for the maze cells */
       .cell {
         position: absolute;

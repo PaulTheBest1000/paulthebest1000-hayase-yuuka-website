@@ -6,6 +6,7 @@
     <title>Hayase Yuuka Website</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="extra.css">
+    <link rel="stylesheet" href="chat.css">
     <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -47,6 +48,21 @@
     <button id="start-btn">Start Game</button>
   </div>
   
+  <div id="chat-container">
+    <div id="chat-history"></div>
+    <input type="text" id="chat-input" placeholder="Type a message..." />
+    <button id="send-btn">Send</button>
+    <button id="emoji-btn">😊</button>
+    <input type="text" id="private-msg-to" placeholder="Recipient username" />
+    <button id="private-msg-btn">Send Private</button>
+    <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+  </div>
+
+  <div>
+    <h3>Online Users</h3>
+    <ul id="online-users"></ul>
+  </div>  
+  
   <!-- Game Area -->
   <div id="game-area" style="display:none;">
     <div id="player"></div>
@@ -61,132 +77,191 @@
   </div>
   
   <script>
-    // Game initialization
-    const cols = 24;
-    const rows = 13;
-    const cellSize = 40;
-    const gameArea = document.getElementById('game-area');
-    const player = document.getElementById('player');
-    const maze = [];
-    let playerPos = { x: 0, y: 0 };
-    let moveCount = 0;
-    const moveCounterDisplay = document.getElementById('move-counter');
-    let startTime, endTime;
-    
-    // Generate maze using Recursive Backtracking
-    function generateMaze() {
-      const grid = [];
-      for (let y = 0; y < rows; y++) {
-        grid[y] = [];
-        for (let x = 0; x < cols; x++) {
-          grid[y][x] = 1; // Wall
-        }
-      }
-    
-      function carve(x, y) {
-        const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-        dirs.sort(() => Math.random() - 0.5);
-        for (const [dx, dy] of dirs) {
-          const nx = x + dx * 2;
-          const ny = y + dy * 2;
-          if (nx >= 0 && ny >= 0 && nx < cols && ny < rows && grid[ny][nx] === 1) {
-            grid[y + dy][x + dx] = 0;
-            grid[ny][nx] = 0;
-            carve(nx, ny);
-          }
-        }
-      }
-    
-      grid[0][0] = 0;
-      carve(0, 0);
-      grid[rows - 1][cols - 1] = 0; // Make sure the end is accessible
-      return grid;
-    }
-    
-    maze.push(...generateMaze());
-    
-    maze.forEach((row, y) => {
-      row.forEach((cell, x) => {
-        const div = document.createElement('div');
-        div.className = 'cell';
-        div.style.left = `${x * cellSize}px`;
-        div.style.top = `${y * cellSize}px`;
-        if (cell === 1) div.classList.add('wall');
-        if (x === cols - 1 && y === rows - 1) div.classList.add('end');
-        gameArea.appendChild(div);
-      });
-    });
-    
-    // Movement
-    function canMove(x, y) {
-      const gx = Math.floor(x / cellSize);
-      const gy = Math.floor(y / cellSize);
-      return maze[gy] && maze[gy][gx] === 0;
-    }
-    
-    document.addEventListener('keydown', e => {
-      let newX = playerPos.x;
-      let newY = playerPos.y;
-    
-      switch (e.key) {
-        case 'ArrowUp': case 'w': case 'W': newY -= cellSize; break;
-        case 'ArrowDown': case 's': case 'S': newY += cellSize; break;
-        case 'ArrowLeft': case 'a': case 'A': newX -= cellSize; break;
-        case 'ArrowRight': case 'd': case 'D': newX += cellSize; break;
-      }
-    
-      if (canMove(newX, newY)) {
-      playerPos.x = newX;
-      playerPos.y = newY;
+// Game initialization
+const cols = 24;
+const rows = 13;
+const cellSize = 40;
+const gameArea = document.getElementById('game-area');
+const player = document.getElementById('player');
+const maze = [];
+let playerPos = { x: 0, y: 0 };
+let moveCount = 0;
+const moveCounterDisplay = document.getElementById('move-counter');
+let startTime, endTime;
 
-      // Increment move counter
-      moveCount++;
-      moveCounterDisplay.textContent = `Moves: ${moveCount}`;
-
-      // Update player position
-      player.style.left = newX + 'px';
-      player.style.top = newY + 'px';
-
-        // Reached the end?
-        if (Math.floor(newX / cellSize) === cols - 1 && Math.floor(newY / cellSize) === rows - 1) {
-          endTime = new Date();
-          const timeTaken = Math.floor((endTime - startTime) / 1000); // In seconds
-          showThankYouMessage(timeTaken);
-        }
-      }
-    });
-    
-    // Start the game when the user enters their name
-    document.getElementById('start-btn').addEventListener('click', () => {
-      const userName = document.getElementById('user-name').value.trim();
-    
-      if (userName) {
-        // Save the name to localStorage
-        localStorage.setItem('playerName', userName);
-    
-        // Hide the start screen and show the game area
-        document.getElementById('start-screen').style.display = 'none';
-        gameArea.style.display = 'block';
-    
-        // Start the timer and game
-        startTime = new Date();
-        startGame();
-      } else {
-        alert('Please enter your name.');
-      }
-    });
-    
-    // Game start function
-    function startGame() {
-      moveCount = 0;
-      moveCounterDisplay.textContent = `Moves: ${moveCount}`;
-      playerPos = { x: 0, y: 0 };
-      player.style.left = playerPos.x + 'px';
-      player.style.top = playerPos.y + 'px';
+// Generate maze using Recursive Backtracking
+function generateMaze() {
+  const grid = [];
+  for (let y = 0; y < rows; y++) {
+    grid[y] = [];
+    for (let x = 0; x < cols; x++) {
+      grid[y][x] = 1; // Wall
     }
-    
-    // Show thank you message with time taken
-    function showThankYouMessage(timeTaken) {
+  }
+
+  function carve(x, y) {
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    dirs.sort(() => Math.random() - 0.5);
+    for (const [dx, dy] of dirs) {
+      const nx = x + dx * 2;
+      const ny = y + dy * 2;
+      if (nx >= 0 && ny >= 0 && nx < cols && ny < rows && grid[ny][nx] === 1) {
+        grid[y + dy][x + dx] = 0;
+        grid[ny][nx] = 0;
+        carve(nx, ny);
+      }
+    }
+  }
+
+  grid[0][0] = 0;
+  carve(0, 0);
+  grid[rows - 1][cols - 1] = 0; // Make sure the end is accessible
+  return grid;
+}
+
+maze.push(...generateMaze());
+
+maze.forEach((row, y) => {
+  row.forEach((cell, x) => {
+    const div = document.createElement('div');
+    div.className = 'cell';
+    div.style.left = `${x * cellSize}px`;
+    div.style.top = `${y * cellSize}px`;
+    if (cell === 1) div.classList.add('wall');
+    if (x === cols - 1 && y === rows - 1) div.classList.add('end');
+    gameArea.appendChild(div);
+  });
+});
+
+const SWIPE_THRESHOLD = 30; // Minimum px for a swipe to count
+const SWIPE_ANGLE_TOLERANCE = 0.5; // To ignore diagonal swipes
+
+// Movement tracking variables
+let touchStartX = 0;
+let touchStartY = 0;
+
+// Movement function with bump support
+function movePlayer(direction) {
+  let newX = playerPos.x;
+  let newY = playerPos.y;
+  let bumpX = '0px';
+  let bumpY = '0px';
+
+  // Determine the new player position based on direction
+  switch (direction) {
+    case 'up': newY -= cellSize; bumpY = '-5px'; break;
+    case 'down': newY += cellSize; bumpY = '5px'; break;
+    case 'left': newX -= cellSize; bumpX = '-5px'; break;
+    case 'right': newX += cellSize; bumpX = '5px'; break;
+  }
+
+  // Check if the new position is valid
+  if (canMove(newX, newY)) {
+    playerPos.x = newX;
+    playerPos.y = newY;
+
+    moveCount++; // Increase move counter
+    moveCounterDisplay.textContent = `Moves: ${moveCount}`;
+
+    // Update player position on screen
+    player.style.left = newX + 'px';
+    player.style.top = newY + 'px';
+  } else {
+    // Bump animation if the player can't move
+    player.style.setProperty('--bump-x', bumpX);
+    player.style.setProperty('--bump-y', bumpY);
+    player.classList.remove('bump'); // Reset animation
+    void player.offsetWidth;        // Force reflow
+    player.classList.add('bump');   // Trigger bump animation
+  }
+
+  // Reached the end?
+  if (Math.floor(newX / cellSize) === cols - 1 && Math.floor(newY / cellSize) === rows - 1) {
+    endTime = new Date();
+    const timeTaken = Math.floor((endTime - startTime) / 1000); // In seconds
+    showThankYouMessage(timeTaken);
+  }
+}
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  switch (e.key) {
+    case 'ArrowUp': case 'w': case 'W': movePlayer('up'); break;
+    case 'ArrowDown': case 's': case 'S': movePlayer('down'); break;
+    case 'ArrowLeft': case 'a': case 'A': movePlayer('left'); break;
+    case 'ArrowRight': case 'd': case 'D': movePlayer('right'); break;
+  }
+});
+
+// Touch start: Track the start of the touch event
+document.addEventListener('touchstart', e => {
+  const touch = e.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+});
+
+// Touch end + swipe detection: Move player based on swipe direction
+document.addEventListener('touchend', e => {
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - touchStartX;
+  const dy = touch.clientY - touchStartY;
+
+  const absDx = Math.abs(dx);
+  const absDy = Math.abs(dy);
+
+  // If the swipe is too short, do nothing
+  if (absDx < SWIPE_THRESHOLD && absDy < SWIPE_THRESHOLD) return;
+
+  // Detect horizontal swipe (left or right)
+  if (absDx > absDy * (1 + SWIPE_ANGLE_TOLERANCE)) {
+    movePlayer(dx > 0 ? 'right' : 'left');
+  } 
+  // Detect vertical swipe (up or down)
+  else if (absDy > absDx * (1 + SWIPE_ANGLE_TOLERANCE)) {
+    movePlayer(dy > 0 ? 'down' : 'up');
+  }
+});
+
+// Can move function: Checks if the player can move to the given position
+function canMove(x, y) {
+  // Check if the new position is within bounds and not a wall
+  const gx = Math.floor(x / cellSize);
+  const gy = Math.floor(y / cellSize);
+
+  return maze[gy] && maze[gy][gx] === 0; // Check if it's a free space (0)
+}
+
+// Start the game when the user enters their name
+document.getElementById('start-btn').addEventListener('click', () => {
+  const userName = document.getElementById('user-name').value.trim();
+
+  if (userName) {
+    // Save the name to localStorage
+    localStorage.setItem('playerName', userName);
+
+    // Hide the start screen and show the game area
+    document.getElementById('start-screen').style.display = 'none';
+    gameArea.style.display = 'block';
+
+    // Start the timer and game
+    startTime = new Date();
+    startGame();
+  } else {
+    alert('Please enter your name.');
+  }
+});
+
+// Game start function
+function startGame() {
+  moveCount = 0;
+  moveCounterDisplay.textContent = `Moves: ${moveCount}`;
+  playerPos = { x: 0, y: 0 };
+  player.style.left = playerPos.x + 'px';
+  player.style.top = playerPos.y + 'px';
+}
+
+// Show thank you message with time taken
+function showThankYouMessage(timeTaken) {
   const playerName = localStorage.getItem('playerName') || 'Player';
 
   const thankYouMessage = document.createElement('div');
@@ -203,15 +278,15 @@
 
   document.body.appendChild(thankYouMessage);
 
-// Set result message and image
-const resultImage = document.getElementById('resultImage');
-const finalMessage = document.getElementById('finalMessage');
-resultImage.src = 'IMG_6212.JPG'; // Replace with your actual image path
-finalMessage.style.display = 'block';
-finalMessage.textContent = `Yuuka is proud of you, ${playerName}! You completed it in ${timeTaken} seconds with ${moveCount} moves!`;
+  // Set result message and image
+  const resultImage = document.getElementById('resultImage');
+  const finalMessage = document.getElementById('finalMessage');
+  resultImage.src = 'IMG_6212.JPG'; // Replace with your actual image path
+  finalMessage.style.display = 'block';
+  finalMessage.textContent = `Yuuka is proud of you, ${playerName}! You completed it in ${timeTaken} seconds with ${moveCount} moves!`;
 
-// Save and redirect to results
-saveAndShowResults(playerName, moveCount, resultImage.src);
+  // Save and redirect to results
+  saveAndShowResults(playerName, moveCount, resultImage.src);
 
   // Play Again button functionality
   const playAgainBtn = document.getElementById('play-again');
@@ -285,5 +360,9 @@ function saveAndShowResults(playerName, score, resultImageSrc) {
 
       <script src="script.js"></script>
       <script src="extra.js"></script>
+
+    <!-- Load Socket.IO script -->
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="chat.js"></script>
 </body>
 </html>

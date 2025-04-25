@@ -103,6 +103,21 @@
         <p>If you love Hayase Yuuka, click the button below:</p>
         <button class="button" onclick="showMessage()">Click Me!</button>
 
+        <div id="chat-container">
+            <div id="chat-history"></div>
+            <input type="text" id="chat-input" placeholder="Type a message..." />
+            <button id="send-btn">Send</button>
+            <button id="emoji-btn">😊</button>
+            <input type="text" id="private-msg-to" placeholder="Recipient username" />
+            <button id="private-msg-btn">Send Private</button>
+            <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+          </div>
+        
+          <div>
+            <h3>Online Users</h3>
+            <ul id="online-users"></ul>
+          </div>  
+          
         <div id="gif-container" style="display:none;">
             <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
         </div>
@@ -307,5 +322,9 @@
 
     <script src="script.js"></script>
     <script src="extra.js"></script>
+
+        <!-- Load Socket.IO script -->
+        <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+        <script src="chat.js"></script>
 </body>
 </html>
