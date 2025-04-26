@@ -414,3 +414,28 @@ questions.forEach(question => {
       localStorage.setItem("yuukaResultGallery", JSON.stringify(gallery));
   }
  
+  document.addEventListener('DOMContentLoaded', () => {
+    // Highlight the active menu item
+    document.querySelectorAll('.menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.querySelector('.menu a.active')?.classList.remove('active');
+            link.classList.add('active');
+        });
+    });
+
+    // Toggle dropdowns when clicking menu items
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            const dropdown = item.querySelector('.dropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('open');
+                e.stopPropagation();  // Prevent menu toggle from closing when clicking dropdown
+            }
+        });
+    });
+
+    // Toggle the mobile menu on hamburger click
+    document.querySelector('.menu-toggle').addEventListener('click', () => {
+        document.getElementById('nav-menu').classList.toggle('active');
+    });
+});
