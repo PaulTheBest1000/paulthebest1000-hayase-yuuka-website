@@ -5,8 +5,8 @@ const socketIo = require('socket.io');
 
 // Define allowed origins
 const allowedOrigins = [
-  'https://paulthebest1000.github.io', // Production domain
-  'http://127.0.0.1:5500', // Local development domain
+  'https://paulthebest1000.github.io',
+  'http://127.0.0.1:5500',
   'http://localhost:5500'
 ];
 
@@ -26,59 +26,43 @@ const io = socketIo(server, {
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow this origin
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS')); // Reject other origins
+      callback(new Error('Not allowed by CORS'));
     }
   }
 }));
 
+// Store clients and chat log
+const clients = {};
+const chatLog = [];
+
 // Socket.IO connection
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-// When a user connects
 io.on('connection', (socket) => {
   console.log('A user connected');
 
+  // Typing events
   socket.on('typing', (username) => {
-    socket.broadcast.emit('userTyping', username); // Notify others
+    socket.broadcast.emit('userTyping', username);
   });
-  
+
   socket.on('stopTyping', (username) => {
-    socket.broadcast.emit('userStopTyping', username); // Stop message
+    socket.broadcast.emit('userStopTyping', username);
   });
-  
-// Handle message sending
-socket.on('sendMessage', (data) => {
+
+  // Handle message sending
+  socket.on('sendMessage', (data) => {
     console.log(`${data.username}: ${data.message}`);
-    
-    // Broadcast the message to everyone except the sender
-    socket.broadcast.emit('receiveMessage', {
-        message: data.message,
-        sender: 'user',
-        username: data.username
-    });
 
-    // Optionally, send the message back to the sender if you want them to see their own message
-    socket.emit('receiveMessage', {
-        message: data.message,
-        sender: 'user',
-        username: data.username
+    // Broadcast the message to everyone including sender
+    io.emit('receiveMessage', {
+      message: data.message,
+      sender: 'user',
+      username: data.username
     });
-});
+  });
 
-  // Handle private message sending
+  // Handle private messages
   socket.on('sendPrivateMessage', (data) => {
     console.log(`Private message from ${data.username} to ${data.recipient}: ${data.message}`);
     const recipientSocketId = Object.keys(clients).find((id) => clients[id] === data.recipient);
@@ -97,29 +81,27 @@ socket.on('sendMessage', (data) => {
         username: data.username,
       });
     }
-  });  
+  });
 
-  // Register username when a user connects
+  // Register username
   socket.on('register', (username) => {
     clients[socket.id] = username;
     console.log(`${username} connected`);
-  
-    // Send updated list to all clients
-    io.emit('onlineUsers', Object.values(clients));
-  });  
 
-  // Handle disconnections
+    io.emit('onlineUsers', Object.values(clients));
+  });
+
+  // Handle disconnect
   socket.on('disconnect', () => {
     delete clients[socket.id];
     console.log('A user disconnected');
-  
-    // Send updated list to all clients
+
     io.emit('onlineUsers', Object.values(clients));
-  });  
+  });
 });
 
-// Start the server
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Start the server (only once!!)
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
