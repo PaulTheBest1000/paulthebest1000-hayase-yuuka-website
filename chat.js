@@ -99,3 +99,13 @@ socket.on('onlineUsers', (users) => {
     typingIndicator.textContent = '';
   });
   
+const chatToggleBtn = document.getElementById('chat-toggle-btn');
+const chatContainer = document.getElementById('chat-container');
+
+chatToggleBtn.addEventListener('click', () => {
+  if (chatContainer.style.display === 'block') {
+    chatContainer.style.display = 'none';
+  } else {
+    chatContainer.style.display = 'block';
+  }
+});

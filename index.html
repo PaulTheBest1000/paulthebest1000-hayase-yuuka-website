@@ -26,7 +26,7 @@
     <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />       
 </head>
 <body>
-    <header class="header">
+    <header>
         <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
         <nav>
           <ul class="menu">
@@ -49,6 +49,29 @@
         </ul>
         </nav>
     </header>
+
+  <script>
+// Example: Highlight the active menu item on click
+document.querySelectorAll('.menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.menu a.active')?.classList.remove('active');
+        link.classList.add('active');
+    });
+});
+
+document.querySelectorAll('.menu li').forEach(item => {
+    item.addEventListener('click', () => {
+        const dropdown = item.querySelector('.dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('open');
+        }
+    });
+});
+
+function toggleMenu() {
+    document.getElementById('nav-menu').classList.toggle('active');
+  }
+</script>
 
 <!-- Modal Structure -->
 <div id="quiz-modal" class="modal">
@@ -103,6 +126,8 @@
 
         <p>If you love Hayase Yuuka, click the button below:</p>
         <button class="button" onclick="showMessage()">Click Me!</button>
+
+        <button id="chat-toggle-btn">💬 Chat</button>
 
         <div id="chat-container">
             <div id="chat-history"></div>

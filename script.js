@@ -413,25 +413,4 @@ questions.forEach(question => {
       gallery.push(result);
       localStorage.setItem("yuukaResultGallery", JSON.stringify(gallery));
   }
-
-  // Example: Highlight the active menu item on click
-document.querySelectorAll('.menu a').forEach(link => {
-    link.addEventListener('click', () => {
-        document.querySelector('.menu a.active')?.classList.remove('active');
-        link.classList.add('active');
-    });
-});
-
-document.querySelectorAll('.menu li').forEach(item => {
-    item.addEventListener('click', () => {
-        const dropdown = item.querySelector('.dropdown');
-        if (dropdown) {
-            dropdown.classList.toggle('open');
-        }
-    });
-});
-
-function toggleMenu() {
-    document.getElementById('nav-menu').classList.toggle('active');
-  }
-  
+ 

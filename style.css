@@ -113,24 +113,6 @@ p {
     margin-top: 80px; /* Shift content down to avoid header overlap */
 }
 
-/* Full-Width and Full-Height Header */
-.header {
-    width: 100%; /* Ensures full width */
-    height: 60px; /* Adjust this value as per your design */
-    background-color: #333; /* Set a background color for the header */
-    position: fixed; /* Keep the header fixed at the top */
-    top: 0; /* Positions it at the top of the viewport */
-    left: 0; /* Aligns it to the left edge of the viewport */
-    z-index: 1000; /* Ensure it appears above other content */
-  }
-  
-  /* Optional: For mobile responsiveness */
-  @media (max-width: 768px) {
-    .header {
-      height: 60px; /* You can adjust the height for mobile as well */
-    }
-  }  
-
   /* Base Styles */
 body, ul, li {
     margin: 0;
@@ -167,9 +149,9 @@ body, ul, li {
 
 /* Active Link Styling */
 .menu a.active {
-    color: limegreen;
+    color: blueviolet;
     font-weight: bold;
-    border-bottom: 2px solid limegreen;
+    border-bottom: 2px solid blueviolet;
 }
 
 /* Hover Underline Effect */
@@ -264,7 +246,7 @@ body, ul, li {
 .menu-toggle {
     display: none;
     font-size: 24px;
-    color: yellowgreen;
+    color: cyan;
     background: none;
     border: none;
     cursor: pointer;

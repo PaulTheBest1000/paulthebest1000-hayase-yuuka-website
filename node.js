@@ -3,16 +3,47 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 
+// Allowed origins
+const allowedOrigins = [
+  'https://paulthebest1000.github.io', // GitHub Pages
+  'http://127.0.0.1:5500',            // Local development
+  'http://localhost:5500'              // Local development
+];
+
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
 
-// Enable CORS
+// Initialize socket.io with CORS
+const io = socketIo(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+  }
+});
+
+// Express CORS middleware setup
 app.use(cors({
-  origin: 'http://127.0.0.1:5500', // Adjust this to the exact URL of your front-end
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
 }));
+
+// Example socket.io event handling
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
+});
+
+// Start the server on port 3000
+server.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
 
 // When a user connects
 io.on('connection', (socket) => {
