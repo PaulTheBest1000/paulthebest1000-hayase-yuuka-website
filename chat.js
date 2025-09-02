@@ -13,6 +13,26 @@ const onlineUsersList = document.getElementById('online-users');
 // Store the username (can be fetched from localStorage or set on user login)
 const userName = localStorage.getItem('playerName') || 'Player'; // Default to 'Player' if no name is found
 
+let currentUsername = userName; // start with the initial username
+
+const changeUsernameInput = document.getElementById('change-username-input');
+const changeUsernameBtn = document.getElementById('change-username-btn');
+
+changeUsernameBtn.addEventListener('click', () => {
+  const newUsername = changeUsernameInput.value.trim();
+  if (newUsername) {
+    currentUsername = newUsername;
+    localStorage.setItem('playerName', currentUsername); // optional: save for refresh
+    alert(`Username changed to ${currentUsername}`);
+    changeUsernameInput.value = '';
+
+    // Notify server of new username
+    socket.emit('register', currentUsername);
+  } else {
+    alert('Please enter a valid username.');
+  }
+});
+
 // Display message in the chat window
 function displayMessage(message, sender, username) {
     const msgElement = document.createElement('div');
@@ -22,15 +42,15 @@ function displayMessage(message, sender, username) {
     chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to the bottom
 }
 
-// Ensure the username is sent with the message
+// Ensure the current username is sent with the message
 sendBtn.addEventListener('click', () => {
     const message = chatInput.value.trim();
     if (message) {
         // Display the message locally (only for the sender)
-        displayMessage(message, 'user', userName);
+        displayMessage(message, 'user', currentUsername);
 
         // Emit the message to the server
-        socket.emit('sendMessage', { message, sender: 'user', username: userName });
+        socket.emit('sendMessage', { message, sender: 'user', username: currentUsername });
 
         chatInput.value = ''; // Clear input field
     }
@@ -41,8 +61,8 @@ privateMsgBtn.addEventListener('click', () => {
   const recipient = privateMsgToInput.value.trim();
   const message = chatInput.value.trim();
   if (message && recipient) {
-    // Emit private message with username and recipient
-    socket.emit('sendPrivateMessage', { message, sender: 'user', username: userName, recipient });
+    // Emit private message with the current username and recipient
+    socket.emit('sendPrivateMessage', { message, sender: 'user', username: currentUsername, recipient });
     chatInput.value = ''; // Clear input field
     privateMsgToInput.value = ''; // Clear recipient input
     displayMessage(`To ${recipient}: ${message}`, 'user');
@@ -57,7 +77,7 @@ emojiBtn.addEventListener('click', () => {
 
 // Listen for messages from the server
 socket.on('receiveMessage', (data) => {
-    if (data.username !== userName) { // Prevent showing the sender's own message
+    if (data.username !== currentUsername) { // Prevent showing the sender's own message
         displayMessage(data.message, data.sender, data.username); // Display message from other users
     }
 });
@@ -79,15 +99,15 @@ socket.on('onlineUsers', (users) => {
     });
   });
   
-  // Register username with the server
-  socket.emit('register', userName);
+  // Register current username with the server
+  socket.emit('register', currentUsername);
 
   chatInput.addEventListener('input', () => {
-    socket.emit('typing', userName); // Notify server you're typing
-  
+    socket.emit('typing', currentUsername); // Notify server you're typing
+
     clearTimeout(typingTimeout);
     typingTimeout = setTimeout(() => {
-      socket.emit('stopTyping', userName); // Stop typing after 2s of no input
+      socket.emit('stopTyping', currentUsername); // Stop typing after 2s of no input
     }, 2000);
   });
 

@@ -108,11 +108,6 @@ p {
     color: greenyellow;
 }
 
-/* Main container styling */
-.container {
-    margin-top: 80px; /* Shift content down to avoid header overlap */
-}
-
   /* Base Styles */
 body, ul, li {
     margin: 0;
@@ -120,18 +115,27 @@ body, ul, li {
     list-style: none;
 }
 
-  .menu {
+header {
+    position: relative; /* keeps hamburger aligned inside header */
+    width: 100%;
+}
+
+/* Menu Styling */
+.menu { 
     display: flex;
     gap: 20px;
     background: #333;
     padding: 10px 20px;
-    justify-content: center;
+    justify-content: center; /* fills the header */
+    width: 100%; /* ensures full width */
+    transition: max-height 0.3s ease;
 }
 
 .menu li {
     position: relative;
 }
 
+/* Links */
 .menu a {
     text-decoration: none;
     color: cyan;
@@ -147,14 +151,14 @@ body, ul, li {
     border-radius: 5px;
 }
 
-/* Active Link Styling */
+/* Active Link */
 .menu a.active {
     color: blueviolet;
     font-weight: bold;
     border-bottom: 2px solid blueviolet;
 }
 
-/* Hover Underline Effect */
+/* Hover underline */
 .menu a::after {
     content: '';
     position: absolute;
@@ -163,15 +167,15 @@ body, ul, li {
     background: cyan;
     bottom: -5px;
     left: 50%;
-    transition: all 0.3s ease;
     transform: translateX(-50%);
+    transition: all 0.3s ease;
 }
 
 .menu a:hover::after {
     width: 100%;
 }
 
-/* General Dropdown Styling */
+/* Dropdown Styling */
 .dropdown {
     display: none;
     position: absolute;
@@ -179,9 +183,8 @@ body, ul, li {
     left: 0;
     background-color: #444;
     border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     padding: 10px 0;
-    z-index: 1000;
     min-width: 200px;
     opacity: 0;
     visibility: hidden;
@@ -189,7 +192,6 @@ body, ul, li {
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
 }
 
-/* Show Dropdown on Hover (Desktop) */
 .menu li:hover .dropdown {
     display: block;
     opacity: 1;
@@ -197,7 +199,6 @@ body, ul, li {
     transform: translateY(0);
 }
 
-/* Dropdown Links Styling */
 .dropdown a {
     color: cyan;
     padding: 10px 20px;
@@ -210,7 +211,22 @@ body, ul, li {
     background-color: #575757;
 }
 
-/* Responsive Menu for Smaller Screens */
+/* Hamburger Button */
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    color: cyan;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    z-index: 1001;
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
     .menu {
         flex-direction: column;
@@ -242,96 +258,43 @@ body, ul, li {
     .menu-item.active .dropdown {
         display: block;
     }
-}
 
-/* Mobile Dropdown Toggle */
-.menu-item .open {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-@media (max-width: 768px) {
-    .menu {
-        display: none;
-        flex-direction: column;
-    }
-
-    .menu.active {
-        display: flex;
-    }
-
-    .menu-item {
-        width: 100%;
-    }
-
-    .menu-item .dropdown {
-        position: static;
-        display: none;
-    }
-
-    .menu-item.active .dropdown {
-        display: block;
-    }
-}
-
-/* Hamburger Button */
-.menu-toggle {
-    display: none;
-    font-size: 24px;
-    color: cyan;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    position: absolute;
-    top: 5px;
-    right: 20px;
-    z-index: 1001;
-}
-
-@media (max-width: 768px) {
     .menu-toggle {
         display: block;
     }
 }
 
-.menu {
-    transition: max-height 0.3s ease;
+/* Media Container Styles */
+.media-container {
+  gap: 1rem;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
 }
 
-/* Media Container Styles */
-  .media-container {
-    display: grid;
-    gap: 1rem;
-    margin-top: 1rem;
-    transition: all 0.3s ease;
-  }
-  
-  .grid-view {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-  
-  .list-view {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .media-item {
-    background: #f0f0f0;
-    padding: 1rem;
-    border-radius: 8px;
-  }
-  
-  .media-item img,
-  .media-item video {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 6px;
-  }
-  
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.list-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.media-item {
+  background: #f0f0f0;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.media-item img,
+.media-item video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
 /* Image Styling */
 .img-responsive {
     width: 100%;
@@ -873,4 +836,69 @@ button:active {
 
 #download-btn:hover {
     background-color: #9b3d62; /* Darker purple on hover */
+}
+
+.difficulty-selector {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.difficulty-selector label {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.difficulty-selector input[type="radio"] {
+  display: none; /* Hide default radio */
+}
+
+.difficulty-selector label span {
+  display: inline-block;
+  font-weight: bold;
+}
+
+/* EASY */
+.difficulty-selector input[value="easy"] + span {
+  background-color: #66BB6A; /* brighter green */
+  border-color: #66BB6A;
+  color: white;
+}
+.difficulty-selector input[value="easy"]:hover + span {
+  background-color: #4CAF50; /* darker green */
+}
+.difficulty-selector input[value="easy"]:checked + span {
+  background-color: #2E7D32; /* even darker green */
+}
+
+/* NORMAL */
+.difficulty-selector input[value="normal"] + span {
+  background-color: #FFD54F; /* bright yellow */
+  border-color: #FFD54F;
+  color: black;
+}
+.difficulty-selector input[value="normal"]:hover + span {
+  background-color: #FFC107; /* darker yellow */
+}
+.difficulty-selector input[value="normal"]:checked + span {
+  background-color: #FF8F00; /* even darker yellow-orange */
+  color: white;
+}
+
+/* HARD */
+.difficulty-selector input[value="hard"] + span {
+  background-color: #E57373; /* bright red */
+  border-color: #E57373;
+  color: white;
+}
+.difficulty-selector input[value="hard"]:hover + span {
+  background-color: #F44336; /* darker red */
+}
+.difficulty-selector input[value="hard"]:checked + span {
+  background-color: #B71C1C; /* even darker red */
 }

@@ -26,29 +26,33 @@
     <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />       
 </head>
 <body>
-    <header>
-        <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
-        <nav>
-            <ul class="menu" id="nav-menu">
-                <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
-                <li><a href="game-results.html"><i class="fas fa-trophy"></i> Hayase Yuuka Game Results</a></li>
-                <li class="menu-item">
-                    <a href=""><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
-                    <ul class="dropdown">
-                        <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i> All Hayase Yuuka Photos</a></li>
-                        <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i> All Hayase Yuuka Videos</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href=""><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
-                    <ul class="dropdown">
-                        <li><a href="maze.html"><i class="fas fa-desktop"></i> Yuuka's Maze Game</a></li>
-                        <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-desktop"></i> Play Whack-A-Yuuka Game</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </header>
+<header>
+    <!-- Hamburger button for mobile -->
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+
+    <nav>
+        <ul class="menu" id="nav-menu">
+            <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="game-results.html"><i class="fas fa-trophy"></i> Hayase Yuuka Game Results</a></li>
+            
+            <li class="menu-item">
+                <a href="#"><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
+                <ul class="dropdown">
+                    <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i> All Hayase Yuuka Photos</a></li>
+                    <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i> All Hayase Yuuka Videos</a></li>
+                </ul>
+            </li>
+            
+            <li class="menu-item">
+                <a href="#"><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
+                <ul class="dropdown">
+                    <li><a href="yuuka's-math.html"><i class="fas fa-dice"></i> Yuuka's Math Game</a></li>
+                    <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-gamepad"></i> Play Whack-A-Yuuka Game</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -78,6 +82,32 @@
     });
     </script>
 
+        <div id="time">Loading time...</div>
+        <div id="calendar">Loading calendar...</div>
+        <button id="open-modal-btn" class="quiz-btn">Start Yuuka Quiz</button>
+        <div id="view-toggle" class="view-toggle">
+        <!-- Content for view toggle -->
+        </div>
+
+                <button id="chat-toggle-btn">💬 Chat</button>
+
+        <div id="chat-container">
+            <div id="chat-history"></div>
+            <input type="text" id="chat-input" placeholder="Type a message..." />
+            <button id="send-btn">Send</button>
+            <button id="emoji-btn">😊</button>
+            <input type="text" id="private-msg-to" placeholder="Recipient username" />
+            <button id="private-msg-btn">Send Private</button>
+            <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+            <input type="text" id="change-username-input" placeholder="New username" />
+            <button id="change-username-btn">Change Username</button>
+          </div>
+        
+          <div>
+            <h3>Online Users</h3>
+            <ul id="online-users"></ul>
+          </div> 
+          
 <!-- Modal Structure -->
 <div id="quiz-modal" class="modal">
     <div class="modal-content">
@@ -118,12 +148,6 @@
 
     <!-- Main Content Section -->
     <div class="container">
-        <div id="time">Loading time...</div>
-        <div id="calendar">Loading calendar...</div>
-        <button id="open-modal-btn" class="quiz-btn">Start Yuuka Quiz</button>
-        <div id="view-toggle" class="view-toggle">
-            <!-- Content for view toggle -->
-        </div>
         
         <h2>Welcome to My Hayase Yuuka Website!</h2>
         <p class="paragraph-1">This is my second website using VS Code.</p>
@@ -132,28 +156,7 @@
         <p>If you love Hayase Yuuka, click the button below:</p>
         <button class="button" onclick="showMessage()">Click Me!</button>
 
-        <button id="chat-toggle-btn">💬 Chat</button>
-
-        <div id="chat-container">
-            <div id="chat-history"></div>
-            <input type="text" id="chat-input" placeholder="Type a message..." />
-            <button id="send-btn">Send</button>
-            <button id="emoji-btn">😊</button>
-            <input type="text" id="private-msg-to" placeholder="Recipient username" />
-            <button id="private-msg-btn">Send Private</button>
-            <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-          </div>
-        
-          <div>
-            <h3>Online Users</h3>
-            <ul id="online-users"></ul>
-          </div>  
-          
-        <div id="gif-container" style="display:none;">
-            <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
-        </div>
-
-        <div id="music-player">
+                <div id="music-player">
             <audio id="bg-music" loop>
                 <source src="Blue Archive OST 17. Irasshaimase.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
@@ -226,7 +229,20 @@
                 // Attach event listener for the music toggle button
                 toggleButton.addEventListener('click', toggleMusic);
             });
-        </script>        
+        </script>         
+
+<div>
+  <div class="box">
+    <button class="button1" onclick="setGridView()">Grid View</button>
+  </div>
+  <div class="box">
+    <button class="button2" onclick="setListView()">List View</button>
+  </div>
+</div>
+
+        <div id="gif-container" style="display:none;">
+            <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
+        </div>
 
         <div class="img-responsive image-container carousel">
             <div class="image-item">
@@ -276,14 +292,6 @@
             }
         </style>
 
-<div class="box">
-    <button class="button1" onclick="setGridView()">Grid View</button>
-  </div>
-  <div class="box">
-    <button class="button2" onclick="setListView()">List View</button>
-  </div>
-</div>
-
     <div class=" media-container grid-view">
         <div class="img-responsive image-container media-item">
             <img src="IMG_2432.GIF" alt="Angry Yuuka" class="image zoom">
@@ -309,11 +317,9 @@
             <img src="IMG_2487.GIF" alt="Happy Yuuka" class="image zoom">
             <div class="text" style="color: blueviolet;">Yuuka is Happy!</div>
         </div>
-    </div>
 
         <p style="color: blue; background-color: pink; font-size: 18px; font-weight: bold; margin: 20px; padding: 10px;">More Yuuka Photos Below</p>
 
-    <div class=" media-container grid-view">
         <div class="img-responsive image-container media-item">
             <img src="IMG_3793.JPG" alt="Yuuka has coffee" class="image wiggle">
             <div class="text" style="color: cyan;">Yuuka is serving you coffee!</div>
@@ -338,11 +344,10 @@
             <img src="IMG_4095.JPG" alt="Cute Yuuka maid" class="image wiggle">
             <div class="text" style="color: blueviolet;">Yuuka is a cute maid!</div>
         </div>
-    </div>
 
         <div style="color: pink">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</div>
     </div>
-</div>
+
 
         <div id="easter-egg" onclick="showSecret()" style="color: #8527dd;">Click me for a surprise!</div>
         <script>

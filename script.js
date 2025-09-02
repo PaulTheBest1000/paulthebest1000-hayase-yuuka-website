@@ -389,16 +389,16 @@ questions.forEach(question => {
   });
   
   function setGridView() {
-      const container = document.querySelector('.media-container');
-      container.classList.remove('list-view');
-      container.classList.add('grid-view');
-    }
-  
-    function setListView() {
-      const container = document.querySelector('.media-container');
-      container.classList.remove('grid-view');
-      container.classList.add('list-view');
-    }
+    const container = document.querySelector('.media-container');
+    container.classList.remove('list-view');
+    container.classList.add('grid-view');
+  }
+
+  function setListView() {
+    const container = document.querySelector('.media-container');
+    container.classList.remove('grid-view');
+    container.classList.add('list-view');
+  }
   
     function saveResultImageToGallery(imageDataURL, playerName, score) {
       const timestamp = new Date().toLocaleString();

@@ -214,29 +214,55 @@
   </style>
 </head>
 <body>
-  <header>
+<header>
+    <!-- Hamburger button for mobile -->
     <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+
     <nav>
         <ul class="menu" id="nav-menu">
             <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
             <li><a href="game-results.html"><i class="fas fa-trophy"></i> Hayase Yuuka Game Results</a></li>
+            
             <li class="menu-item">
-                <a href=""><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
+                <a href="#"><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
                 <ul class="dropdown">
                     <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i> All Hayase Yuuka Photos</a></li>
                     <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i> All Hayase Yuuka Videos</a></li>
                 </ul>
             </li>
+            
             <li class="menu-item">
-                <a href=""><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
+                <a href="#"><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
                 <ul class="dropdown">
-                    <li><a href="maze.html"><i class="fas fa-desktop"></i> Yuuka's Maze Game</a></li>
-                    <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-desktop"></i> Play Whack-A-Yuuka Game</a></li>
+                    <li><a href="yuuka's-math.html"><i class="fas fa-dice"></i> Yuuka's Math Game</a></li>
+                    <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-gamepad"></i> Play Whack-A-Yuuka Game</a></li>
                 </ul>
             </li>
         </ul>
     </nav>
 </header>
+
+        <div id="time">Loading time...</div>
+        <div id="calendar">Loading calendar...</div>
+
+      <button id="chat-toggle-btn">💬 Chat</button>
+
+      <div id="chat-container">
+        <div id="chat-history"></div>
+        <input type="text" id="chat-input" placeholder="Type a message..." />
+        <button id="send-btn">Send</button>
+        <button id="emoji-btn">😊</button>
+        <input type="text" id="private-msg-to" placeholder="Recipient username" />
+        <button id="private-msg-btn">Send Private</button>
+        <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+        <input type="text" id="change-username-input" placeholder="New username" />
+        <button id="change-username-btn">Change Username</button>
+      </div>
+    
+      <div>
+        <h3>Online Users</h3>
+        <ul id="online-users"></ul>
+      </div> 
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -268,8 +294,6 @@
             
     <div class="container">
         <h1>Hayase Yuuka Photos</h1>
-        <div id="time">Loading time...</div>
-        <div id="calendar">Loading calendar...</div>
         
         <!-- Password Prompt Section -->
         <div id="passwordPrompt">
@@ -287,23 +311,7 @@
   <div id="content" style="display: none;">
       <h1>Welcome to Hayase Yuuka Photos!</h1>
       <p>This page is password protected. You have successfully entered the correct password!</p>
-
-      <button id="chat-toggle-btn">💬 Chat</button>
-
-      <div id="chat-container">
-        <div id="chat-history"></div>
-        <input type="text" id="chat-input" placeholder="Type a message..." />
-        <button id="send-btn">Send</button>
-        <button id="emoji-btn">😊</button>
-        <input type="text" id="private-msg-to" placeholder="Recipient username" />
-        <button id="private-msg-btn">Send Private</button>
-        <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-      </div>
-    
-      <div>
-        <h3>Online Users</h3>
-        <ul id="online-users"></ul>
-      </div>  
+      <p>Spoiler alert! Some images may be too revealing!</p> 
       
         <div class="view-toggle">
             <div class="box">
@@ -313,77 +321,257 @@
               <button class="button2" onclick="setListView()">List View</button>
             </div>
           </div>
-  
-          <div class="media-container grid-view">
-            <div class="media-item"><img src="IMG_4161.JPG" alt="Hayase Yuuka Image 1"></div>
-            <div class="media-item"><img src="IMG_4175.JPG" alt="Hayase Yuuka Image 2"></div>
-            <div class="media-item"><img src="IMG_4191.JPG" alt="Hayase Yuuka Image 3"></div>
-            <div class="media-item"><img src="IMG_4393.JPG" alt="Hayase Yuuka Image 4"></div>
-            <div class="media-item"><img src="IMG_4567.JPG" alt="Hayase Yuuka Image 5"></div>
-            <div class="media-item"><img src="IMG_4569.JPG" alt="Hayase Yuuka Image 6"></div>
-            <div class="media-item"><img src="IMG_4571.JPG" alt="Hayase Yuuka Image 7"></div>
-            <div class="media-item"><img src="IMG_4575.JPG" alt="Hayase Yuuka Image 8"></div>
-            <div class="media-item"><img src="IMG_4576.JPG" alt="Hayase Yuuka Image 9"></div>
-            <div class="media-item"><img src="IMG_4596.JPG" alt="Hayase Yuuka Image 10"></div>
-            <div class="media-item"><img src="IMG_4600.JPG" alt="Hayase Yuuka Image 11"></div>
-            <div class="media-item"><img src="IMG_4602.JPG" alt="Hayase Yuuka Image 12"></div>
-            <div class="media-item"><img src="IMG_4604.JPG" alt="Hayase Yuuka Image 13"></div>
-            <div class="media-item"><img src="IMG_4606.JPG" alt="Hayase Yuuka Image 14"></div>
-            <div class="media-item"><img src="IMG_4610.JPG" alt="Hayase Yuuka Image 15"></div>
-            <div class="media-item"><img src="IMG_4612.JPG" alt="Hayase Yuuka Image 16"></div>
-            <div class="media-item"><img src="IMG_4616.JPG" alt="Hayase Yuuka Image 17"></div>
-            <div class="media-item"><img src="IMG_4618.JPG" alt="Hayase Yuuka Image 18"></div>
-            <div class="media-item"><img src="IMG_4629.JPG" alt="Hayase Yuuka Image 19"></div>
-            <div class="media-item"><img src="IMG_4630.JPG" alt="Hayase Yuuka Image 20"></div>
-            <div class="media-item"><img src="IMG_4634.JPG" alt="Hayase Yuuka Image 21"></div>
-            <div class="media-item"><img src="IMG_4636.JPG" alt="Hayase Yuuka Image 22"></div>
-            <div class="media-item"><img src="IMG_4638.JPG" alt="Hayase Yuuka Image 23"></div>
-            <div class="media-item"><img src="IMG_4640.JPG" alt="Hayase Yuuka Image 24"></div>
-            <div class="media-item"><img src="IMG_4644.JPG" alt="Hayase Yuuka Image 25"></div>
-            <div class="media-item"><img src="IMG_4646.JPG" alt="Hayase Yuuka Image 26"></div>
-            <div class="media-item"><img src="IMG_4648.JPG" alt="Hayase Yuuka Image 27"></div>
-            <div class="media-item"><img src="IMG_4652.JPG" alt="Hayase Yuuka Image 28"></div>
-            <div class="media-item"><img src="IMG_4660.JPG" alt="Hayase Yuuka Image 29"></div>
-            <div class="media-item"><img src="IMG_4665.JPG" alt="Hayase Yuuka Image 30"></div>
-            <div class="media-item"><img src="IMG_4669.JPG" alt="Hayase Yuuka Image 31"></div>
-            <div class="media-item"><img src="IMG_4745.JPG" alt="Hayase Yuuka Image 32"></div>
-            <div class="media-item"><img src="IMG_4755.JPG" alt="Hayase Yuuka Image 33"></div>
-            <div class="media-item"><img src="IMG_4756.JPG" alt="Hayase Yuuka Image 34"></div>
-            <div class="media-item"><img src="IMG_4757.JPG" alt="Hayase Yuuka Image 35"></div>
-            <div class="media-item"><img src="IMG_4771.JPG" alt="Hayase Yuuka Image 36"></div>
-            <div class="media-item"><img src="IMG_4876.GIF" alt="Hayase Yuuka Image 37"></div>
-            <div class="media-item"><img src="IMG_4887.JPG" alt="Hayase Yuuka Image 38"></div>
-            <div class="media-item"><img src="IMG_4979.JPG" alt="Hayase Yuuka Image 39"></div>
-            <div class="media-item"><img src="IMG_5272.JPG" alt="Hayase Yuuka Image 40"></div>
-            <div class="media-item"><img src="IMG_5274.PNG" alt="Hayase Yuuka Image 41"></div>
-            <div class="media-item"><img src="IMG_5634.JPG" alt="Hayase Yuuka Image 42"></div>
-            <div class="media-item"><img src="IMG_5635.JPG" alt="Hayase Yuuka Image 43"></div>
-            <div class="media-item"><img src="IMG_5636.JPG" alt="Hayase Yuuka Image 44"></div>
-            <div class="media-item"><img src="IMG_5637.JPG" alt="Hayase Yuuka Image 45"></div>
-            <div class="media-item"><img src="IMG_5638.JPG" alt="Hayase Yuuka Image 46"></div>
-            <div class="media-item"><img src="IMG_5961.JPG" alt="Hayase Yuuka Image 47"></div>
-            <div class="media-item"><img src="IMG_5964.JPG" alt="Hayase Yuuka Image 48"></div>
-            <div class="media-item"><img src="IMG_5974.JPG" alt="Hayase Yuuka Image 49"></div>
-            <div class="media-item"><img src="IMG_6210.JPG" alt="Hayase Yuuka Image 50"></div>
-            <div class="media-item"><img src="IMG_6211.JPG" alt="Hayase Yuuka Image 51"></div>
-            <div class="media-item"><img src="IMG_6212.JPG" alt="Hayase Yuuka Image 52"></div>
-            <div class="media-item"><img src="IMG_6213.JPG" alt="Hayase Yuuka Image 53"></div>
-            <div class="media-item"><img src="IMG_6214.JPG" alt="Hayase Yuuka Image 54"></div>
-            <div class="media-item"><img src="IMG_6215.JPG" alt="Hayase Yuuka Image 55"></div>
-            <div class="media-item"><img src="IMG_6216.JPG" alt="Hayase Yuuka Image 56"></div>
-            <div class="media-item"><img src="IMG_6217.JPG" alt="Hayase Yuuka Image 57"></div>
-            <div class="media-item"><img src="IMG_6218.JPG" alt="Hayase Yuuka Image 58"></div>
-            <div class="media-item"><img src="IMG_6219.JPG" alt="Hayase Yuuka Image 59"></div>
-            <div class="media-item"><img src="IMG_6280.JPG" alt="Hayase Yuuka Image 60"></div>
-            <div class="media-item"><img src="IMG_6281.JPG" alt="Hayase Yuuka Image 61"></div>
-            <div class="media-item"><img src="IMG_6283.JPG" alt="Hayase Yuuka Image 62"></div>
-            <div class="media-item"><img src="IMG_6284.JPG" alt="Hayase Yuuka Image 63"></div>
-            <div class="media-item"><img src="IMG_6318.PNG" alt="Hayase Yuuka Image 64"></div>
-            <div class="media-item"><img src="IMG_6319.PNG" alt="Hayase Yuuka Image 65"></div>
-            <div class="media-item"><img src="IMG_6320.PNG" alt="Hayase Yuuka Image 66"></div>            
-          </div> <!-- Closing for .media-container -->
-      </div> <!-- Closing for #content -->
-    </div> <!-- Closing for .container -->
+
+  <div class="media-container grid-view">
+  <div class="media-item"><img src="GKFKrbPaEAA6_kh.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="GOOerNhXgAAUs0m.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="Goz8171bEAAqJuk.jpg_large.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="GSDtR7jboAA0Kpb.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="GUCc7eHacAABJjy.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="GUnraeNXwAE4KVf.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="GVVSH2faYAAmXVC.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_2432.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_2487.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_2489.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_2490.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_2496.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3441.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3442.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3446.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3551.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3591.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3592.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3594.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3595.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3596.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3597.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3598.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3599.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3600.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3601.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3602.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3624.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3631.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3640.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3763.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3766.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3770.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3788.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3793.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3794.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3797.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3853.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_3855.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4023.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4025.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4033.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4093.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4161.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4175.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4177.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4393.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4503.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4505.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4567.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4569.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4571.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4575.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4576.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4578.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4590.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4592.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4594.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4596.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4598.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4600.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4602.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4604.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4606.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4610.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4612.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4614.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4616.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4618.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4620.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4622.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4624.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4626.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4627.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4629.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4630.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4632.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4634.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4636.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4638.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4640.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4642.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4644.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4646.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4648.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4650.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4652.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4655.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4656.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4658.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4660.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4662.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4664.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4665.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4667.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4669.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4745.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4755.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4756.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4757.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4771.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4773.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4876.GIF" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4887.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4901.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_4979.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5268.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5270.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5272.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5274.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5276.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5293.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5496.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5634.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5635.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5636.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5637.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5638.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5639.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5830.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5961.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5963.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5964.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5974.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_5997.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6044.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6146.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6209.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6210.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6211.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6212.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6213.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6214.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6215.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6216.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6217.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6218.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6219.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6265.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6266.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6280.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6281.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6282.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6283.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6284.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6315.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6316.JPG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6318.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6319.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG_6320.PNG" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="118554509_p0.png" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="118554509_p1.png" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="119675654_p0.png" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="121711647_p0_master1200.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="1729196468298.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="509437000_649539721450689_6605942079671853974_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="514363642_654948090909852_3493839345508741325_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="514875500_661498793588115_7383688587367113905_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="515409892_661490663588928_1069431267187076815_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="515438761_667681382969856_544642468379051277_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="515487232_661499863588008_6839313437461921676_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="515701790_661475876923740_450650484277238056_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="516239124_661494173588577_4525765463921597496_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="516339661_661499200254741_4475585304694746894_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="516578101_661483470256314_2733947618408034370_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="516628141_661498416921486_8968962800257542531_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="516716614_662760096795318_3814334847288631824_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="517049576_661488683589126_2769630785892712435_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="517806758_662762880128373_8099210852477168803_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518270984_667694769635184_4035956634342297489_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518271357_667691276302200_6819136961120295628_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518273566_667682172969777_2343016811936889207_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518275256_667684109636250_3267101326899141447_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518275867_667691599635501_8175595538717754618_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518276684_668590652878929_301419000662701416_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518277683_668592822878712_4450395133396725888_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518288805_668592049545456_520905081988853050_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518329908_670176359387025_2709255783308853205_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518334547_671139835957344_1632501919854591500_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518336624_670172612720733_7299000468576424733_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518338438_671138439290817_76689177380860475_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518352851_670181199386541_483197118392427341_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518365708_671140435957284_3956606514726026711_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518384739_671139355957392_1048627147160314202_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518387282_671140219290639_1335945469574634798_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518396064_684634191274575_2009697150521533928_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518529264_670175179387143_4355360223082244196_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="518982486_673107072427287_1728709594909790973_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="519500680_670181852719809_7178246828493256292_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="520166246_673108999093761_4194715554095812764_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="520978386_675562832181711_4181492952232839155_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="521458859_675574095513918_1235938666215118659_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="522008970_675562465515081_7010280187238543153_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="522665841_675558818848779_7341379217333224107_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="522915331_673097869094874_4992105057618095109_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="523323884_675564575514870_8667745782220359582_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="523715700_675568635514464_325365457762423820_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="523816931_675560858848575_6116868285818873296_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="523863367_675566115514716_2840499344109366566_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="523878449_676591858745475_2476480456638597791_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="523879152_676594108745250_660410608390390774_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="523948468_675564935514834_280001468810475095_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="524149693_675564125514915_9068875642966470348_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="526866160_684622211275773_1318234215578973212_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527098402_684619597942701_5269774704263206015_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527108385_684636274607700_8940816001873061525_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527163721_684632117941449_7865961580168559941_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527187273_684638761274118_6556734514659383798_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527217874_684631441274850_1438335451764167623_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527301846_684623751275619_4402451070538215561_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527327864_684629661275028_8588044228024597065_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527335720_684616457943015_6470971767774449782_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527339949_684617777942883_7459967984750739575_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527344319_684608077943853_8853609570368863435_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527374003_684619781276016_3283155727799291502_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527397595_684621304609197_7742940872671639699_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527450892_684621141275880_4650190083226964342_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527452741_684633717941289_7598833740489709784_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527524079_684635857941075_4102894699031586712_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527613265_684627141275280_6347805194892849396_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527787630_684625531275441_6915607978281873060_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528040137_684617551276239_955833110886789684_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528074741_684638091274185_4062067495598341663_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528158629_684621957942465_59833923314853536_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528162837_684629244608403_7567386318379869933_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528312243_684623197942341_1287571074604417647_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528383526_684625161275478_8544323834555645014_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528607010_684625391275455_4888355666786217547_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="FB_IMG_1750837289310.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="FB_IMG_1753269051274.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="FB_IMG_1755996016347.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="FB_IMG_1756137437743.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="Gx6RNEJbCAA3dPI.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="illust_112441601_20250426_073000.png" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="illust_125562434_20250729_073613.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG-20250730-WA0049.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG-20250730-WA0058.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="IMG-20250823-WA0027.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="yuuka_blue_archive_drawn_by_aikawa_ryou__sample-e1a91c937d79d217a3e31f7554fa2873.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="yuuka_blue_archive_drawn_by_ddungddang__sample-8491a00dce4b2aeea9ffa789468efe9a.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="yuuka_blue_archive_drawn_by_fortysansan__sample-d6be6c6438eec54913765b1335becc37.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="yuuka_blue_archive_drawn_by_herananu117__sample-d3448f0dae8ef732d102789ee4025bf0.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="yuuka_blue_archive_drawn_by_kame_nokonoko10271__sample-72bd9a64b9dc05f9a867d3be8e79c21d.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="yuuka_blue_archive_drawn_by_oryo_oryo04__sample-ad2c11ae2c76a8b576d955f5828b30b6.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="yuuka_blue_archive_drawn_by_shuvi_shuvi1125__sample-0feacbedf435ecb314d4a39eb9db55b4.jpg" alt="Hayase Yuuka"></div>
+
+  </div> <!-- Closing for .media-container -->
+ </div> <!-- Closing for #content -->
+</div> <!-- Closing for .container -->
 
 <script>
 // Function to check the password and hide the container

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hayase Yuuka Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extra.css">
+    <link rel="stylesheet" href="chat.css">
+    <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <!-- Hamburger button for mobile -->
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+
+    <nav>
+        <ul class="menu" id="nav-menu">
+            <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="game-results.html"><i class="fas fa-trophy"></i> Hayase Yuuka Game Results</a></li>
+            
+            <li class="menu-item">
+                <a href="#"><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
+                <ul class="dropdown">
+                    <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i> All Hayase Yuuka Photos</a></li>
+                    <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i> All Hayase Yuuka Videos</a></li>
+                </ul>
+            </li>
+            
+            <li class="menu-item">
+                <a href="#"><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
+                <ul class="dropdown">
+                    <li><a href="yuuka's-math.html"><i class="fas fa-dice"></i> Yuuka's Math Game</a></li>
+                    <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-gamepad"></i> Play Whack-A-Yuuka Game</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+    <div id="time">Loading time...</div>
+    <div id="calendar">Loading calendar...</div>
+
+  <button id="chat-toggle-btn">💬 Chat</button>
+
+  <div id="chat-container">
+    <div id="chat-history"></div>
+    <input type="text" id="chat-input" placeholder="Type a message..." />
+    <button id="send-btn">Send</button>
+    <button id="emoji-btn">😊</button>
+    <input type="text" id="private-msg-to" placeholder="Recipient username" />
+    <button id="private-msg-btn">Send Private</button>
+    <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+    <input type="text" id="change-username-input" placeholder="New username" />
+    <button id="change-username-btn">Change Username</button>
+  </div>
+
+  <div>
+    <h3>Online Users</h3>
+    <ul id="online-users"></ul>
+  </div>
+  
+  <div class="container">
+    <h2>Welcome to Yuuka's Math Game!</h2>
+    <p>Are you smart like Yuuka?</p>
+  </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // Highlight the active menu item
+    document.querySelectorAll('.menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.querySelector('.menu a.active')?.classList.remove('active');
+            link.classList.add('active');
+        });
+    });
+
+    // Toggle dropdowns when clicking menu items
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            const dropdown = item.querySelector('.dropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('open');
+                e.stopPropagation();  // Prevent menu toggle from closing when clicking dropdown
+            }
+        });
+    });
+
+    // Toggle the mobile menu on hamburger click
+    document.querySelector('.menu-toggle').addEventListener('click', () => {
+        document.getElementById('nav-menu').classList.toggle('active');
+    });
+});
+</script>
+
+<!-- Start Screen -->
+<div id="start-screen">
+  <input type="text" id="username" placeholder="Enter your name">
+
+<div id="move-counter">Attempts: 0</div>
+
+  <div class="difficulty-buttons" style="display:inline-block; vertical-align: middle;">
+    <button id="easy-btn" data-difficulty="easy" type="button">Easy</button>
+    <button id="normal-btn" data-difficulty="normal" type="button">Normal</button>
+    <button id="hard-btn" data-difficulty="hard" type="button">Hard</button>
+  </div>
+</div>
+
+<!-- Game Area -->
+<div id="game-area">
+  <!-- math problems will be injected here -->
+</div>
+
+  <h2>Please don't use phone calculator!</h2>
+  <h1>Use your brain or a simple calculator!</h1>
+  <h1>Good luck!</h1>
+
+<script>
+  const gameArea = document.getElementById('game-area');
+  const moveCounterDisplay = document.getElementById('move-counter');
+  let moveCount = 0;
+  let correctAnswers = 0;
+  let totalQuestions = 5; // Number of math problems to solve
+  let startTime, endTime;
+  let difficulty = null;
+  let gameStarted = false;
+
+  const userNameInput = document.getElementById('username');
+  const diffButtons = document.querySelectorAll('.difficulty-buttons button');
+
+  // Watch player name input
+  userNameInput.addEventListener('input', () => {
+    tryAutoStart();
+  });
+
+  // Watch difficulty selection
+  diffButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      diffButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      difficulty = btn.dataset.difficulty;
+      tryAutoStart();
+    });
+  });
+
+  // Try starting the game when both username + difficulty are set
+  function tryAutoStart() {
+    const userName = userNameInput.value.trim();
+    if (userName && difficulty && !gameStarted) {
+      startGame(userName);
+    }
+  }
+
+  function startGame(userName) {
+    gameStarted = true;
+    localStorage.setItem('userName', userName);
+    document.getElementById('start-screen').style.display = 'none';
+    gameArea.style.display = 'block';
+
+    startTime = new Date();
+    moveCount = 0;
+    correctAnswers = 0;
+    moveCounterDisplay.textContent = `Attempts: ${moveCount}`;
+
+    showProblem();
+  }
+
+function generateProblem() {
+  let a, b, operators, operator, answer;
+
+  if (difficulty === 'easy') {
+    a = Math.floor(Math.random() * 10) + 1;
+    b = Math.floor(Math.random() * 10) + 1;
+    operators = ['+', '-'];
+  } else if (difficulty === 'normal') {
+    a = Math.floor(Math.random() * 100) + 1;
+    b = Math.floor(Math.random() * 100) + 1;
+    if (Math.random() < 0.5) a *= -1;
+    if (Math.random() < 0.5) b *= -1;
+    operators = ['+', '-'];
+  } else if (difficulty === 'hard') {
+    a = Math.floor(Math.random() * 1000) + 1;
+    b = Math.floor(Math.random() * 1000) + 1;
+    if (Math.random() < 0.5) a *= -1;
+    if (Math.random() < 0.5) b *= -1;
+    operators = ['+', '-', '*', '/'];
+  }
+
+  // Pick operator randomly
+  operator = operators[Math.floor(Math.random() * operators.length)];
+
+  // Hard mode division handling
+  if (difficulty === 'hard' && operator === '/') {
+    if (Math.random() < 0.5) {
+      // Make exact integer division 50% of the time
+      b = Math.floor(Math.random() * 1000) + 1;
+      a = b * (Math.floor(Math.random() * 20) + 1);
+    } else {
+      // Otherwise, normal decimal division
+      b = Math.floor(Math.random() * 999) + 1; // avoid zero
+    }
+  }
+
+  // Compute answer
+  switch (operator) {
+    case '+': answer = a + b; break;
+    case '-': answer = a - b; break;
+    case '*': answer = a * b; break;
+    case '/':
+      answer = a / b;
+      answer = parseFloat(answer.toFixed(2)); // round to 2 decimals
+      break;
+  }
+
+  return { question: `${a} ${operator} ${b}`, answer };
+}
+
+function showProblem() {
+  const problem = generateProblem();
+  const problemDiv = document.createElement('div');
+  problemDiv.className = 'math-problem';
+  problemDiv.innerHTML = `
+    <h2>Solve: ${problem.question}</h2>
+    <input type="number" id="answerInput" placeholder="Enter answer" step="any">
+    <button id="submitAnswer">Submit</button>
+  `;
+  gameArea.innerHTML = '';
+  gameArea.appendChild(problemDiv);
+
+  document.getElementById('submitAnswer').addEventListener('click', () => {
+    const userAnswer= parseFloat(document.getElementById('answerInput').value);
+    moveCount++;
+    moveCounterDisplay.textContent = `Attempts: ${moveCount}`;
+
+    if (isNaN(userAnswer)) {
+      alert('Please enter a valid number!');
+      return;
+    }
+
+    // Allow a small difference (tolerance) for decimals
+    const tolerance = 0.01;
+    if (Math.abs(userAnswer - problem.answer) < tolerance) {
+      correctAnswers++;
+      if (correctAnswers >= totalQuestions) {
+        endTime = new Date();
+        const timeTaken = Math.floor((endTime - startTime) / 1000);
+        showThankYouMessage(timeTaken);
+      } else {
+        showProblem();
+      }
+    } else {
+      alert('Wrong answer! Try again!');
+    }
+  });
+}
+
+  function showThankYouMessage(timeTaken) {
+    const playerName = localStorage.getItem('playerName') || 'Player';
+
+    const thankYouMessage = document.createElement('div');
+    thankYouMessage.className = 'thank-you-message';
+    thankYouMessage.innerHTML = `
+      <h2>Yuuka: "Great work, ${playerName}! 🎉"</h2>
+      <p>You solved ${totalQuestions} ${difficulty.toUpperCase()} math problems! 🧮</p>
+      <p>It took you ${timeTaken} seconds with ${moveCount} attempts. ⏱️</p>
+      <img id="resultImage" src="IMG_6212.JPG" style="display:none;">
+      <p id="finalMessage" style="display:none;"></p>
+    `;
+
+    document.body.appendChild(thankYouMessage);
+
+    const resultImage = document.getElementById('resultImage');
+    const finalMessage = document.getElementById('finalMessage');
+    finalMessage.style.display = 'block';
+    finalMessage.textContent = `Yuuka is proud of you, ${playerName}! You completed ${difficulty.toUpperCase()} mode in ${timeTaken} seconds with ${moveCount} attempts!`;
+
+    saveAndShowResults(playerName, moveCount, resultImage.src);
+
+    document.getElementById('play-again').addEventListener('click', () => {
+      localStorage.removeItem('playerName');
+      location.reload();
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', downloadResult);
+  }
+
+  function saveAndShowResults(playerName, score, resultImageSrc) {
+    const resultData = {
+      name: playerName,
+      score: score,
+      difficulty: difficulty,
+      image: resultImageSrc,
+      timestamp: new Date().toISOString(),
+    };
+
+    let results = JSON.parse(localStorage.getItem('gameResults')) || [];
+    results.push(resultData);
+    localStorage.setItem('gameResults', JSON.stringify(results));
+
+    displayResults();
+  }
+
+  function displayResults() {
+    const results = JSON.parse(localStorage.getItem('gameResults')) || [];
+    localStorage.setItem('gameResults', JSON.stringify(results));
+    setTimeout(() => {
+      window.location.href = 'game-results.html';
+    }, 10000);
+  }
+
+  function downloadResult() {
+    const finalMessage = document.getElementById('finalMessage');
+    const resultImage = document.getElementById('resultImage');
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = 500;
+    canvas.height = 300;
+
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    context.fillStyle = '#000';
+    context.font = '20px Arial';
+    context.fillText(finalMessage.textContent, 20, 50);
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = resultImage.src;
+    img.onload = () => {
+      context.drawImage(img, 20, 80, 100, 100);
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL();
+      link.download = 'game_result.png';
+      link.click();
+    };
+  }
+</script>
+
+      <script src="script.js"></script>
+      <script src="extra.js"></script>
+
+    <!-- Load Socket.IO script -->
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="chat.js"></script>
+</body>
+</html>

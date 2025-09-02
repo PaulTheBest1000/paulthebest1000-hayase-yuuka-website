@@ -213,29 +213,55 @@
   </style>
 </head>
 <body>
-  <header>
+<header>
+    <!-- Hamburger button for mobile -->
     <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+
     <nav>
         <ul class="menu" id="nav-menu">
             <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
             <li><a href="game-results.html"><i class="fas fa-trophy"></i> Hayase Yuuka Game Results</a></li>
+            
             <li class="menu-item">
-                <a href=""><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
+                <a href="#"><i class="fa fa-desktop"></i> Hayase Yuuka Media</a>
                 <ul class="dropdown">
                     <li><a href="hayase-yuuka-photos.html"><i class="fas fa-image"></i> All Hayase Yuuka Photos</a></li>
                     <li><a href="hayase-yuuka-videos.html"><i class="fas fa-video"></i> All Hayase Yuuka Videos</a></li>
                 </ul>
             </li>
+            
             <li class="menu-item">
-                <a href=""><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
+                <a href="#"><i class="fas fa-gamepad"></i> Hayase Yuuka Games</a>
                 <ul class="dropdown">
-                    <li><a href="maze.html"><i class="fas fa-desktop"></i> Yuuka's Maze Game</a></li>
-                    <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-desktop"></i> Play Whack-A-Yuuka Game</a></li>
+                    <li><a href="yuuka's-math.html"><i class="fas fa-dice"></i> Yuuka's Math Game</a></li>
+                    <li><a href="whack-a-yuuka-weasel.html"><i class="fas fa-gamepad"></i> Play Whack-A-Yuuka Game</a></li>
                 </ul>
             </li>
         </ul>
     </nav>
 </header>
+
+    <div id="time">Loading time...</div>
+    <div id="calendar">Loading calendar...</div>
+
+  <button id="chat-toggle-btn">💬 Chat</button>
+
+  <div id="chat-container">
+    <div id="chat-history"></div>
+    <input type="text" id="chat-input" placeholder="Type a message..." />
+    <button id="send-btn">Send</button>
+    <button id="emoji-btn">😊</button>
+    <input type="text" id="private-msg-to" placeholder="Recipient username" />
+    <button id="private-msg-btn">Send Private</button>
+    <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+    <input type="text" id="change-username-input" placeholder="New username" />
+    <button id="change-username-btn">Change Username</button>
+  </div>
+
+  <div>
+    <h3>Online Users</h3>
+    <ul id="online-users"></ul>
+  </div> 
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -267,8 +293,6 @@
 
 <div class="container">
     <h1>Hayase Yuuka Videos</h1>
-    <div id="time">Loading time...</div>
-    <div id="calendar">Loading calendar...</div>
     
     <!-- Password Prompt Section -->
     <div id="passwordPrompt">
@@ -286,23 +310,7 @@
   <div id="content" style="display: none;">
     <h1>Welcome to Hayase Yuuka Videos!</h1>
     <p>This page is password protected. You have successfully entered the correct password!</p>
-
-  <button id="chat-toggle-btn">💬 Chat</button>
-
-  <div id="chat-container">
-    <div id="chat-history"></div>
-    <input type="text" id="chat-input" placeholder="Type a message..." />
-    <button id="send-btn">Send</button>
-    <button id="emoji-btn">😊</button>
-    <input type="text" id="private-msg-to" placeholder="Recipient username" />
-    <button id="private-msg-btn">Send Private</button>
-    <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-  </div>
-
-  <div>
-    <h3>Online Users</h3>
-    <ul id="online-users"></ul>
-  </div>  
+    <p>Spoiler alert! Some images may be too revealing!</p>  
   
     <div class="view-toggle">
       <div class="box">
@@ -327,6 +335,11 @@
       <div class="media-item">
         <video controls>
           <source src="IMG_6346.MP4" type="video/mp4">
+        </video>
+      </div>
+      <div class="media-item">
+        <video controls>
+          <source src="IMG_6397.MP4" type="video/mp4">
         </video>
       </div>
     </div> <!-- Closing for .media-container -->
