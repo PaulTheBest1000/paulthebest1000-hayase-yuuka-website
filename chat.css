@@ -2,7 +2,7 @@
   position: fixed;
   display: none; /* Initially hidden */
   bottom: 20px;
-  right: 20px;
+  right: 80px;
   width: 300px;
   background-color: #fff;
   border: 2px solid #ccc;
@@ -63,4 +63,72 @@ button {
     padding: 10px;
     font-size: 18px;
   }
+}
+
+#online-users-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  max-width: 280px;
+  width: 100%;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+/* Head and Body Bar */
+#online-users-header {
+  background: linear-gradient(90deg, blueviolet, cyan);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  text-shadow: 0 0 6px rgba(0,0,0,0.6);
+}
+
+/* User List */
+#online-users { 
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+#online-users li {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(0,255,255,0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s ease-in-out, transform 0.15s ease-in-out;
+  color: #e0e0ff;
+}
+
+#online-users li:last-child {
+  border-bottom: none;
+}
+
+#online-users li::before {
+  content: "●";
+  font-size: 12px;
+  animation: pulseColors 6s infinite alternate;
+}
+
+/* Keyframes for blueviolet → cyan → lime */
+@keyframes pulseColors {
+  0%  { color: blueviolet; }
+  20% { color: cyan; }
+  40% { color: lime; }
+  60% { color: lime; }
+  80% { color: cyan; }
+  100%{ color: blueviolet; }
+}
+
+#online-users li:hover {
+  background: rgba(138, 43, 226, 0.15);
+  transform: translateX(3px);
+  cursor: pointer;
+}
+#online-users li:active {
+  transform: translateX(1px);
 }

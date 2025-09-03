@@ -15,6 +15,7 @@ body {
     display: flex;
     justify-content: center;  /* Align items horizontally in the center */
     align-items: center;  /* Align items vertically in the center */
+    flex-direction: row; /* Stack items horizontally */
     flex-direction: column; /* Stack items vertically */
     min-height: 100vh;
     font-size: 16px;

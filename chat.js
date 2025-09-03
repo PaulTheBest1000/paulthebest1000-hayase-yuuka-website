@@ -11,7 +11,7 @@ const emojiPicker = ["😊", "😂", "😢", "😍", "😎", "😜"]; // Example
 const onlineUsersList = document.getElementById('online-users');
 
 // Store the username (can be fetched from localStorage or set on user login)
-const userName = localStorage.getItem('playerName') || 'Player'; // Default to 'Player' if no name is found
+const userName = localStorage.getItem('playerName') || 'User'; // Default to 'Player' if no name is found
 
 let currentUsername = userName; // start with the initial username
 
@@ -56,19 +56,6 @@ sendBtn.addEventListener('click', () => {
     }
 });
 
-// Send private message
-privateMsgBtn.addEventListener('click', () => {
-  const recipient = privateMsgToInput.value.trim();
-  const message = chatInput.value.trim();
-  if (message && recipient) {
-    // Emit private message with the current username and recipient
-    socket.emit('sendPrivateMessage', { message, sender: 'user', username: currentUsername, recipient });
-    chatInput.value = ''; // Clear input field
-    privateMsgToInput.value = ''; // Clear recipient input
-    displayMessage(`To ${recipient}: ${message}`, 'user');
-  }
-});
-
 // Emoji Picker Button
 emojiBtn.addEventListener('click', () => {
   const randomEmoji = emojiPicker[Math.floor(Math.random() * emojiPicker.length)];
@@ -81,14 +68,6 @@ socket.on('receiveMessage', (data) => {
         displayMessage(data.message, data.sender, data.username); // Display message from other users
     }
 });
-  
-  // Listen for private messages
-  socket.on('receivePrivateMessage', (data) => {
-    // Same check for private messages
-    if (data.username) {
-      displayMessage(`[Private] ${data.username}: ${data.message}`, data.sender);
-    }
-  });  
 
 socket.on('onlineUsers', (users) => {
     onlineUsersList.innerHTML = '';

@@ -55,9 +55,7 @@
     <input type="text" id="chat-input" placeholder="Type a message..." />
     <button id="send-btn">Send</button>
     <button id="emoji-btn">😊</button>
-    <input type="text" id="private-msg-to" placeholder="Recipient username" />
-    <button id="private-msg-btn">Send Private</button>
-    <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+    <div id="typing-indicator" style="font-style: italic; color: cyan;"></div>
     <input type="text" id="change-username-input" placeholder="New username" />
     <button id="change-username-btn">Change Username</button>
   </div>
@@ -99,8 +97,8 @@
             <p>Try to score as many points as you can in 1 minute and 15 seconds!</p>
         </div>
 
-  <div>
-    <h3>Online Users</h3>
+  <div id="online-users-container">
+    <div id="online-users-header">🟢 Online Users</div>
     <ul id="online-users"></ul>
   </div>  
   

@@ -62,27 +62,6 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Handle private messages
-  socket.on('sendPrivateMessage', (data) => {
-    console.log(`Private message from ${data.username} to ${data.recipient}: ${data.message}`);
-    const recipientSocketId = Object.keys(clients).find((id) => clients[id] === data.recipient);
-    if (recipientSocketId) {
-      const logEntry = {
-        type: 'private',
-        from: data.username,
-        to: data.recipient,
-        message: data.message,
-        timestamp: new Date().toISOString()
-      };
-      chatLog.push(logEntry);
-      io.to(recipientSocketId).emit('receivePrivateMessage', {
-        message: data.message,
-        sender: 'user',
-        username: data.username,
-      });
-    }
-  });
-
   // Register username
   socket.on('register', (username) => {
     clients[socket.id] = username;
@@ -94,7 +73,7 @@ io.on('connection', (socket) => {
   // Handle disconnect
   socket.on('disconnect', () => {
     delete clients[socket.id];
-    console.log('A user disconnected');
+    console.log(`${username} disconnected`);
 
     io.emit('onlineUsers', Object.values(clients));
   });
