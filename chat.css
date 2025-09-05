@@ -1,8 +1,8 @@
 #chat-container {
   position: fixed;
   display: none; /* Initially hidden */
-  bottom: 20px;
-  right: 80px;
+  bottom: 40px;
+  right: 20px;
   width: 360px;
   max-height: 480px;
   background: linear-gradient(90deg, cyan, blueviolet);
