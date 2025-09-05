@@ -4,3 +4,31 @@
     margin: 10px 0;
     color: #4a3a00; /* Dark green text */
 }
+
+.paragraph-3 {
+    font-size: 18px;
+    color: red;
+    font-weight: bold;
+}
+
+.paragraph-4 {
+    font-size: 18px;
+    color: blueviolet;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+#missed-counter {
+display:none;
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  background:#ff3b30; /* Red background */
+  color:#fff; /* White text */
+  font-weight:bold;
+  padding:3px 8px;
+  border-radius:12px;
+  font-size:13px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.3);
+  cursor:pointer;
+}

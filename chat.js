@@ -66,6 +66,10 @@ emojiBtn.addEventListener('click', () => {
 socket.on('receiveMessage', (data) => {
     if (data.username !== currentUsername) { // Prevent showing the sender's own message
         displayMessage(data.message, data.sender, data.username); // Display message from other users
+
+// auto-scroll
+const chatBox = document.getElementById("chat-box");
+  chatBox.scrollTop = chatBox.scrollHeight;
     }
 });
 
@@ -100,6 +104,7 @@ socket.on('onlineUsers', (users) => {
   
 const chatToggleBtn = document.getElementById('chat-toggle-btn');
 const chatContainer = document.getElementById('chat-container');
+const chatHeader = document.getElementById("chat-header");
 
 chatToggleBtn.addEventListener('click', () => {
   if (chatContainer.style.display === 'block') {
@@ -107,4 +112,71 @@ chatToggleBtn.addEventListener('click', () => {
   } else {
     chatContainer.style.display = 'block';
   }
+});
+
+let isDragging = false;
+let offsetX = 0, offsetY = 0;
+
+// Mouse events
+chatHeader.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  offsetX = e.clientX - chatContainer.offsetLeft;
+  offsetY = e.clientY - chatContainer.offsetTop;
+  chatHeader.style.cursor = "grabbing";
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    let newLeft = e.clientX - offsetX;
+    let newTop = e.clientY - offsetY;
+
+    // Clamp values so the box stays in the window
+    const maxLeft = window.innerWidth - chatContainer.offsetWidth;
+    const maxTop = window.innerHeight - chatContainer.offsetHeight;
+
+    newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+    newTop = Math.max(0, Math.min(newTop, maxTop));
+
+    chatContainer.style.left = (e.clientX - offsetX) + "px";
+    chatContainer.style.top = (e.clientY - offsetY) + "px";
+    chatContainer.style.bottom = "auto"; // prevent infinite stretching
+  }
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+  chatHeader.style.cursor = "grab";
+});
+
+// Touch events (mobile)
+chatHeader.addEventListener("touchstart", (e) => {
+  isDragging = true;
+  const touch = e.touches[0];
+  offsetX = touch.clientX - chatContainer.offsetLeft;
+  offsetY = touch.clientY - chatContainer.offsetTop;
+});
+
+// 👇 Added preventDefault + passive: false here
+document.addEventListener("touchmove", (e) => {
+  if (isDragging) {
+    e.preventDefault(); // 🚨 Prevent page scrolling while dragging
+    const touch = e.touches[0];
+    let newLeft = touch.clientX - offsetX;
+    let newTop = touch.clientY - offsetY;
+
+    // Clamp for mobile too
+    const maxLeft = window.innerWidth - chatContainer.offsetWidth;
+    const maxTop = window.innerHeight - chatContainer.offsetHeight;
+
+    newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+    newTop = Math.max(0, Math.min(newTop, maxTop));
+
+    chatContainer.style.left = (touch.clientX - offsetX) + "px";
+    chatContainer.style.top = (touch.clientY - offsetY) + "px";
+    chatContainer.style.bottom = "auto"; // same fix for touch
+  }
+}, { passive: false }); // 👈 Important so preventDefault works
+
+document.addEventListener("touchend", () => {
+  isDragging = false;
 });

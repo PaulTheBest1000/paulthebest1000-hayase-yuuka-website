@@ -413,4 +413,3 @@ questions.forEach(question => {
       gallery.push(result);
       localStorage.setItem("yuukaResultGallery", JSON.stringify(gallery));
   }
- 

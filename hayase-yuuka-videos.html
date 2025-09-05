@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hayase Yuuka Website</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extra.css">
     <link rel="stylesheet" href="chat.css">
     <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
     <style>
@@ -247,13 +248,18 @@
   <button id="chat-toggle-btn">💬 Chat</button>
 
   <div id="chat-container">
-    <div id="chat-history"></div>
-    <input type="text" id="chat-input" placeholder="Type a message..." />
-    <button id="send-btn">Send</button>
-    <button id="emoji-btn">😊</button>
-    <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-    <input type="text" id="change-username-input" placeholder="New username" />
-    <button id="change-username-btn">Change Username</button>
+      <div id="chat-header">💬 Chat</div>
+      <div id="chat-box">
+      <div id="chat-history"></div>
+      <div id="missed-counter"></div>
+  </div>
+
+      <input type="text" id="chat-input" placeholder="Type a message..." />
+      <button id="send-btn">Send</button>
+      <button id="emoji-btn">😊</button>
+      <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+      <input type="text" id="change-username-input" placeholder="New username" />
+      <button id="change-username-btn">Change Username</button>
   </div>
 
   <div id="online-users-container">
@@ -307,8 +313,8 @@
   <!-- Content Section (Hidden by default) -->
   <div id="content" style="display: none;">
     <h1>Welcome to Hayase Yuuka Videos!</h1>
-    <p>This page is password protected. You have successfully entered the correct password!</p>
-    <p>Spoiler alert! Some images may be too revealing!</p>  
+    <p class="paragraph-4">This page is password protected. You have successfully entered the correct password!</p>
+    <p class="paragraph-3">Spoiler alert! Some videos may be too revealing!</p>  
   
     <div class="view-toggle">
       <div class="box">
@@ -338,6 +344,11 @@
       <div class="media-item">
         <video controls>
           <source src="IMG_6397.MP4" type="video/mp4">
+        </video>
+      </div>
+      <div class="media-item">
+        <video controls>
+          <source src="Messenger_creation_FE4AD724-4309-4358-8827-52BB2A944B7F.mp4" type="video/mp4">
         </video>
       </div>
     </div> <!-- Closing for .media-container -->

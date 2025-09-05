@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hayase Yuuka Website</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extra.css">
     <link rel="stylesheet" href="chat.css">
     <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -50,14 +51,21 @@
         
   <button id="chat-toggle-btn">💬 Chat</button>
 
+  <button id="chat-toggle-btn">💬 Chat</button>
+
   <div id="chat-container">
-    <div id="chat-history"></div>
-    <input type="text" id="chat-input" placeholder="Type a message..." />
-    <button id="send-btn">Send</button>
-    <button id="emoji-btn">😊</button>
-    <div id="typing-indicator" style="font-style: italic; color: cyan;"></div>
-    <input type="text" id="change-username-input" placeholder="New username" />
-    <button id="change-username-btn">Change Username</button>
+      <div id="chat-header">💬 Chat</div>
+      <div id="chat-box">
+      <div id="chat-history"></div>
+      <div id="missed-counter"></div>
+  </div>
+
+      <input type="text" id="chat-input" placeholder="Type a message..." />
+      <button id="send-btn">Send</button>
+      <button id="emoji-btn">😊</button>
+      <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+      <input type="text" id="change-username-input" placeholder="New username" />
+      <button id="change-username-btn">Change Username</button>
   </div>
 
     <script>

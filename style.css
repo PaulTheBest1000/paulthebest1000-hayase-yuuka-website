@@ -10,6 +10,7 @@ body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background-color: blueviolet;
+    scrollbar-color: cyan blueviolet; /* thumb and track color */
     text-align: center;
     padding: 20px;
     display: flex;
@@ -25,6 +26,7 @@ body {
 /* Container styling */
 .container {
     display: flex;
+    flex-direction: row;
     flex-direction: column;
     justify-content: center;
     align-items: center;

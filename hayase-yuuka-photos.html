@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hayase Yuuka Website</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extra.css">
     <link rel="stylesheet" href="chat.css">
     <link rel="icon" href="IMG_6281.ico" type="image/x-icon">
     <style>
-/* General Styles for the container */
 /* Styles for the container */
 .container {
   height: 100vh;
@@ -245,17 +245,22 @@
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
 
-      <button id="chat-toggle-btn">💬 Chat</button>
+  <button id="chat-toggle-btn">💬 Chat</button>
 
-      <div id="chat-container">
-        <div id="chat-history"></div>
-        <input type="text" id="chat-input" placeholder="Type a message..." />
-        <button id="send-btn">Send</button>
-        <button id="emoji-btn">😊</button>
-        <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-        <input type="text" id="change-username-input" placeholder="New username" />
-        <button id="change-username-btn">Change Username</button>
-      </div>
+  <div id="chat-container">
+      <div id="chat-header">💬 Chat</div>
+      <div id="chat-box">
+      <div id="chat-history"></div>
+      <div id="missed-counter"></div>
+  </div>
+
+      <input type="text" id="chat-input" placeholder="Type a message..." />
+      <button id="send-btn">Send</button>
+      <button id="emoji-btn">😊</button>
+      <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+      <input type="text" id="change-username-input" placeholder="New username" />
+      <button id="change-username-btn">Change Username</button>
+  </div>
     
       <div id="online-users-container">
         <div id="online-users-header">🟢 Online Users</div>
@@ -308,8 +313,8 @@
   <!-- Content Section (Hidden by default) -->
   <div id="content" style="display: none;">
       <h1>Welcome to Hayase Yuuka Photos!</h1>
-      <p>This page is password protected. You have successfully entered the correct password!</p>
-      <p>Spoiler alert! Some images may be too revealing!</p> 
+      <p class="paragraph-4">This page is password protected. You have successfully entered the correct password!</p>
+      <p class="paragraph-3">Spoiler alert! Some images may be too revealing!</p> 
       
         <div class="view-toggle">
             <div class="box">
@@ -566,6 +571,24 @@
   <div class="media-item"><img src="yuuka_blue_archive_drawn_by_kame_nokonoko10271__sample-72bd9a64b9dc05f9a867d3be8e79c21d.jpg" alt="Hayase Yuuka"></div>
   <div class="media-item"><img src="yuuka_blue_archive_drawn_by_oryo_oryo04__sample-ad2c11ae2c76a8b576d955f5828b30b6.jpg" alt="Hayase Yuuka"></div>
   <div class="media-item"><img src="yuuka_blue_archive_drawn_by_shuvi_shuvi1125__sample-0feacbedf435ecb314d4a39eb9db55b4.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="4.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="14.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="15.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="20.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="132011136_p0_master1200.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="515439826_686805557724105_739521187549799046_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="526987561_686804847724176_401524386834312201_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="527953184_686805234390804_8671021679981928326_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528041581_686808574390470_5918644103172402115_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528041616_686809574390370_6498600030124717900_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528047996_686805817724079_3140726593316961663_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528182033_686807084390619_743107642234126617_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528227802_686810077723653_1836659176893414052_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528585787_686807671057227_1013113960928234036_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528611529_686805034390824_1116403421980055826_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="528662179_686806867723974_617600556857836912_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="531844924_692470583824269_4974618412040227475_n.jpg" alt="Hayase Yuuka"></div>
+  <div class="media-item"><img src="532533633_692471793824148_6538757585161964363_n.jpg" alt="Hayase Yuuka"></div>
 
   </div> <!-- Closing for .media-container -->
  </div> <!-- Closing for #content -->
