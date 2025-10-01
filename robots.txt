@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://paulthebest1000.github.io/paulthebest1000-hayase-yuuka-website/sitemap.xml
