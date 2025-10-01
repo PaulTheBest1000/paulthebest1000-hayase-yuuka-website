@@ -85,32 +85,6 @@ p {
     color: cyan;
 }
 
-.button1 {
-    background-color: #b30000;
-    color: greenyellow;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-}
-
-.button1:hover {
-    background-color: #4f0000;
-    color: limegreen;
-}
-
-.button2 {
-    background-color: #0000b3;
-    color: limegreen;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-}
-
-.button2:hover {
-    background-color: #00004f;
-    color: greenyellow;
-}
-
   /* Base Styles */
 body, ul, li {
     margin: 0;
