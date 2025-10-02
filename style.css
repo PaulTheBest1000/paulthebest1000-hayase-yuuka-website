@@ -115,7 +115,11 @@ header {
 /* Links */
 .menu a {
     text-decoration: none;
-    color: cyan;
+    background: linear-gradient(90deg, blueviolet, cyan);
+    -webkit-background-clip: text; /* clips background to text */
+    background-clip: text;         /* Standard property (add for compatibility) */
+    -webkit-text-fill-color: transparent; /* makes the text itself show the gradient */
+    font-weight: bold;
     padding: 10px 15px;
     font-size: 16px;
     display: inline-block;
@@ -123,16 +127,12 @@ header {
 }
 
 .menu a:hover {
-    background-color: #575757;
+    background: linear-gradient(90deg, cyan, blueviolet);
+    -webkit-background-clip: text; /* clips background to text */
+    background-clip: text;         /* Standard property (add for compatibility) */
+    -webkit-text-fill-color: transparent; /* makes the text itself show the gradient */
     transform: scale(1.05);
     border-radius: 5px;
-}
-
-/* Active Link */
-.menu a.active {
-    color: blueviolet;
-    font-weight: bold;
-    border-bottom: 2px solid blueviolet;
 }
 
 /* Hover underline */
@@ -141,7 +141,7 @@ header {
     position: absolute;
     width: 0;
     height: 2px;
-    background: cyan;
+    background: white;
     bottom: -5px;
     left: 50%;
     transform: translateX(-50%);
