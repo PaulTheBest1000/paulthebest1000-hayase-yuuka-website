@@ -94,6 +94,7 @@ body, ul, li {
 
 header {
     position: sticky; /* keeps header at top when scrolling */
+    z-index: 9999;
     width: 100%;
     top: 0;
 }
