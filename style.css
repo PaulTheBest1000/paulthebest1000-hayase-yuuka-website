@@ -93,8 +93,9 @@ body, ul, li {
 }
 
 header {
-    position: relative; /* keeps hamburger aligned inside header */
+    position: sticky; /* keeps header at top when scrolling */
     width: 100%;
+    top: 0;
 }
 
 /* Menu Styling */
