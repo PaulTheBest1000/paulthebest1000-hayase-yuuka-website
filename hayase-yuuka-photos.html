@@ -47,7 +47,9 @@
     }
 }
 
+/* Keep your existing styles */
 #passwordPrompt {
+    position: relative;
     margin: 40px auto;
     padding: 20px;
     width: 90%;
@@ -60,7 +62,7 @@
     text-align: center;
 }
 
-#passwordPrompt input[type="password"] {
+#passwordPrompt input[type="password, text"] {
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #a6c8ff;
@@ -68,20 +70,52 @@
     margin-top: 10px;
 }
 
+.password-container {
+  position: relative;
+  display: inline-block;
+  width: 80%; /* matches input width */
+  margin-top: 10px;
+}
+
+#passwordPrompt input[type="password"],
+#passwordPrompt input[type="text"] {
+  padding-right: 40px; /* space for eye icon */
+  width: 100%;
+  box-sizing: border-box;
+  height: 36px;
+  font-size: 16px;
+}
+
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  fill: #555;
+  transition: fill 0.2s ease;
+}
+
+.eye-icon:hover {
+  fill: #000;
+}
+
 #passwordPrompt button {
-    padding: 10px 20px;
-    background-color: #6a9eff; /* Millennium-themed button */
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    margin-top: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #6a9eff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 #passwordPrompt button:hover {
-    background-color: #4f7be8;
+  background-color: #4f7be8;
 }
 
 /* Ensure content is unaffected */
@@ -90,7 +124,7 @@
     margin-top: 20px;
     border-radius: 12px;
     background: linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
-                url('https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7') center top/cover no-repeat;
+                        url('https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7') center top/cover no-repeat;
     transition: background-image 1s ease-in-out;
     padding: 20px;
     box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
@@ -150,7 +184,7 @@
 
 /* Media items */
 .media-item {
-  background-color: #e0e8f9;
+  background-color: gray;
   border-radius: 12px;
   padding: 10px;
   box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
@@ -210,7 +244,6 @@
     user-select: none;
     transition: color 0.3s ease;
   }
-
   </style>
 </head>
 <body>
@@ -243,6 +276,10 @@
         </ul>
     </nav>
 </header>
+
+    <audio id="chimes-sound" src="chimes.mp3"></audio>
+    <audio id="chord-sound" src="chord.mp3"></audio>
+    <audio id="critical-sound" src="critical-stop.mp3"></audio>
 
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
@@ -299,24 +336,31 @@
             
     <div class="container">
         <h1>Hayase Yuuka Photos</h1>
-        
-        <!-- Password Prompt Section -->
-        <div id="passwordPrompt">
-          <h2>Enter the password to access this page</h2>
-          <input type="password" id="passwordInput" placeholder="Enter Password">
-          <button onclick="checkPassword()">Submit</button>
-          
-          <!-- Hidden Easter Egg -->
-          <div id="easter-egg" onclick="showSecret()" style="color: transparent; cursor: pointer; user-select: none;">
-            Click me for a surprise!
-          </div>
-      </div> <!-- Closing for #passwordPrompt -->    
 
-  <!-- Content Section (Hidden by default) -->
+<!-- Password Prompt Section -->
+<div id="passwordPrompt">
+  <h2>Enter the password to access this page</h2>
+  <div class="password-container">
+    <input type="password" id="passwordInput" placeholder="Enter Password">
+    <svg class="eye-icon" id="togglePassword" viewBox="0 0 24 24">
+      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13c-3.03 0-5.5-2.47-5.5-5.5S8.97 6.5 12 6.5s5.5 2.47 5.5 5.5-2.47 5.5-5.5 5.5zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/>
+    </svg>
+  </div>
+  <button onclick="checkPassword()">Submit</button>
+</div> <!-- Closing for #passwordPrompt -->    
+
+      <!-- Hidden Easter Egg -->
+      <div id="easter-egg" onclick="showSecret()" style="color: transparent; cursor: pointer; user-select: none;">
+        Click me for a surprise!
+      </div>
+
+  <!-- Content Section (Hidden by default) -->     
   <div id="content" style="display: none;">
+    <div style="background: gray; opacity: 0.5;">
       <h1>Welcome to Hayase Yuuka Photos!</h1>
       <p class="paragraph-4">This page is password protected. You have successfully entered the correct password!</p>
-      <p class="paragraph-3">Spoiler alert! Some images may be too revealing!</p> 
+      <p class="paragraph-3">Spoiler alert! Some images may be too revealing!</p>  
+    </div>
       
         <div class="view-toggle">
             <div class="box">
@@ -670,53 +714,70 @@
 document.querySelectorAll('img[data-src]').forEach(img => observer.observe(img));
 
 // Function to check the password and hide the container
-function checkPassword() {
-    const correctPassword = "YuukaWillForeverSmileAtYou!"; // The correct password
-  const enteredPassword = document.getElementById("passwordInput").value;
+const chimesSound = document.getElementById('chimes-sound');
+const chordSound = document.getElementById('chord-sound');
+const criticalSound = document.getElementById('critical-sound');
 
+let lastAttemptTime = 0; // track last attempt
+
+function checkPassword() {
+  const correctPassword = "YuukaWillForeverSmileAtYou!";
+  const enteredPassword = document.getElementById("passwordInput").value;
+  const now = Date.now();
+
+  // If user spams too fast (<5s)
+  if (now - lastAttemptTime < 5000) {
+    chordSound.play();
+    alert("⚠️ Slow down!");
+    // Reset the cooldown here to restart from this spam attempt
+    lastAttemptTime = now;
+    return;
+  }
+
+  // Update attempt time (fresh valid attempt)
+  lastAttemptTime = now;
+
+  // Normal password check
   if (enteredPassword === correctPassword) {
-    // Hide the password prompt and background container
-    document.getElementById("passwordPrompt").style.display = "none"; // Hide password prompt
-    document.getElementById("content").style.display = "block"; // Show content
+    document.getElementById("passwordPrompt").style.display = "none";
+    document.getElementById("content").style.display = "block";
+    chimesSound.play();
+    alert("✅ Access Granted!");
   } else {
-    alert("Incorrect password, please try again.");
+    criticalSound.play();
+    alert("❌ Access Denied!");
   }
 }
+
+// Toggle password show/hide
+const toggleBtn = document.getElementById("togglePassword");
+const passwordInput = document.getElementById("passwordInput");
+
+toggleBtn.addEventListener("click", () => {
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleBtn.innerHTML = `
+      <path d="M1 1l22 22M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/>
+    `;
+  } else {
+    passwordInput.type = "password";
+    toggleBtn.innerHTML = `
+      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13c-3.03 0-5.5-2.47-5.5-5.5S8.97 6.5 12 6.5s5.5 2.47 5.5 5.5-2.47 5.5-5.5 5.5zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/>
+    `;
+  }
+});
 
 function showSecret() {
   alert('You found the secret! The password to Hayase Yuuka Photos is YuukaWillForeverSmileAtYou!');
 }
-
-const yuukaImages = [
-  "https://tse2.mm.bing.net/th?id=OIP.S_zmQ1nkCCQC316NEAfJHgHaFQ&w=336&h=336&c=7",
-  "https://images5.alphacoders.com/130/1306317.png",
-  "https://images3.alphacoders.com/128/1286131.png",
-  "https://images.alphacoders.com/119/1194700.png",
-  "https://images.alphacoders.com/121/1211388.png",
-];
-
-let promptCurrent = 0;
-
-// Background change for the password prompt (targeted only here)
-setInterval(() => {
-  // Apply the background to both #container-background and #content
-  document.querySelectorAll("#passwordPrompt, #content").forEach(el => {
-    el.style.background = `
-      linear-gradient(rgba(230, 240, 255, 0.6), rgba(200, 230, 255, 0.4)),
-      url('${yuukaImages[promptCurrent]}') center top/cover no-repeat
-    `;
-  });
-
-  promptCurrent = (promptCurrent + 1) % yuukaImages.length; // Cycle through the images
-}, 5000); // Changes every 5 seconds
 </script>
           
 </div>
 <script src="script.js"></script>
 <script src="extra.js"></script>
 
-        <!-- Load Socket.IO script -->
-        <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
-        <script src="chat.js"></script>
+<!-- Load Socket.IO script -->
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+<script src="chat.js"></script>
 </body>  
 </div>

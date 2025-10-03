@@ -10,7 +10,7 @@ body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background-color: blueviolet;
-    scrollbar-color: cyan blueviolet; /* thumb and track color */
+    scrollbar-color: blueviolet cyan; /* thumb and track color */
     text-align: center;
     padding: 20px;
     display: flex;
@@ -40,9 +40,13 @@ body {
 }
 
 /* Heading styling */
-h2 {
+h1 {
     font-size: 36px;
     color: cyan;
+}
+h2 {
+    font-size: 36px;
+    color: blueviolet;
 }
 
 /* Paragraph styling */
