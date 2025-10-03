@@ -398,7 +398,7 @@ header {
     bottom: 10px; /* Adjust position to where you want the text */
     left: 10px;
     background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-    color: white;
+    color: gray;
     padding: 10px;
     opacity: 0; /* Text is hidden initially */
     transition: opacity 0.3s ease; /* Smooth transition */
@@ -411,10 +411,6 @@ header {
 }
 
 /* Basic Styling */
-
-h1 {
-    color: cyan;
-}
 
 /* Button to open the modal */
 #open-modal-btn {
