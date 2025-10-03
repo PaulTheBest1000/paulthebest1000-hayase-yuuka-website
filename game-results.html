@@ -160,6 +160,151 @@
         </select>
       </div> 
 
+  <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
+  <audio id="ricochet" src="whizzby-41134.mp3"></audio>
+
+<script>
+const yuukaImages = [
+  '509437000_649539721450689_6605942079671853974_n.jpg',
+  '514875500_661498793588115_7383688587367113905_n.jpg',
+  '515409892_661490663588928_1069431267187076815_n.jpg',
+  '518288805_668592049545456_520905081988853050_n.jpg' 
+];
+
+const colors = ['#ff0000','#00ff00','#0000ff','#ffff00','#ff00ff','#00ffff'];
+const numYuukas = 4;
+
+let yuukas = [];
+let bumperActive = false;
+let animationId = null;
+let imageSwitchInterval = null;
+
+// --- Helpers ---
+function isColliding(a,b){
+  return !(
+    a.x + a.element.width < b.x ||
+    a.x > b.x + b.element.width ||
+    a.y + a.element.height < b.y ||
+    a.y > b.y + b.element.height
+  );
+}
+
+function flashBorder(u){
+  const color = colors[Math.floor(Math.random()*colors.length)];
+  u.element.style.border = `5px solid ${color}`;
+  setTimeout(()=>u.element.style.border='none',150);
+}
+
+function switchImage(u){
+  u.element.src = yuukaImages[Math.floor(Math.random()*yuukaImages.length)];
+}
+
+function playBounceSound(){ 
+  const sound = document.getElementById('ricochet');
+  sound.currentTime = 0; sound.play();
+}
+
+// --- Spawn Yuuka Away From Others ---
+function spawnYuuka(){
+  const img = document.createElement('img');
+  img.src = yuukaImages[Math.floor(Math.random()*yuukaImages.length)];
+  img.classList.add('yuuka');
+
+  // Determine parent: header if exists, else body
+  const parent = document.querySelector('header') || document.body;
+  parent.appendChild(img);
+
+  const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+
+  let x, y;
+  let maxAttempts = 100, attempt = 0;
+  do {
+    x = Math.random() * (window.innerWidth - img.width);
+    y = headerHeight + Math.random() * (window.innerHeight - img.height - headerHeight);
+    attempt++;
+  } while (yuukas.some(u => isColliding({x,y,element:img}, u)) && attempt < maxAttempts);
+
+  const dx = (Math.random() * 4 + 2) * (Math.random() < 0.5 ? 1 : -1);
+  const dy = (Math.random() * 4 + 2) * (Math.random() < 0.5 ? 1 : -1);
+
+  return {element: img, x, y, dx, dy};
+}
+
+// --- Animate ---
+function animate(){
+  yuukas.forEach((u,i)=>{
+    u.x += u.dx;
+    u.y += u.dy;
+
+// Wall bounce
+if (u.x + u.element.width >= window.innerWidth || u.x <= 0) {
+  u.dx = -u.dx; flashBorder(u); switchImage(u); playBounceSound();
+}
+if (u.y + u.element.height >= window.innerHeight || u.y <= headerHeight) {
+  u.dy = -u.dy; flashBorder(u); switchImage(u); playBounceSound();
+}
+
+
+    // Collision with other Yuukas
+    for(let j=i+1;j<yuukas.length;j++){
+      const v=yuukas[j];
+      if(isColliding(u,v)){
+        [u.dx,v.dx]=[v.dx,u.dx];
+        [u.dy,v.dy]=[v.dy,u.dy];
+        flashBorder(u); flashBorder(v); switchImage(u); switchImage(v); playBounceSound();
+      }
+    }
+
+    u.element.style.left = u.x+'px';
+    u.element.style.top = u.y+'px';
+  });
+
+  animationId = requestAnimationFrame(animate);
+}
+
+// --- Toggle Bumper ---
+const toggleBtn = document.getElementById('toggleBtn');
+toggleBtn.addEventListener('click',()=>{
+  if(!bumperActive){
+    // Start
+    yuukas = [];
+    for(let i=0;i<numYuukas;i++) yuukas.push(spawnYuuka());
+    bumperActive = true;
+    toggleBtn.innerText='🔴 Stop Yuuka Bumper';
+    animate();
+
+    // Image switch interval
+    imageSwitchInterval = setInterval(()=>{
+      if(bumperActive) yuukas.forEach(u=>{if(Math.random()<0.3) switchImage(u);});
+    },2000);
+
+  } else {
+    // Stop
+    bumperActive=false;
+    cancelAnimationFrame(animationId);
+    clearInterval(imageSwitchInterval);
+    yuukas.forEach(u=>u.element.remove());
+    toggleBtn.innerText='🟢 Start Yuuka Bumper';
+  }
+});
+
+// Get actual header height dynamically
+const header = document.querySelector('header');
+let headerHeight = header ? header.offsetHeight : 0;
+
+// Update header height on resize (in case it changes)
+window.addEventListener('resize', () => {
+  headerHeight = header ? header.offsetHeight : 0;
+  
+  if (bumperActive) {
+    yuukas.forEach(u => {
+      u.x = Math.min(u.x, window.innerWidth - u.element.width);
+      u.y = Math.max(headerHeight, Math.min(u.y, window.innerHeight - u.element.height));
+    });
+  }
+});
+</script>
+
   <h1>Game Results</h1>
   <div id="results-container"></div>
 

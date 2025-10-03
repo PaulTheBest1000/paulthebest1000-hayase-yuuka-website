@@ -32,3 +32,33 @@ display:none;
   box-shadow:0 2px 5px rgba(0,0,0,0.3);
   cursor:pointer;
 }
+
+  .yuuka {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    user-select: none;
+    pointer-events: none;
+    transition: border 0.1s;
+  }
+  #toggleBtn {
+    position: fixed;
+    top: 622.5px;
+    left: 8.5%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+    #toggleBtn1 {
+    position: fixed;
+    top: 622.5px;
+    left: 8.5%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
