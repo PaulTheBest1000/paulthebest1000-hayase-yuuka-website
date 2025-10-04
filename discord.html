@@ -46,13 +46,41 @@
         <div class="box" id="discord"><button class="button" onclick="window.location.href='https://discord.gg/bws3ZCRDbA'">Check out my Discord</button></div>
         <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
         <audio id="ricochet" src="whizzby-41134.mp3"></audio>
+
 <script>
-  const yuukaImages = [
-  '509437000_649539721450689_6605942079671853974_n.jpg',
-  '514875500_661498793588115_7383688587367113905_n.jpg',
-  '515409892_661490663588928_1069431267187076815_n.jpg',
-  '518288805_668592049545456_520905081988853050_n.jpg' 
-];
+async function loadGalleryImages(fromExternal = true) {
+  try {
+    let imgs;
+
+    if (fromExternal) {
+      // fetch from another HTML file
+      const response = await fetch("hayase-yuuka-photos.html");
+      const text = await response.text();
+      const temp = document.createElement("div");
+      temp.innerHTML = text;
+      imgs = temp.querySelectorAll(".media-item img");
+    } else {
+      // use images already on this page
+      imgs = document.querySelectorAll(".media-item img");
+    }
+
+    // build array of safe images only
+    return Array.from(imgs)
+      .filter(img => img.dataset.safe !== "false") // skip unsafe
+      .map(img => img.getAttribute("data-src") || img.getAttribute("src"));
+
+  } catch (e) {
+    console.error("Failed to load gallery images", e);
+    return [];
+  }
+}
+
+// Usage in your bumper game
+let yuukaImages = [];
+loadGalleryImages().then(imgs => {
+  yuukaImages = imgs;
+  console.log("Loaded Yuuka images:", yuukaImages);
+});
 
 const colors = ['#ff0000','#00ff00','#0000ff','#ffff00','#ff00ff','#00ffff'];
 const numYuukas = 4;
@@ -61,20 +89,21 @@ let yuukas = [];
 let bumperActive = false;
 let animationId = null;
 let imageSwitchInterval = null;
+let headerHeight = document.querySelector('header')?.offsetHeight || 0;
 
 // --- Helpers ---
 function isColliding(a,b){
   return !(
-    a.x + a.element.width < b.x ||
-    a.x > b.x + b.element.width ||
-    a.y + a.element.height < b.y ||
-    a.y > b.y + b.element.height
+    a.x + a.element.offsetWidth < b.x ||
+    a.x > b.x + b.element.offsetWidth ||
+    a.y + a.element.offsetHeight < b.y ||
+    a.y > b.y + b.element.offsetHeight
   );
 }
 
 function flashBorder(u){
   const color = colors[Math.floor(Math.random()*colors.length)];
-  u.element.style.border = `5px solid ${color}`;
+  u.element.style.border = `3px solid ${color}`;
   setTimeout(()=>u.element.style.border='none',150);
 }
 
@@ -84,62 +113,108 @@ function switchImage(u){
 
 function playBounceSound(){ 
   const sound = document.getElementById('ricochet');
+  if (!sound) return;
   sound.currentTime = 0; sound.play();
 }
 
 // --- Spawn Yuuka Away From Others ---
-function spawnYuuka(){
+function spawnYuuka() {
   const img = document.createElement('img');
-  img.src = yuukaImages[Math.floor(Math.random()*yuukaImages.length)];
+  img.src = yuukaImages[Math.floor(Math.random() * yuukaImages.length)];
   img.classList.add('yuuka');
+  document.body.appendChild(img);
 
-  // Determine parent: header if exists, else body
-  const parent = document.querySelector('header') || document.body;
-  parent.appendChild(img);
-
-  const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+  const width = img.offsetWidth || 120; // fallback if not loaded yet
+  const height = img.offsetHeight || 120;
 
   let x, y;
   let maxAttempts = 100, attempt = 0;
   do {
-    x = Math.random() * (window.innerWidth - img.width);
-    y = headerHeight + Math.random() * (window.innerHeight - img.height - headerHeight);
+    // Clamp to current viewport dynamically
+    x = Math.random() * (window.innerWidth - width);
+    y = headerHeight + Math.random() * (window.innerHeight - height - headerHeight);
     attempt++;
-  } while (yuukas.some(u => isColliding({x,y,element:img}, u)) && attempt < maxAttempts);
+  } while (yuukas.some(u => isColliding({ x, y, element: img }, u)) && attempt < maxAttempts);
 
-  const dx = (Math.random() * 4 + 2) * (Math.random() < 0.5 ? 1 : -1);
-  const dy = (Math.random() * 4 + 2) * (Math.random() < 0.5 ? 1 : -1);
+  const dx = (Math.random() * 3 + 2) * (Math.random() < 0.5 ? 1 : -1);
+  const dy = (Math.random() * 3 + 2) * (Math.random() < 0.5 ? 1 : -1);
 
-  return {element: img, x, y, dx, dy};
+  return { element: img, x, y, dx, dy, width, height };
 }
 
 // --- Animate ---
-function animate(){
-  yuukas.forEach((u,i)=>{
+function animate() {
+  yuukas.forEach((u, i) => {
     u.x += u.dx;
     u.y += u.dy;
 
-// Wall bounce
-if (u.x + u.element.width >= window.innerWidth || u.x <= 0) {
-  u.dx = -u.dx; flashBorder(u); switchImage(u); playBounceSound();
-}
-if (u.y + u.element.height >= window.innerHeight || u.y <= headerHeight) {
-  u.dy = -u.dy; flashBorder(u); switchImage(u); playBounceSound();
-}
+    const w = u.element.offsetWidth || u.width;
+    const h = u.element.offsetHeight || u.height;
 
+    const maxX = window.innerWidth - w;
+    const maxY = window.innerHeight - h;
 
-    // Collision with other Yuukas
-    for(let j=i+1;j<yuukas.length;j++){
-      const v=yuukas[j];
-      if(isColliding(u,v)){
-        [u.dx,v.dx]=[v.dx,u.dx];
-        [u.dy,v.dy]=[v.dy,u.dy];
-        flashBorder(u); flashBorder(v); switchImage(u); switchImage(v); playBounceSound();
+    // --- Bounce off viewport edges ---
+    if (u.x > maxX) {
+      u.x = maxX;
+      u.dx *= -1;
+      flashBorder(u); switchImage(u); playBounceSound();
+    }
+    if (u.x < 0) {
+      u.x = 0;
+      u.dx *= -1;
+      flashBorder(u); switchImage(u); playBounceSound();
+    }
+    if (u.y > maxY) {
+      u.y = maxY;
+      u.dy *= -1;
+      flashBorder(u); switchImage(u); playBounceSound();
+    }
+    if (u.y < headerHeight) {
+      u.y = headerHeight;
+      u.dy *= -1;
+      flashBorder(u); switchImage(u); playBounceSound();
+    }
+
+    // --- Collision with other Yuukas ---
+    for (let j = i + 1; j < yuukas.length; j++) {
+      const v = yuukas[j];
+      if (isColliding(u, v)) {
+        // Swap directions
+        [u.dx, v.dx] = [v.dx, u.dx];
+        [u.dy, v.dy] = [v.dy, u.dy];
+        flashBorder(u); flashBorder(v);
+        switchImage(u); switchImage(v);
+        playBounceSound();
+
+        // Calculate overlap
+        const overlapX = (u.x + w) - v.x;
+        const overlapY = (u.y + h) - v.y;
+
+        // Push apart along strongest overlap axis
+        if (Math.abs(overlapX) < Math.abs(overlapY)) {
+          if (u.x < v.x) {
+            u.x -= overlapX / 2;
+            v.x += overlapX / 2;
+          } else {
+            u.x += overlapX / 2;
+            v.x -= overlapX / 2;
+          }
+        } else {
+          if (u.y < v.y) {
+            u.y -= overlapY / 2;
+            v.y += overlapY / 2;
+          } else {
+            u.y += overlapY / 2;
+            v.y -= overlapY / 2;
+          }
+        }
       }
     }
 
-    u.element.style.left = u.x+'px';
-    u.element.style.top = u.y+'px';
+    // --- Apply new position ---
+    u.element.style.left = u.x + "px";
+    u.element.style.top = u.y + "px";
   });
 
   animationId = requestAnimationFrame(animate);
@@ -149,20 +224,19 @@ if (u.y + u.element.height >= window.innerHeight || u.y <= headerHeight) {
 const toggleBtn = document.getElementById('toggleBtn');
 toggleBtn.addEventListener('click',()=>{
   if(!bumperActive){
-    // Start
     yuukas = [];
     for(let i=0;i<numYuukas;i++) yuukas.push(spawnYuuka());
     bumperActive = true;
     toggleBtn.innerText='🔴 Stop Yuuka Bumper';
     animate();
 
-    // Image switch interval
     imageSwitchInterval = setInterval(()=>{
-      if(bumperActive) yuukas.forEach(u=>{if(Math.random()<0.3) switchImage(u);});
+      if(bumperActive) yuukas.forEach(u=>{
+        if(Math.random()<0.3) switchImage(u);
+      });
     },2000);
 
   } else {
-    // Stop
     bumperActive=false;
     cancelAnimationFrame(animationId);
     clearInterval(imageSwitchInterval);
@@ -171,18 +245,16 @@ toggleBtn.addEventListener('click',()=>{
   }
 });
 
-// Get actual header height dynamically
-const header = document.querySelector('header');
-let headerHeight = header ? header.offsetHeight : 0;
-
-// Update header height on resize (in case it changes)
+// Update header height and resize Yuukas properly
 window.addEventListener('resize', () => {
-  headerHeight = header ? header.offsetHeight : 0;
-  
+  headerHeight = document.querySelector('header')?.offsetHeight || 0;
+
   if (bumperActive) {
     yuukas.forEach(u => {
-      u.x = Math.min(u.x, window.innerWidth - u.element.width);
-      u.y = Math.max(headerHeight, Math.min(u.y, window.innerHeight - u.element.height));
+      const w = u.element.offsetWidth;
+      const h = u.element.offsetHeight;
+      u.x = Math.min(u.x, window.innerWidth - w);
+      u.y = Math.max(headerHeight, Math.min(u.y, window.innerHeight - h));
     });
   }
 });
