@@ -244,6 +244,28 @@
     user-select: none;
     transition: color 0.3s ease;
   }
+
+  .safe-toggle {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.safe-toggle.on {
+  background: linear-gradient(135deg, #22c55e, #16a34a); /* Green ON */
+}
+
+.safe-toggle.off {
+  background: linear-gradient(135deg, #ef4444, #b91c1c); /* Red OFF */
+}
+
+.safe-toggle:hover {
+  transform: scale(1.05);
+}
   </style>
 </head>
 <body>
@@ -564,6 +586,9 @@ window.addEventListener('resize', () => {
               <button class="button2" onclick="setListView()">List View</button>
             </div>
           </div>
+
+  <!-- Safe Media Toggle -->
+  <button id="safeToggle" class="safe-toggle on">Safe Media: ON</button>
 
   <div class="media-container grid-view">
   <div class="media-item img-responsive"><img src="GKFKrbPaEAA6_kh.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
@@ -941,17 +966,17 @@ window.addEventListener('resize', () => {
   <div class="media-item img-responsive"><img src="531272976_692488830489111_5236785496095452436_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="531289569_692489463822381_5652526965501180130_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="531442873_692453687159292_1997575623891550687_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="531625883_692489793822348_3835596663960512884_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="531625883_692489793822348_3835596663960512884_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="533034883_692486807155980_4815015498714293260_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="541432914_709529215451739_6736504835644535528_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="541476913_709529465451714_2703416622455521722_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="541734351_711749518563042_5654886082430502743_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="541734351_711749518563042_5654886082430502743_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="541840014_709530425451618_2839854668651944630_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="541909949_709527525451908_4900290620233073777_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="542552003_709525268785467_4715792586301990569_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="541909949_709527525451908_4900290620233073777_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="542552003_709525268785467_4715792586301990569_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="542600273_709527775451883_6943908142472148399_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="542657571_709523298785664_6264296532048941693_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="542672581_711744845230176_3987192092627180019_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="542672581_711744845230176_3987192092627180019_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="542764192_709528262118501_618879516566356796_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="543033315_713566301714697_1521371686319143752_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="543033315_713566301714697_1521371686319143752_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
@@ -965,23 +990,23 @@ window.addEventListener('resize', () => {
   <div class="media-item img-responsive"><img src="543416378_711750718562922_7254834949830187971_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="543440042_711752488562745_5159336041277465603_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="544635604_711753045229356_4574582626370808707_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="544726198_713565365048124_2318368692527700534_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="544729036_713565928381401_2672050824999021073_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="544726198_713565365048124_2318368692527700534_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="544729036_713565928381401_2672050824999021073_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="544818314_711754091895918_7278856039887006860_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="544878365_712505525154108_6324005754913177158_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="544996723_711745488563445_5872468055615143055_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="544996723_711745488563445_5872468055615143055_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="545023533_711755191895808_1943979757673387262_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="545183117_716762088061785_1658320641105159957_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="545183117_716762088061785_1658320641105159957_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="545325477_711755671895760_7634397234632539460_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="545355943_712503988487595_639146548540107574_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="545355943_712503988487595_639146548540107574_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="545372887_716763408061653_6293806869869908776_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="545389966_712504871820840_607164236331923287_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="545554600_720801264324534_6628998500743167323_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="545389966_712504871820840_607164236331923287_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="545554600_720801264324534_6628998500743167323_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="545626074_713566828381311_7873881764429482092_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="545628767_716766591394668_3569866660614089697_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="545628767_716766591394668_3569866660614089697_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="545638937_712503201821007_5672284316589097432_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="545713833_716767121394615_2351736809447736024_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="545931346_717639627974031_43315515669234915_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="545931346_717639627974031_43315515669234915_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="545948610_713567525047908_2931805686348052775_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="546454896_717639161307411_7137799627921042582_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="546629095_719201957817798_2119188021582634274_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
@@ -989,65 +1014,84 @@ window.addEventListener('resize', () => {
   <div class="media-item img-responsive"><img src="546629584_716767481394579_8461351790109715706_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="546633273_719201467817847_3011229826455996628_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="546645698_717640914640569_4222941524865524226_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="547038312_719201114484549_7104935842002974455_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="547255226_718416844562976_2135709478575426291_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="547038312_719201114484549_7104935842002974455_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="547255226_718416844562976_2135709478575426291_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="547501124_720802504324410_4614928908149040686_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="547514758_721688350902492_8931130666275572021_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="547669576_720798980991429_631980091443785784_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="547701082_721689330902394_3421293288970069387_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="547669576_720798980991429_631980091443785784_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="547701082_721689330902394_3421293288970069387_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="547757598_719202704484390_6914798543766932113_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="547761160_717638107974183_150463796090451576_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="547826499_720799274324733_7670094500006509063_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="547761160_717638107974183_150463796090451576_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="547826499_720799274324733_7670094500006509063_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="547912125_720802760991051_7741096463921644633_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="547973855_718417514562909_5341350909840080321_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="547973915_718417211229606_5109178156100547428_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="548694688_721690610902266_7511507287477242169_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="548923702_720803527657641_3094529006811501209_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="549147075_718417771229550_7388770214951057994_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="549298956_719200531151274_7302062860854892725_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="549298956_719200531151274_7302062860854892725_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="549363084_720800557657938_3427859844820648006_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="549414579_721688970902430_2141593483426666931_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="550179709_722494890821838_64807353348175160_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="557639782_737413372663323_4677900098796928714_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="FB_IMG_1740732387892.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="FB_IMG_1740732387892.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="FB_IMG_1759372345367.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="FB_IMG_1759424807015.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="FB_IMG_1759717091960.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="FB_IMG_1759904136519.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="FB_IMG_1760064690259.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="FB_IMG_1759717091960.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="FB_IMG_1759904136519.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="FB_IMG_1760064690259.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="FB_IMG_1760144940611.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="FB_IMG_1760577427685.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="G0OujtdaAAATONJ.jpeg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="G3IlLhqbUAA5sy6.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G3IlLhqbUAA5sy6.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="G3TaHFLbQAAble7.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="G3THVDRacAINzE2.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="G3YDskSbAAEG8nA.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G3YDskSbAAEG8nA.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="Gap9LtYaIAAwNAr.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="GodvPfuXcAA2HT5.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="GxBMnw1b0AAvN6i.jpeg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_101565565_20251017_073249.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_101637974_20251003_090348.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_108496766_20251017_073054.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_113901770_20251010_082426.png" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_115569756_20251008_002311.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_120289344_20251016_083746.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_113901770_20251010_082426.png" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_115569756_20251008_002311.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_120289344_20251016_083746.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_125584137_20251009_065510.png" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_125850145_20251015_090327.png" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_128145365_20251016_084340.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_128145365_20251016_084340.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_129072572_20251002_094639.png" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_129382144_20251016_084357.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_129382144_20251016_084357.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_130142720_20251007_084337.png" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_132219076_20251009_232418.png" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_132219076_20251009_232418.png" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_133879990_20251002_094217.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="illust_134861845_20251009_232610.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_135529310_20250930_125218.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_135529310_20250930_125220.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
-  <div class="media-item img-responsive"><img src="illust_136392551_20251018_124104.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_135529310_20250930_125218.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_135529310_20250930_125220.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_136392551_20251018_124104.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="Wihh_apa_nih_yangg..selfie2_di_hpku.._Hmm_kamu_ini.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="yuuka_blue_archive_drawn_by_akinoji_akiponpon27__sample-deabc8ff7dea62e7e2221ac99eef9977.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="yuuka_blue_archive_drawn_by_ayamy__sample-cf35d1e1ded52bcb36ca749a199064cd.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="yuuka_blue_archive_drawn_by_kihou_no_gotoku_dmc__sample-7730bbccd959f58352a4a0279605354c.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
   <div class="media-item img-responsive"><img src="yuuka_blue_archive_drawn_by_rekimarusui3__sample-854bcc9d89018489f0d3489a29f8b63d.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="515013891_723412307396763_8318429693713414632_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="549047965_723411964063464_8350832593390672180_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="549241971_722495764155084_2152649457420476417_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="549457057_723416490729678_7817538290355639107_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="549472506_723413714063289_8290439783028664089_n.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="550178874_723411407396853_7650235549664276791_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="550497332_722498910821436_6598869125876653370_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="554775199_728149220256405_3819849315405504824_n.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="FB_IMG_1760807986398.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G0TnPYebkAAjeii.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G3c4G7ZXgAAfKwR.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G3gspAWWMAAcikM.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G3h9g3DWcAAuAPd.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G3jD1rPXsAAHPPL.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G3n_0lGXoAAEVkl.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="G3qN1UJW4AAYDBA.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="GRSL63NW0AAPngF.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_136096042_20251019_074122.jpg" alt="Hayase Yuuka" data-safe="true" loading="lazy"></div>
+  <div class="media-item img-responsive"><img src="illust_136305579_20251018_081655.jpg" alt="Hayase Yuuka" data-safe="false" loading="lazy"></div>
   </div> <!-- Closing for .media-container -->
  </div> <!-- Closing for #content -->
 </div> <!-- Closing for .container -->
@@ -1069,7 +1113,7 @@ window.addEventListener('resize', () => {
 
 document.querySelectorAll('img[data-src]').forEach(img => observer.observe(img));
 
-// Function to check the password and hide the container
+// --- Password System ---
 const chimesSound = document.getElementById('chimes-sound');
 const chordSound = document.getElementById('chord-sound');
 const criticalSound = document.getElementById('critical-sound');
@@ -1081,47 +1125,84 @@ function checkPassword() {
   const enteredPassword = document.getElementById("passwordInput").value;
   const now = Date.now();
 
-  // If user spams too fast (<5s)
+  // prevent spam
   if (now - lastAttemptTime < 5000) {
     chordSound.play();
     alert("⚠️ Slow down!");
-    // Reset the cooldown here to restart from this spam attempt
     lastAttemptTime = now;
     return;
   }
 
-  // Update attempt time (fresh valid attempt)
   lastAttemptTime = now;
 
-  // Normal password check
   if (enteredPassword === correctPassword) {
     document.getElementById("passwordPrompt").style.display = "none";
     document.getElementById("content").style.display = "block";
     chimesSound.play();
     alert("✅ Access Granted!");
+    initSafeMediaSystem(); // initialize safe media toggle
   } else {
     criticalSound.play();
     alert("❌ Access Denied!");
   }
 }
 
-// Toggle password show/hide
+// --- Toggle password show/hide ---
 const toggleBtn2 = document.getElementById("togglePassword");
 const passwordInput = document.getElementById("passwordInput");
 
 toggleBtn2.addEventListener("click", () => {
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
-    toggleBtn2.innerHTML = `
-      <path d="M1 1l22 22M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/>
-    `;
+    toggleBtn2.innerHTML = `<path d="M1 1l22 22M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/>`;
   } else {
     passwordInput.type = "password";
-    toggleBtn2.innerHTML = `
-      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13c-3.03 0-5.5-2.47-5.5-5.5S8.97 6.5 12 6.5s5.5 2.47 5.5 5.5-2.47 5.5-5.5 5.5zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/>
-    `;
+    toggleBtn2.innerHTML = `<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13c-3.03 0-5.5-2.47-5.5-5.5S8.97 6.5 12 6.5s5.5 2.47 5.5 5.5-2.47 5.5-5.5 5.5zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/>`;
   }
 });
+
+// --- Safe Media Toggle System ---
+function initSafeMediaSystem() {
+  let safeMode = true; // Default: ON
+  const toggleBtn = document.getElementById("safeToggle");
+
+  // Function to update the UI
+  const updateMediaVisibility = () => {
+    document.querySelectorAll(".media-item img").forEach(img => {
+      const isSafe = img.dataset.safe?.toLowerCase() === "true";
+      const mediaBox = img.parentElement;
+
+      if (safeMode && !isSafe) {
+        mediaBox.style.opacity = "0";
+        setTimeout(() => (mediaBox.style.display = "none"), 300);
+      } else {
+        mediaBox.style.display = "block";
+        setTimeout(() => (mediaBox.style.opacity = "1"), 10);
+      }
+    });
+
+    // Button color and label
+    if (safeMode) {
+      toggleBtn.textContent = "Safe Media: ON";
+      toggleBtn.classList.remove("off");
+      toggleBtn.classList.add("on");
+    } else {
+      toggleBtn.textContent = "Safe Media: OFF";
+      toggleBtn.classList.remove("on");
+      toggleBtn.classList.add("off");
+      alert("⚠️ Warning!");
+    }
+  };
+
+  // Initial setup
+  updateMediaVisibility();
+
+  // Toggle on click
+  toggleBtn.addEventListener("click", () => {
+    safeMode = !safeMode;
+    updateMediaVisibility();
+  });
+}
 
 function showSecret() {
   alert('You found the secret! The password to Hayase Yuuka Photos is YuukaWillForeverSmileAtYou!');
