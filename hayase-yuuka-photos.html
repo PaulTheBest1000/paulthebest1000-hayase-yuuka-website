@@ -302,6 +302,7 @@
     <audio id="chimes-sound" src="chimes.mp3"></audio>
     <audio id="chord-sound" src="chord.mp3"></audio>
     <audio id="critical-sound" src="critical-stop.mp3"></audio>
+    <audio id="warning-sound" src="danger-alarm-sound-effect-meme.mp3"></audio>
 
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
@@ -1117,6 +1118,7 @@ document.querySelectorAll('img[data-src]').forEach(img => observer.observe(img))
 const chimesSound = document.getElementById('chimes-sound');
 const chordSound = document.getElementById('chord-sound');
 const criticalSound = document.getElementById('critical-sound');
+const warningSound = document.getElementById('warning-sound');
 
 let lastAttemptTime = 0; // track last attempt
 
@@ -1186,13 +1188,17 @@ function initSafeMediaSystem() {
       toggleBtn.textContent = "Safe Media: ON";
       toggleBtn.classList.remove("off");
       toggleBtn.classList.add("on");
+      warningSound.currentTime = 0; 
+      warningSound.pause();
     } else {
       toggleBtn.textContent = "Safe Media: OFF";
       toggleBtn.classList.remove("on");
       toggleBtn.classList.add("off");
-      alert("⚠️ Warning!");
-    }
-  };
+      warningSound.loop = true;
+      warningSound.play();
+      alert("⚠️ Warning Safe Media Filter is compromised!");
+  }
+};
 
   // Initial setup
   updateMediaVisibility();
