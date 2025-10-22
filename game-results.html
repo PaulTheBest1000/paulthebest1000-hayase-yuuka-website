@@ -15,6 +15,7 @@
           flex-wrap: wrap;
           justify-content: center;
           gap: 20px;
+          min-height: calc(50vh - 30px); /* 30px = header height, adjust if needed */
       }
 
       .gallery-item {
@@ -100,22 +101,50 @@
     <div id="time">Loading time...</div>
     <div id="calendar">Loading calendar...</div>
 
-  <button id="chat-toggle-btn">💬 Chat</button>
+    <button id="chat-toggle-btn">💬 Chat</button>
 
-  <div id="chat-container">
+    <div id="chat-container">
       <div id="chat-header">💬 Chat</div>
+    
+      <!-- Chat display area -->
       <div id="chat-box">
-      <div id="chat-history"></div>
-      <div id="missed-counter"></div>
-  </div>
-
-      <input type="text" id="chat-input" placeholder="Type a message..." />
-      <button id="send-btn">Send</button>
-      <button id="emoji-btn">😊</button>
+        <div id="chat-history"></div>
+        <div id="missed-counter"></div>
+      </div>
+    
+      <!-- Chat input area -->
+      <div id="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Type a message..." />
+        <button id="send-btn">Send</button>
+        <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
+      </div>
+    
+      <!-- Emoji menu -->
+      <div id="emoji-menu" class="emoji-menu">
+        <!-- Category tabs -->
+        <div id="emoji-categories" class="emoji-categories">
+          <button data-category="smileys">😄</button>
+          <button data-category="gestures">🙌</button>
+          <button data-category="hearts">❤️</button>
+          <button data-category="animals">🐶</button>
+          <button data-category="food">🍕</button>
+          <button data-category="symbols">🔥</button>
+        </div>
+        <!-- Emoji list container -->
+        <div id="emoji-list" class="emoji-list"></div>
+      </div>
+    
       <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-      <input type="text" id="change-username-input" placeholder="New username" />
-      <button id="change-username-btn">Change Username</button>
-  </div>
+    
+      <!-- Username change -->
+      <div id="username-change-area">
+        <input type="text" id="change-username-input" placeholder="New username" />
+        <button id="change-username-btn">Change Username</button>
+      </div>
+    
+      <!-- Safe ping toggle -->
+      <button id="toggle-safe-btn">Safe Pings ON</button>
+    </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {

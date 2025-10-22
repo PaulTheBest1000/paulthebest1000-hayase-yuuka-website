@@ -33,9 +33,8 @@ app.use(cors({
   }
 }));
 
-// Store clients and chat log
+// Store clients
 const clients = {};
-const chatLog = [];
 
 // Socket.IO connection
 io.on('connection', (socket) => {
@@ -72,14 +71,15 @@ io.on('connection', (socket) => {
 
   // Handle disconnect
   socket.on('disconnect', () => {
+    const username = clients[socket.id]; // grab username before deleting
     delete clients[socket.id];
-    console.log(`${username} disconnected`);
+    console.log(`${username || 'A user'} disconnected`);
 
     io.emit('onlineUsers', Object.values(clients));
   });
 });
 
-// Start the server (only once!!)
+// Start the server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

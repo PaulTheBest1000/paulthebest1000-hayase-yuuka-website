@@ -26,15 +26,12 @@ body {
 /* Container styling */
 .container {
     display: flex;
-    flex-direction: row;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
     max-width: 600px;
     padding: 20px;
     text-align: center;
-    margin-top: 120px; /* Adjusted to avoid overlap with fixed top content */
     margin-left: auto; /* Center horizontally */
     margin-right: auto; /* Center horizontally */
 }
@@ -247,36 +244,142 @@ header {
     }
 }
 
-/* Media Container Styles */
-.media-container {
-  gap: 1rem;
-  margin-top: 1rem;
-  transition: all 0.3s ease;
-}
-
-.grid-view {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.list-view {
-  display: flex;
-  flex-direction: column;
-}
-
-.media-item {
-  background: #f0f0f0;
-  padding: 1rem;
-  border-radius: 8px;
-}
-
-.media-item img,
-.media-item video {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 6px;
-}
+/* Default (desktop/tablet) grid layout */
+.media-container.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  
+  /* Default list layout */
+  .media-container.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    align-items: center;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  
+  /* Common container styling */
+  .media-container {
+    transition: all 0.3s ease-in-out;
+    margin: 0 auto;
+    padding: 10px;
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Media items */
+  .media-item {
+    background-color: gray;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    max-height: 360px;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+  
+  /* Responsive media (images/videos) */
+  .media-item video,
+  .media-item img {
+    width: 100%;
+    max-width: 100%;
+    max-height: 250px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+    display: block;
+  }
+  
+  /* 💡 Responsive adjustments 💡 */
+  @media (max-width: 1024px) {
+    .media-container.grid-view {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      max-width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    /* 👇 Two items per row on mobile */
+    .media-container.grid-view {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      max-width: 100%;
+    }
+  
+    .media-item {
+      max-width: 100%;
+      padding: 8px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    /* For super small phones — still 2 columns but tighter */
+    .media-container.grid-view {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+  
+    .media-item {
+      padding: 6px;
+    }
+  
+    .media-item video,
+    .media-item img {
+      max-height: 180px;
+    }
+  }
+  
+  /* Toggle buttons layout */
+  .view-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .view-toggle .box {
+    display: inline-block;
+  }
+  
+  .view-toggle .button1, .view-toggle .button2 {
+    background-color: #4b89b8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-toggle .button1:hover, .view-toggle .button2:hover {
+    background-color: #3872a4;
+  }
+  
+  .view-toggle .button1:hover, .view-toggle .button2:hover {
+      background-color: #3872a4;
+  }
 
 /* Image Styling */
 .img-responsive {
@@ -308,7 +411,6 @@ header {
 
     /* Adjust container and text sizes for smaller screens */
     .container {
-        margin-top: 120px; /* Avoid overlap with fixed content */
         width: 100%; /* Allow container to take up full width */
         padding: 15px;
     }
@@ -327,12 +429,7 @@ header {
         width: 90%; /* Allow the time and calendar to adjust to screen */
         max-width: 90%; /* Keep it from getting too wide */
     }
-
-    .img-responsive img {
-        max-width: 200px; /* Adjust max-width for mobile */
-    }
 }
-
 /* Larger Screens (Desktop & Tablets) */
 @media (min-width: 768px) {
     body {
@@ -340,9 +437,8 @@ header {
     }
 
     .container {
-        margin-top: 120px; /* Space for the fixed top bar */
         padding: 40px; /* More padding on larger screens */
-        width: 60%; /* Ensure container doesn't stretch too wide */
+        width: 100%; /* Ensure container doesn't stretch too wide */
     }
 
     h2 {
@@ -360,17 +456,12 @@ header {
         width: 40%; /* Make them narrower */
         max-width: 400px; /* Prevent stretching */
     }
-
-    /* Image responsiveness */
-    .img-responsive img {
-        max-width: 300px; /* Larger max-width for desktop */
-    }
 }
 
 /* Ensure the layout is also good on extra large screens */
 @media (min-width: 1200px) {
     .container {
-        width: 50%; /* Reduce width on extra large screens */
+        width: 100%; /* Reduce width on extra large screens */
     }
 
     h2 {
@@ -632,37 +723,6 @@ header {
         transform: scale(1); /* Return to original size */
     }
 }
-
-/* Grid View Styles */
-.grid-view {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Auto columns */
-    grid-template-rows: repeat(3, minmax(200px, auto)); /* Max 3 rows */
-    grid-auto-rows: minmax(200px, auto); /* Ensures a min height for rows */
-  }
-  
-  /* List View Styles */
-  .list-view {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .media-item {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .media-item img, .media-item video {
-    max-width: 100%;
-    height: auto;
-    display: block;
-  }
 
 /* Container styling */
 #game-container,

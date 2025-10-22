@@ -50,25 +50,56 @@
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
         
-  <button id="chat-toggle-btn">💬 Chat</button>
+        <button id="chat-toggle-btn">💬 Chat</button>
 
-  <button id="chat-toggle-btn">💬 Chat</button>
+        <div id="chat-container">
+          <div id="chat-header">💬 Chat</div>
+        
+          <!-- Chat display area -->
+          <div id="chat-box">
+            <div id="chat-history"></div>
+            <div id="missed-counter"></div>
+          </div>
+        
+          <!-- Chat input area -->
+          <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type a message..." />
+            <button id="send-btn">Send</button>
+            <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
+          </div>
+        
+          <!-- Emoji menu -->
+          <div id="emoji-menu" class="emoji-menu">
+            <!-- Category tabs -->
+            <div id="emoji-categories" class="emoji-categories">
+              <button data-category="smileys">😄</button>
+              <button data-category="gestures">🙌</button>
+              <button data-category="hearts">❤️</button>
+              <button data-category="animals">🐶</button>
+              <button data-category="food">🍕</button>
+              <button data-category="symbols">🔥</button>
+            </div>
+            <!-- Emoji list container -->
+            <div id="emoji-list" class="emoji-list"></div>
+          </div>
+        
+          <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+        
+          <!-- Username change -->
+          <div id="username-change-area">
+            <input type="text" id="change-username-input" placeholder="New username" />
+            <button id="change-username-btn">Change Username</button>
+          </div>
+        
+          <!-- Safe ping toggle -->
+          <button id="toggle-safe-btn">Safe Pings ON</button>
+        </div>
 
-  <div id="chat-container">
-      <div id="chat-header">💬 Chat</div>
-      <div id="chat-box">
-      <div id="chat-history"></div>
-      <div id="missed-counter"></div>
-  </div>
-
-      <input type="text" id="chat-input" placeholder="Type a message..." />
-      <button id="send-btn">Send</button>
-      <button id="emoji-btn">😊</button>
-      <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-      <input type="text" id="change-username-input" placeholder="New username" />
-      <button id="change-username-btn">Change Username</button>
-  </div>
-
+        <div id="online-users-container">
+          <div id="online-users-header">🟢 Online Users</div>
+          <ul id="online-users"></ul>
+        </div> 
+        
     <script>
         document.addEventListener('DOMContentLoaded', () => {
         // Highlight the active menu item
@@ -319,12 +350,7 @@ window.addEventListener('resize', () => {
             <h2>How to Play</h2>
             <p>Click on the Yuuka weasel when it pops up to score points! But don't click on the real cute Yuuka or you'll lose points!</p>
             <p>Try to score as many points as you can in 1 minute and 15 seconds!</p>
-        </div>
-
-  <div id="online-users-container">
-    <div id="online-users-header">🟢 Online Users</div>
-    <ul id="online-users"></ul>
-  </div>  
+        </div> 
   
         <!-- Timer -->
         <div id="timer">Time Left: 75s</div>

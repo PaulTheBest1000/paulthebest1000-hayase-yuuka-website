@@ -140,103 +140,6 @@
     box-sizing: border-box;
 }
 
-/* Grid layout for media */
-.media-container.grid-view {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 10px;
-  box-sizing: border-box;
-  overflow-y: auto; /* Allow scrolling if needed */
-}
-
-/* List layout for media */
-.media-container.list-view {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 400px;
-  align-items: center;
-  margin: 0 auto;
-  padding: 10px;
-  box-sizing: border-box;
-  overflow-y: auto; /* Allow scrolling if needed */
-}
-
-/* Common container transition */
-.media-container {
-  transition: all 0.3s ease-in-out;
-  margin: 0 auto;
-  padding: 10px;
-  width: 100%;
-  max-width: 1000px; /* Give the container some upper bound */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  box-sizing: border-box;
-}
-
-/* Media items */
-.media-item {
-  background-color: gray;
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
-  text-align: center;
-  width: 100%;
-  max-width: 350px;
-  height: auto;
-  max-height: 360px;
-  overflow-y: auto;
-  box-sizing: border-box;
-}
-
-/* Responsive media (video or image) */
-.media-item video,
-.media-item img {
-  width: 100%;
-  max-height: 250px;
-  height: auto;
-  border-radius: 8px;
-  object-fit: contain;
-  display: block;
-}
-
-/* Toggle buttons layout */
-.view-toggle {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.view-toggle .box {
-  display: inline-block;
-}
-
-.view-toggle .button1, .view-toggle .button2 {
-  background-color: #4b89b8;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.view-toggle .button1:hover, .view-toggle .button2:hover {
-  background-color: #3872a4;
-}
-
-.view-toggle .button1:hover, .view-toggle .button2:hover {
-    background-color: #3872a4;
-}
-
 #easter-egg {
     color: transparent;
     cursor: pointer;
@@ -283,22 +186,50 @@
     <div id="time">Loading time...</div>
     <div id="calendar">Loading calendar...</div>
 
-  <button id="chat-toggle-btn">💬 Chat</button>
+    <button id="chat-toggle-btn">💬 Chat</button>
 
-  <div id="chat-container">
+    <div id="chat-container">
       <div id="chat-header">💬 Chat</div>
+    
+      <!-- Chat display area -->
       <div id="chat-box">
-      <div id="chat-history"></div>
-      <div id="missed-counter"></div>
-  </div>
-
-      <input type="text" id="chat-input" placeholder="Type a message..." />
-      <button id="send-btn">Send</button>
-      <button id="emoji-btn">😊</button>
+        <div id="chat-history"></div>
+        <div id="missed-counter"></div>
+      </div>
+    
+      <!-- Chat input area -->
+      <div id="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Type a message..." />
+        <button id="send-btn">Send</button>
+        <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
+      </div>
+    
+      <!-- Emoji menu -->
+      <div id="emoji-menu" class="emoji-menu">
+        <!-- Category tabs -->
+        <div id="emoji-categories" class="emoji-categories">
+          <button data-category="smileys">😄</button>
+          <button data-category="gestures">🙌</button>
+          <button data-category="hearts">❤️</button>
+          <button data-category="animals">🐶</button>
+          <button data-category="food">🍕</button>
+          <button data-category="symbols">🔥</button>
+        </div>
+        <!-- Emoji list container -->
+        <div id="emoji-list" class="emoji-list"></div>
+      </div>
+    
       <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-      <input type="text" id="change-username-input" placeholder="New username" />
-      <button id="change-username-btn">Change Username</button>
-  </div>
+    
+      <!-- Username change -->
+      <div id="username-change-area">
+        <input type="text" id="change-username-input" placeholder="New username" />
+        <button id="change-username-btn">Change Username</button>
+      </div>
+    
+      <!-- Safe ping toggle -->
+      <button id="toggle-safe-btn">Safe Pings ON</button>
+    </div>
 
   <div id="online-users-container">
     <div id="online-users-header">🟢 Online Users</div>

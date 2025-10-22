@@ -99,69 +99,56 @@
         <div id="time">Loading time...</div>
         <div id="calendar">Loading calendar...</div>
         <button id="open-modal-btn" class="quiz-btn">Start Yuuka Quiz</button>
-        <div id="view-toggle" class="view-toggle">
-        <!-- Content for view toggle -->
-        </div>
 
         <button id="chat-toggle-btn">💬 Chat</button>
 
         <div id="chat-container">
-            <div id="chat-header">💬 Chat</div>
-            <div id="chat-box">
+          <div id="chat-header">💬 Chat</div>
+        
+          <!-- Chat display area -->
+          <div id="chat-box">
             <div id="chat-history"></div>
             <div id="missed-counter"></div>
-        </div>
-
-        <input type="text" id="chat-input" placeholder="Type a message..." />
+          </div>
+        
+          <!-- Chat input area -->
+          <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type a message..." />
             <button id="send-btn">Send</button>
-            <button id="emoji-btn">😊</button>
-            <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+            <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
+          </div>
+        
+          <!-- Emoji menu -->
+          <div id="emoji-menu" class="emoji-menu">
+            <!-- Category tabs -->
+            <div id="emoji-categories" class="emoji-categories">
+              <button data-category="smileys">😄</button>
+              <button data-category="gestures">🙌</button>
+              <button data-category="hearts">❤️</button>
+              <button data-category="animals">🐶</button>
+              <button data-category="food">🍕</button>
+              <button data-category="symbols">🔥</button>
+            </div>
+            <!-- Emoji list container -->
+            <div id="emoji-list" class="emoji-list"></div>
+          </div>
+        
+          <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+        
+          <!-- Username change -->
+          <div id="username-change-area">
             <input type="text" id="change-username-input" placeholder="New username" />
             <button id="change-username-btn">Change Username</button>
           </div>
+        
+          <!-- Safe ping toggle -->
+          <button id="toggle-safe-btn">Safe Pings ON</button>
+        </div>
         
           <div id="online-users-container">
             <div id="online-users-header">🟢 Online Users</div>
              <ul id="online-users"></ul>
           </div> 
-          
-<!-- Modal Structure -->
-<div id="quiz-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="close-modal-btn">&times;</span>
-        <h1>Yuuka Quiz Game</h1>
-
-        <!-- Static Question -->
-        <div id="question-container">
-            <p id="question">What is Yuuka's favorite color?</p>
-        </div>
-
-        <!-- Static Answer Options -->
-        <div id="answers-container">
-            <button class="answer">Red</button>
-            <button class="answer">Blue</button>
-            <button class="answer">Green</button>
-            <button class="answer">Yellow</button>
-        </div>
-
-        <!-- Static Score -->
-        <div id="score-container">
-            <p id="score">Score: 0</p>
-        </div>
-
-        <!-- Static Timer -->
-        <div id="timer-container">
-            <p id="quiz-timer">Time Left: 00:00</p>
-        </div>
-
-        <!-- Static Score Message -->
-        <div id="score-message-container"></div>
-    </div>
-</div>
-
-    <!-- Correct and Wrong -->
-    <audio id="correct-sound" src="correct.mp3"></audio>
-    <audio id="wrong-sound" src="wrong.mp3"></audio>
 
     <!-- Main Content Section -->
     <div class="container">
@@ -169,6 +156,24 @@
 <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
 <audio id="ricochet" src="whizzby-41134.mp3"></audio>
 
+        <h1>Welcome to My Hayase Yuuka Website!</h1>
+        <p class="paragraph-1">This is my second website using VS Code.</p>
+        <p style="color: cyan;">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar".</p>
+
+        <p>If you love Hayase Yuuka, click the button below:</p>
+        <button class="button" onclick="showMessage()">Click Me!</button>
+
+                <div id="music-player">
+            <audio id="bg-music" loop>
+                <source src="Blue Archive OST 17. Irasshaimase.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <button id="music-toggle-btn">Play Music</button>
+            <progress id="progress-bar" value="0" max="100"></progress>
+            <span id="time-display">0:00 / 0:00</span>
+            <div id="message"></div> <!-- Container for custom messages -->
+        </div>
+        
 <script>
 async function loadGalleryImages(fromExternal = true) {
   try {
@@ -380,27 +385,6 @@ window.addEventListener('resize', () => {
     });
   }
 });
-</script>
-
-        <h1>Welcome to My Hayase Yuuka Website!</h1>
-        <p class="paragraph-1">This is my second website using VS Code.</p>
-        <p style="color: cyan;">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar".</p>
-
-        <p>If you love Hayase Yuuka, click the button below:</p>
-        <button class="button" onclick="showMessage()">Click Me!</button>
-
-                <div id="music-player">
-            <audio id="bg-music" loop>
-                <source src="Blue Archive OST 17. Irasshaimase.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-            <button id="music-toggle-btn">Play Music</button>
-            <progress id="progress-bar" value="0" max="100"></progress>
-            <span id="time-display">0:00 / 0:00</span>
-            <div id="message"></div> <!-- Container for custom messages -->
-        </div>
-        
-        <script>
             document.addEventListener('DOMContentLoaded', function () {
                 console.log("DOM loaded");
         
@@ -464,15 +448,6 @@ window.addEventListener('resize', () => {
             });
         </script>         
 
-<div>
-  <div class="box">
-    <button class="button1" onclick="setGridView()">Grid View</button>
-  </div>
-  <div class="box">
-    <button class="button2" onclick="setListView()">List View</button>
-  </div>
-</div>
-
         <div id="gif-container" style="display:none;">
             <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
         </div>
@@ -524,6 +499,15 @@ window.addEventListener('resize', () => {
                 font-size: 1.2em;
             }
         </style>
+
+        <div class="view-toggle">
+          <div class="box">
+            <button class="button1" onclick="setGridView()">Grid View</button>
+          </div>
+          <div class="box">
+            <button class="button2" onclick="setListView()">List View</button>
+          </div>
+        </div>
 
     <div class=" media-container grid-view">
         <div class="img-responsive image-container media-item">
