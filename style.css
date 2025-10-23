@@ -860,9 +860,14 @@ button:active {
     font-size: 20px;
     font-weight: bold;
     margin-top: 10px;
-    color: #9b3d62; /* Deep pinkish-purple text */
+    color: #c4a2d9; /* Soft purple text */
 }
 
+#score {
+    font-weight: bold;
+    margin-top: 10px;
+    color: #f9e84e; /* Light yellow text */
+}
 #download-btn {
     margin-top: 20px;
     background-color: #c4a2d9; /* Soft purple */
@@ -940,4 +945,11 @@ button:active {
 }
 .difficulty-selector input[value="hard"]:checked + span {
   background-color: #B71C1C; /* even darker red */
+}
+
+#move-counter {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #f9e84e;
 }

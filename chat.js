@@ -12,46 +12,145 @@ const toggleSafeBtn = document.getElementById("toggle-safe-btn");
 const emojiMenu = document.getElementById("emoji-menu");
 const emojiList = document.getElementById("emoji-list");
 const emojiPicker = {
-  smileys: ["😀","😁","😂","🤣","😃","😄","😅","😆","😉","😊","😋","😎","😍","😘","😜","🤪"],
-  gestures: ["👍","👎","✌️","🤞","🤟","🤘","👏","🙌","🙏","💪","🤝"],
-  hearts: ["❤️","💛","💚","💙","💜","🖤","💔","❣️","💕","💞"],
-  animals: ["🐶","🐱","🐼","🦊","🦁","🐸","🐵","🐤","🦄","🐝"],
-  food: ["🍕","🍔","🍟","🌭","🍣","🍩","🍫","🍪","🍦","☕","🥤"],
-  symbols: ["🔥","✨","⭐","⚡","✅","❌","💯","💥","🎯","🏆"]
+  smileys: [
+    "😀","😁","😂","🤣","😃","😄","😅","😆","😉","😊","😋","😎","😍","😘","😗","😙","😚",
+    "🙂","🤗","🤩","🤭","🤫","🤔","🤨","😐","😑","😶","🙄","😏","😣","😥","😮","🤐","😯",
+    "😪","😫","🥱","😴","😌","😛","😜","🤪","😝","🤤","😒","😓","😔","😕","🙃","😖","😞",
+    "😟","😢","😭","😦","😧","😨","😩","🤯","😬","😰","😱","🥶","🥵","🥴","😳","🤪","🤢",
+    "🤮","🤧","😷","🤒","🤕","😇","🥳","🥺","🤠","🤓","🧐","😈","👿","💀","☠️","🤡","👻",
+    "👽","👾","🤖"
+  ],
+  gestures: [
+    "👍","👎","👊","✊","🤛","🤜","👏","🙌","👐","🤲","🙏","💪","👌","🤏","✌️","🤞",
+    "🤟","🤘","🤙","🖖","👋","🤚","✋","🖐️","🤝","✍️","👏","🤜","🤛","💅","👈","👉",
+    "👆","👇","☝️","✊","🤚","🤞","🤲","🖕","✋","🤳","🖋️","✏️","💅"
+  ],
+  hearts: [
+    "❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗",
+    "💖","💘","💝","💟","💌","💑","💏","💋","♥️","💒","💌","💘","💗","💓","💞",
+    "💖","💟","❣️","❤️‍🔥","❤️‍🩹"
+  ],
+  animals: [
+    "🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐸","🐵",
+    "🐔","🐧","🐦","🐤","🐣","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🐛",
+    "🦋","🐌","🐞","🐜","🦂","🕷️","🕸️","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐",
+    "🦞","🐠","🐟","🐡","🐬","🦈","🐳","🐋","🐊","🐅","🐆","🦓","🦍","🦧","🐘",
+    "🦛","🦏","🐪","🐫","🦒","🦘","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐",
+    "🦌","🐕","🐩","🐈","🐓","🦃","🕊️","🐇","🐁","🐀","🐿️","🦔"
+  ],  
+  food: [
+    "🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🍈","🍒","🍑","🥭","🍍",
+    "🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶️","🌽","🥕","🧄","🧅","🥔",
+    "🍠","🥐","🍞","🥖","🥨","🥯","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩",
+    "🍗","🍖","🌭","🍔","🍟","🍕","🥪","🥙","🧆","🌮","🌯","🥗","🥘","🥫",
+    "🍝","🍜","🍲","🍛","🍣","🍱","🥟","🍤","🍙","🍚","🍘","🍢","🍡","🍧",
+    "🍨","🍦","🥧","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🧃","🥤","☕","🍵",
+    "🍺","🍻","🍷","🥂","🍸","🍹","🍾","🥄","🍴","🍽️","🥢"
+  ],  
+  symbols: ["💯","♻️","⚠️","🚫","✅","❌","⭐","🌟","✨","💥","🔥","⚡","💫","❇️",
+  "❗","❕","❓","❔","💤","💢","💬","🗯️","💭","💡","🔔","🔕","🎵","🎶","💰","💎","🔒",
+  "🔓","🔑","❤️‍🔥","☮️","✝️","☪️","🕉️","☸️","✡️","🔯","🕎","☯️","☦️","🛐","♈","♉",
+  "♊","♋","♌","♍","♎","♏","♐","♑","♒","♓","🆘","🆗","🆙","🆒","🆕","🆓",
+  "🔴","🟠","🟡","🟢","🔵","🟣","⚫","⚪","⬛","⬜","🔶","🔷","🔸","🔹","🔺","🔻",
+  "💠","🔘","🔳","🔲","⏺️","⏹️","⏯️","⏩","⏪","⏫","⏬","⏸️","⏭️","⏮️","⏰","⏱️",
+  "⏲️","⏳","⌛","⌚","♾️","⚙️","⚖️","⚔️","⚒️","⚗️","⚰️","⚱️","⚛️","⚕️","⚜️","⚓",
+  "⛵","✈️","☂️","☁️","⚡","❄️","☃️","⛄","☄️","🔥","💧","🌊","🌈","🌍","🌎","🌏",
+  "⭐","🌟","💫","✨","⚜️","🔰","♻️","💮","🏧","🚮","🚰","♿","🚹","🚺","🚻",
+  "🚼","🚾","🅿️","🚸","⛔","🚫","🚳","🚭","🚯","🚱","🚷","📵","🔞","☢️",
+  "☣️","⚠️","🚸","🔆","🔅","🔱","⚜️"]
 };
 
-// Show menu button (you can place it anywhere)
+// 🎨 Emoji Picker Layout — fully contained inside #chat-container
+
+// Toggle menu visibility
 emojiBtn.addEventListener("click", () => {
   emojiMenu.style.display = emojiMenu.style.display === "block" ? "none" : "block";
 });
 
-let currentCategory = null; // track which category is open
+let currentCategory = null;
 
-// Fill emoji list based on category
-document.getElementById("emoji-categories").addEventListener("click", (e) => {
+// 💫 Emoji Menu Container — keeps everything locked inside
+emojiMenu.style.width = "100%";
+emojiMenu.style.boxSizing = "border-box";
+emojiMenu.style.maxWidth = "270px";
+emojiMenu.style.overflow = "hidden";
+emojiMenu.style.borderRadius = "8px";
+emojiMenu.style.marginTop = "8px";
+emojiMenu.style.background = "rgba(0,0,0,0.25)";
+emojiMenu.style.backdropFilter = "blur(8px)";
+emojiMenu.style.border = "1px solid rgba(255,255,255,0.2)";
+emojiMenu.style.padding = "6px";
+emojiMenu.style.display = "none";
+emojiMenu.style.flexDirection = "column";
+
+// 💫 Category bar — fits exactly within menu width
+const emojiCategories = document.getElementById("emoji-categories");
+emojiCategories.style.display = "flex";
+emojiCategories.style.overflowX = "auto";
+emojiCategories.style.whiteSpace = "nowrap";
+emojiCategories.style.gap = "5px";
+emojiCategories.style.padding = "4px";
+emojiCategories.style.maxWidth = "100%";
+emojiCategories.style.scrollBehavior = "smooth";
+emojiCategories.style.borderBottom = "1px solid rgba(255,255,255,0.2)";
+emojiCategories.style.background = "rgba(255,255,255,0.08)";
+emojiCategories.style.borderRadius = "6px";
+emojiCategories.style.msOverflowStyle = "none";
+emojiCategories.style.scrollbarWidth = "none";
+emojiCategories.style.overflowY = "hidden";
+emojiCategories.style.flexShrink = "0";
+
+// 🔧 Prevent horizontal scroll from shifting layout
+emojiCategories.addEventListener("wheel", (e) => {
+  if (e.deltaY !== 0) {
+    emojiCategories.scrollLeft += e.deltaY;
+    e.preventDefault();
+  }
+});
+
+// 💫 Emoji list — 5 per row, scrollable inside menu
+emojiList.style.maxHeight = "160px";
+emojiList.style.overflowY = "auto";
+emojiList.style.display = "grid";
+emojiList.style.gridTemplateColumns = "repeat(5, 1fr)";
+emojiList.style.gap = "6px";
+emojiList.style.padding = "5px";
+emojiList.style.textAlign = "center";
+emojiList.style.justifyItems = "center";
+emojiList.style.alignItems = "center";
+emojiList.style.background = "rgba(255,255,255,0.08)";
+emojiList.style.borderRadius = "6px";
+emojiList.style.marginTop = "5px";
+emojiList.style.boxSizing = "border-box";
+emojiList.style.width = "100%";
+
+// 🧠 Fill emoji list when category clicked
+emojiCategories.addEventListener("click", (e) => {
   const category = e.target.dataset.category;
   if (!category) return;
 
   if (currentCategory === category) {
-    // Clicking the same category toggles hide
     emojiList.innerHTML = "";
     currentCategory = null;
   } else {
-    // Show new category
-    emojiList.innerHTML = ""; // clear previous emojis
+    emojiList.innerHTML = "";
     emojiPicker[category].forEach(emoji => {
-        const span = document.createElement("span");
-        span.textContent = emoji;
-        span.addEventListener("click", () => {
-            chatInput.value += emoji; // insert emoji into input
-            chatInput.focus();
-        });
-        emojiList.appendChild(span);
+      const span = document.createElement("span");
+      span.textContent = emoji;
+      span.style.cursor = "pointer";
+      span.style.fontSize = "22px";
+      span.style.transition = "transform 0.1s";
+      span.addEventListener("mouseenter", () => (span.style.transform = "scale(1.3)"));
+      span.addEventListener("mouseleave", () => (span.style.transform = "scale(1)"));
+      span.addEventListener("click", () => {
+        chatInput.value += emoji;
+        chatInput.focus();
+      });
+      emojiList.appendChild(span);
     });
     currentCategory = category;
   }
 });
-
 
 // Store the username (can be fetched from localStorage or set on user login)
 const userName = localStorage.getItem('playerName') || 'User'; // Default to 'Player' if no name is found
@@ -76,70 +175,87 @@ changeUsernameBtn.addEventListener('click', () => {
   }
 });
 
-// Default font
-let currentFont = "Arial, sans-serif"; // or whatever default you want
+// 🎨 Default font
+let currentFont = "Arial, sans-serif"; // can be toggled later
 
-// --- Markdown parser ---
+// 🧠 Markdown parser — supports bold, italic, underline, links, etc.
 function parseMarkdown(text) {
-  // ***bold+italic***
-  text = text.replace(/\*\*\*(.*?)\*\*\*/g, "<b><i>$1</i></b>");
-  // **bold**
-  text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-  // *italic*
-  text = text.replace(/\*(.*?)\*/g, "<i>$1</i>");
-  // __underline__
-  text = text.replace(/__(.*?)__/g, "<u>$1</u>");
-  // ~~strikethrough~~
-  text = text.replace(/~~(.*?)~~/g, "<s>$1</s>");
-  // `inline code`
-  text = text.replace(/`(.*?)`/g, "<code>$1</code>");
-  // [text](url)
-  text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
-  
-  return text;
+  return text
+    .replace(/\*\*\*(.*?)\*\*\*/g, "<b><i>$1</i></b>")   // ***bold+italic***
+    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")              // **bold**
+    .replace(/\*(.*?)\*/g, "<i>$1</i>")                  // *italic*
+    .replace(/__(.*?)__/g, "<u>$1</u>")                  // __underline__
+    .replace(/~~(.*?)~~/g, "<s>$1</s>")                  // ~~strikethrough~~
+    .replace(/`(.*?)`/g, "<code>$1</code>")              // `inline code`
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>'); // [text](url)
 }
 
-// --- Updated displayMessage ---
+// ✨ Highlight @mentions in chat
+function highlightMentions(text) {
+  return text.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+}
+
+// 💬 Display a message in the chat box
 function displayMessage(message, sender, username) {
   const msgElement = document.createElement('div');
   msgElement.classList.add(sender === 'user' ? 'user-message' : 'other-message');
-  msgElement.style.fontFamily = currentFont; // your font toggle still works
-  msgElement.innerHTML = `${username}: ${parseMarkdown(message)}`; // parse full markdown
+  msgElement.style.fontFamily = currentFont;
+  msgElement.innerHTML = `${username}: ${highlightMentions(parseMarkdown(message))}`;
+
   chatHistory.appendChild(msgElement);
-  chatHistory.scrollTop = chatHistory.scrollHeight; // auto-scroll
+
+  // 🚀 Smooth auto-scroll to bottom after render
+  requestAnimationFrame(() => {
+    chatHistory.scrollTo({
+      top: chatHistory.scrollHeight,
+      behavior: 'smooth'
+    });
+  });
 }
 
-// Ensure the current username is sent with the message
+// 📤 Send message
 function sendChatMessage() {
   const message = chatInput.value.trim();
   if (message) {
-      // Display the message locally (only for the sender)
-      displayMessage(message, 'user', currentUsername);
+    // Display locally
+    displayMessage(message, 'user', currentUsername);
 
-      // Emit the message to the server
-      socket.emit('sendMessage', { message, sender: 'user', username: currentUsername });
+    // Emit to server
+    socket.emit('sendMessage', {
+      message,
+      sender: 'user',
+      username: currentUsername
+    });
 
-      chatInput.value = ''; // Clear input field
+    // Clear input
+    chatInput.value = '';
+
+    // 🚀 Smooth scroll (slightly delayed to ensure DOM updates)
+    setTimeout(() => {
+      chatHistory.scrollTo({
+        top: chatHistory.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 50);
   }
 }
 
-// Send button click
+// 🖱️ Send button
 sendBtn.addEventListener('click', sendChatMessage);
 
-// Enter key press
+// ⌨️ Enter key sends, Shift+Enter = newline
 chatInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) { // Enter sends message
-      e.preventDefault(); // Prevent newline
-      sendChatMessage();
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
   }
-  // Shift+Enter allows newline
 });
 
 // --- Safe Ping Sound System with Password Access ---
 function initSafePingSystem() {
   let safeMode = true; // Default: only safe pings
   let unsafeUnlocked = false; // Tracks if password was entered
-  const toggleBtn = document.getElementById("toggle-safe-btn"); // button in HTML
+  const toggleBtn = document.getElementById("toggle-safe-btn");
 
   const sounds = {
     ping001: { src: "ping-001.mp3", safe: true },
@@ -147,64 +263,68 @@ function initSafePingSystem() {
     ping003: { src: "ping-003.mp3", safe: false }
   };
 
-  const password = "HayaseYuukaMemberOfTheYLF"; // change this to your secret password
+  const password = "HayaseYuukaMemberOfTheYLF"; // secret passphrase
 
-      // Function to pick a sound based on safeMode & password unlock
-      const pickPing = () => {
-        const available = Object.values(sounds).filter(s => s.safe || unsafeUnlocked);
-        if (available.length === 0) return null;
-        return available[Math.floor(Math.random() * available.length)];
-    };
+  // 🔊 Pick a sound
+  const pickPing = () => {
+    const available = Object.values(sounds).filter(s => s.safe || unsafeUnlocked);
+    if (available.length === 0) return null;
+    return available[Math.floor(Math.random() * available.length)];
+  };
 
-    // Function to play a ping
-    const playPing = () => {
-        const sound = pickPing();
-        if (!sound) return;
-        const audio = new Audio(sound.src);
-        audio.volume = sound.safe ? 1 : 0.5; // 50% volume for unsafe sounds
-        audio.play().catch(err => console.log("Audio failed:", err));
-    };
+  // 🔊 Play sound
+  const playPing = () => {
+    const sound = pickPing();
+    if (!sound) return;
+    const audio = new Audio(sound.src);
+    audio.volume = sound.safe ? 1 : 0.5;
+    audio.play().catch(err => console.log("Audio failed:", err));
+  };
 
-    // Update button UI
-    const updateToggleUI = () => {
-        if (safeMode) {
-            toggleBtn.textContent = "Safe Pings: ON";
-            toggleBtn.classList.remove("off");
-            toggleBtn.classList.add("on");
-        } else {
-            toggleBtn.textContent = "Safe Pings: OFF";
-            toggleBtn.classList.remove("on");
-            toggleBtn.classList.add("off");
+  // 🎨 Update button UI
+  const updateToggleUI = () => {
+    if (safeMode) {
+      toggleBtn.textContent = "Safe Pings: ON";
+      toggleBtn.classList.remove("off");
+      toggleBtn.classList.add("on");
+    } else {
+      toggleBtn.textContent = "Safe Pings: OFF";
+      toggleBtn.classList.remove("on");
+      toggleBtn.classList.add("off");
+    }
+  };
 
-            // Only allow unsafe pings if password unlocked
-            if (!unsafeUnlocked) {
-                const userPass = prompt("Enter password to enable unsafe pings:");
-                if (userPass === password) {
-                    unsafeUnlocked = true;
-                    alert("✅ Safe Pings Offline!");
-                } else {
-                    safeMode = true; // force back to safe mode
-                    alert("❌ Safe Pings Online!");
-                }
-            }
+  // 🔘 Handle toggle click
+  toggleBtn.addEventListener("click", () => {
+    // If switching from ON → OFF
+    if (safeMode) {
+      // Ask for password BEFORE changing mode
+      const userPass = prompt("Are you sure bro? Don't say i didn't warn you!");
+      if (userPass === null) return;
+      if (userPass === password) {
+        unsafeUnlocked = true;
+        safeMode = false;
+        alert("✅ Success Safe Pings Offline!");
+        alert("⚠️ Warning: Safe Pings Filter is compromised!");
+      } else {
+        alert("❌ Error!");
+        safeMode = true;
+      }
+    } else {
+      // Turning back ON doesn’t need password
+      safeMode = true;
+      alert("🟢 Success Safe Pings Online!");
+    }
 
-            if (unsafeUnlocked) {
-                alert("⚠️ Warning: Safe Pings Filter is compromised!");
-            }
-        }
-    };
-
-    // Initial UI update
+    // Always update button after decision
     updateToggleUI();
+  });
 
-    // Toggle button click
-    toggleBtn.addEventListener("click", () => {
-        safeMode = !safeMode;
-        updateToggleUI();
-    });
+  // Initial UI update
+  updateToggleUI();
 
-    // Return function to be used in chat
-    return playPing;
+  // Return for use in chat
+  return playPing;
 }
 
 // Initialize
@@ -212,39 +332,104 @@ const playPing = initSafePingSystem();
 
 // Listen for messages from the server
 socket.on('receiveMessage', (data) => {
-  if (data.username !== currentUsername) { // Only show for other users
-      displayMessage(data.message, data.sender, data.username); // Show in chat
+  if (data.username !== currentUsername) {
+    // 💬 Display in chat with mention highlights
+    const messageHTML = highlightMentions(parseMarkdown(data.message));
+    const msgElement = document.createElement('div');
+    msgElement.classList.add('other-message');
+    msgElement.style.fontFamily = currentFont;
+    msgElement.innerHTML = `${data.username}: ${messageHTML}`;
+    chatHistory.appendChild(msgElement);
 
+    // 🚀 Smooth scroll to bottom
+    chatHistory.scrollTo({
+      top: chatHistory.scrollHeight,
+      behavior: 'smooth'
+    });
+
+    // 🧠 Check for mention
+    const mentioned = data.message.includes(`@${currentUsername}`);
+
+    if (mentioned) {
+      // 🔔 Play ping sound
+      playPing();
+
+      // 🌟 Add glow animation for mentions
+      msgElement.querySelectorAll('.mention').forEach(m => {
+        if (m.textContent === `@${currentUsername}`) {
+          m.classList.add('mention-me');
+          setTimeout(() => m.classList.remove('mention-me'), 1500);
+        }
+      });
+
+      // 🖥️ Desktop/mobile notification
       if (Notification.permission === "granted") {
-          playPing(); // safe/unsafe logic applied automatically
-          new Notification(`${data.username} says:`, {
-              body: data.message,
-              icon: "IMG_6281.ico" // optional icon
-          });
-      } else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then(permission => {
-              if (permission === "granted") {
-                  playPing();
-                  const notification = new Notification(`${data.username} says:`, {
-                      body: data.message,            // the main text
-                      icon: "IMG_6281.ico",          // icon for the notification
-                      tag: `chat-${data.username}`,  // group similar notifications
-                      renotify: true,                // alert again if a notification with the same tag exists                  
-                      requireInteraction: false      // true: keeps notification until user clicks/dismisses
-                  });
-                  notification.onclick = () => {
-                    window.focus();                 // brings browser to front
-                    chatInput.focus();              // focuses chat input
-                    notification.close();           // optional
-                };
-              }
-          });
+        const mentionNotification = new Notification(`You were mentioned by ${data.username}!`, {
+          body: data.message,
+          icon: "IMG_6281.ico",
+          tag: `mention-${data.username}`,
+          renotify: true,
+          requireInteraction: false
+        });
+
+        // 🖱️ Click to focus window
+        mentionNotification.onclick = () => {
+          window.focus();
+          chatInput.focus();
+          mentionNotification.close();
+        };
       }
-    
-// auto-scroll
-const chatBox = document.getElementById("chat-box");
-  chatBox.scrollTop = chatBox.scrollHeight;
     }
+
+    // 🎨 Auto-scroll smoothly to bottom
+    const chatBox = document.getElementById("chat-box");
+    setTimeout(() => {
+      chatBox.scrollTo({
+        top: chatBox.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 50);
+
+    // 🔔 Desktop/mobile notifications
+    if (Notification.permission === "granted") {
+      // 🔊 Play ping sound
+      playPing();
+
+      // 🧠 Markdown-style text beautifier
+      const formatMarkdownForNotification = (text) => {
+        return text
+          // Bold + Italic (***word*** → ⚡word⚡)
+          .replace(/\*\*\*(.*?)\*\*\*/g, (_, word) => `⚡${word}⚡`)
+          // Bold (**word** → WORD)
+          .replace(/\*\*(.*?)\*\*/g, (_, word) => word.toUpperCase())
+          // Italic (*word* → _word_)
+          .replace(/\*(.*?)\*/g, (_, word) => `_${word}_`)
+          // Strikethrough (~~word~~ → ~word~)
+          .replace(/~~(.*?)~~/g, (_, word) => `~${word}~`)
+          // Inline code (`word` → [word])
+          .replace(/`(.*?)`/g, (_, code) => `[${code}]`);
+      };
+
+      // 🖌️ Format the incoming message
+      const formattedMessage = formatMarkdownForNotification(data.message);
+
+      // 💬 Create the notification
+      const notification = new Notification(`${data.username} says:`, {
+        body: formattedMessage,
+        icon: "IMG_6281.ico",
+        tag: `chat-${data.username}`, // group notifications per user
+        renotify: true,
+        requireInteraction: false, // disappear automatically
+      });
+
+      // 🖱️ Clicking the notification brings the tab to focus
+      notification.onclick = () => {
+        window.focus();
+        chatInput.focus();
+        notification.close();
+      };
+    }
+  }
 });
 
 socket.on('onlineUsers', (users) => {
