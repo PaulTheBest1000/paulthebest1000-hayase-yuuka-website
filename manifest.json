@@ -3,8 +3,8 @@
     "short_name": "Yuuka Site",
     "start_url": "./?pwa=true",
     "display": "standalone",
-    "background_color": "dimgray",
-    "theme_color": "#1c1c1e",
+    "background_color": "blueviolet",
+    "theme_color": "cyan",
     "icons": [
       { "src": "icons/Assets.xcassets/AppIcon.appiconset/16.png", "sizes": "16x16", "type": "image/png" },
       { "src": "icons/Assets.xcassets/AppIcon.appiconset/20.png", "sizes": "20x20", "type": "image/png" },
