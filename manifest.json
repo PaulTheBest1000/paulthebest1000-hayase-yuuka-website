@@ -1,7 +1,7 @@
 {
     "name": "Hayase Yuuka Website",
     "short_name": "Yuuka Site",
-    "start_url": "/paulthebest1000-hayase-yuuka-website/?pwa=true",
+    "start_url": "https://paulthebest1000.github.io/paulthebest1000-hayase-yuuka-website/?pwa=true",
     "display": "standalone",
     "background_color": "blueviolet",
     "theme_color": "cyan",
