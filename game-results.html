@@ -69,6 +69,25 @@
 #clearGalleryBtn:focus, #clear-Results-Btn:focus {
   outline: none;
 }
+
+.view-toggle {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.view-toggle button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.view-toggle button:hover {
+  background: #45a049;
+}
     </style>
 </head>
 <body>
@@ -412,101 +431,22 @@ window.addEventListener('resize', () => {
   <h1>Game Results</h1>
   <div id="results-container"></div>
 
-  <div class="view-toggle">
-  <button id="clear-results-btn" style="display: none;">Clear Results!</button>
-</div> 
+<!-- 🧹 Admin Buttons ABOVE their sections -->
+<div class="view-toggle">
+  <button id="clear-results-btn" style="display: none;">🧹 Clear Results</button>
+</div>
+
+<!-- 🧾 Results Section -->
+<div id="results-container"></div>
+
+<!-- 🎨 Gallery Section -->
+<div class="view-toggle">
+  <button id="clearGalleryBtn" style="display: none;">🧼 Clear Gallery</button>
+</div>
 
 <div class="gallery-container" id="gallery-container">
-    <!-- Gallery items will be dynamically inserted here -->
+  <!-- Gallery items will be dynamically inserted here -->
 </div>
-<div class="view-toggle">
-    <button id="clearGalleryBtn">Clear Gallery!</button>
-</div>
-</div>
-
-  <script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const galleryContainer = document.getElementById("gallery-container");
-    const sortBySelect = document.getElementById("sortBy");
-    const savedGallery = JSON.parse(localStorage.getItem("yuukaResultGallery")) || [];
-
-    const adminPassword = "YuukaLovesYouAlways!";
-    const clearGalleryBtn = document.getElementById("clearGalleryBtn");
-
-    clearGalleryBtn.style.display = "none";
-
-    document.addEventListener("keydown", (event) => {
-      if (event.ctrlKey && event.key === "Enter") {
-        const inputPassword = prompt("Enter the admin password to access the gallery settings:");
-        if (inputPassword === null) return;
-
-        if (inputPassword === adminPassword) {
-          clearGalleryBtn.style.display = "block";
-          clearGalleryBtn.addEventListener("click", () => {
-            const accessCode = prompt("Enter admin code to clear the gallery:");
-            if (accessCode === null) return;
-
-            if (accessCode === adminPassword) {
-              localStorage.removeItem("yuukaResultGallery");
-              alert("Gallery has been cleared.");
-              location.reload();
-            } else {
-              alert("Access denied. Incorrect admin code.");
-            }
-          });
-        }
-      }
-    });
-
-    function renderGallery(gallery) {
-      galleryContainer.innerHTML = "";
-
-      gallery.forEach((entry, index) => {
-        const item = document.createElement("div");
-        item.className = "gallery-item";
-
-        const img = document.createElement("img");
-        img.src = entry.image;
-        img.alt = `Result for ${entry.name}`;
-
-        const details = document.createElement("div");
-        details.className = "details";
-        details.innerHTML = `
-          <strong>${entry.name}</strong><br>
-          Score: ${entry.score}<br>
-          <em>${entry.timestamp}</em>
-        `;
-
-        const downloadLink = document.createElement("a");
-        downloadLink.href = entry.image;
-        downloadLink.download = `Yuuka_Quiz_Result_${entry.name}_${index + 1}.png`;
-        downloadLink.textContent = "⬇️ Download Image";
-        downloadLink.className = "download-link";
-
-        item.appendChild(img);
-        item.appendChild(details);
-        item.appendChild(downloadLink);
-        galleryContainer.appendChild(item);
-      });
-    }
-
-    function sortGallery() {
-      const sortBy = sortBySelect.value;
-      let sortedGallery;
-
-      if (sortBy === "score") {
-        sortedGallery = [...savedGallery].sort((a, b) => b.score - a.score);
-      } else {
-        sortedGallery = [...savedGallery].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      }
-
-      renderGallery(sortedGallery);
-    }
-
-    sortGallery();
-    sortBySelect.addEventListener("change", sortGallery);
-  });
-</script>
 
 <script src="script.js"></script>
 <script src="results.js"></script>

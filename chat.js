@@ -213,30 +213,52 @@ function displayMessage(message, sender, username) {
   });
 }
 
+let deleting = false;
+let deleteTimeout;
+
+// ⚡ Detect fast deletion mode
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Backspace') {
+    if (!deleting) {
+      deleting = true;
+
+      // Enable turbo mode (less lag)
+      chatInput.style.transition = 'none';
+      chatInput.style.overflowY = 'auto';
+    }
+
+    // Reset timer every time you press or hold Backspace
+    clearTimeout(deleteTimeout);
+    deleteTimeout = setTimeout(() => {
+      // 🧘 Stop turbo mode after no Backspace for 300ms
+      deleting = false;
+      chatInput.style.transition = '';
+      chatInput.style.overflowY = '';
+    }, 300);
+  }
+});
+
 // 📤 Send message
 function sendChatMessage() {
   const message = chatInput.value.trim();
   if (message) {
-    // Display locally
     displayMessage(message, 'user', currentUsername);
-
-    // Emit to server
     socket.emit('sendMessage', {
       message,
       sender: 'user',
       username: currentUsername
     });
 
-    // Clear input
     chatInput.value = '';
+    chatInput.style.transition = 'none'; // instant reset
+    chatInput.style.height = ''; // if auto-expanding
 
-    // 🚀 Smooth scroll (slightly delayed to ensure DOM updates)
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       chatHistory.scrollTo({
         top: chatHistory.scrollHeight,
         behavior: 'smooth'
       });
-    }, 50);
+    });
   }
 }
 

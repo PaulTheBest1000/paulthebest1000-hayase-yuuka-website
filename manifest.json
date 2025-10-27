@@ -1,10 +1,46 @@
 {
     "name": "Hayase Yuuka Website",
     "short_name": "Yuuka Site",
-    "start_url": "https://paulthebest1000.github.io/paulthebest1000-hayase-yuuka-website/?pwa=true",
+    "description": "The cute Hayase Yuuka website — now installable as a PWA!",
+    "id": "/?pwa=true",
+    "start_url": "./?pwa=true",
+    "scope": "./",
     "display": "standalone",
     "background_color": "blueviolet",
     "theme_color": "cyan",
+    "categories": ["blue archive", "hayase", "yuuka"],
+    "screenshots": [
+      {
+        "src": "Screenshot-001.jpg",
+        "sizes": "1080x1920",
+        "type": "image/jpg",
+        "form_factor": "narrow"
+      },
+      {
+        "src": "Screenshot-002.jpg",
+        "sizes": "1080x1920",
+        "type": "image/jpg",
+        "form_factor": "narrow"
+      },
+      {
+        "src": "Screenshot-003.jpg",
+        "sizes": "1080x1920",
+        "type": "image/jpg",
+        "form_factor": "narrow"
+      },
+      {
+        "src": "Screenshot-004.png",
+        "sizes": "1920x1080",
+        "type": "image/png",
+        "form_factor": "wide"
+      },
+      {
+        "src": "Screenshot-005.png",
+        "sizes": "1920x1080",
+        "type": "image/png",
+        "form_factor": "wide"
+      }
+    ],
     "icons": [
       { "src": "icons/android/mipmap-hdpi/IMG_6281.JPG.png", "sizes": "72x72", "type": "image/png" },
       { "src": "icons/android/mipmap-mdpi/IMG_6281.JPG.png", "sizes": "48x48", "type": "image/png" },

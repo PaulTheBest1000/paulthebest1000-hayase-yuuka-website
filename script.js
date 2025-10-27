@@ -285,7 +285,7 @@ questions.forEach(question => {
           imageSrc = "IMG_2487.GIF";
       } else if (currentScore <= 1650) {
           message = "Wow! Yuuka is super proud of you! Your hard work is paying off, keep it up!";
-          imageSrc = "IMG_3422.GIF";
+          imageSrc = "IMG_3442.GIF";
       }    
   
       console.log(`Message: ${message}, GIF: ${imageSrc}`);
@@ -363,7 +363,7 @@ questions.forEach(question => {
   
       // Display the GIF
       const gifContainer = document.getElementById('gif-container');
-      gifContainer.style.display = 'block';  // Show the GIF container
+      gifContainer.style.display = 'flex';  // Show the GIF container
   
       // Hide the GIF after 5 seconds (5000 ms)
       setTimeout(() => {

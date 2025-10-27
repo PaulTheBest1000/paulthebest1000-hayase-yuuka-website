@@ -154,8 +154,46 @@
              <ul id="online-users"></ul>
           </div> 
 
-    <!-- Main Content Section -->
-    <div class="container">
+    <!-- Modal Structure -->
+<div id="quiz-modal" class="modal">
+  <div class="modal-content">
+      <span class="close-btn" id="close-modal-btn">&times;</span>
+      <h1>Yuuka Quiz Game</h1>
+
+      <!-- Static Question -->
+      <div id="question-container">
+          <p id="question">What is Yuuka's favorite color?</p>
+      </div>
+
+      <!-- Static Answer Options -->
+      <div id="answers-container">
+          <button class="answer">Red</button>
+          <button class="answer">Blue</button>
+          <button class="answer">Green</button>
+          <button class="answer">Yellow</button>
+      </div>
+
+      <!-- Static Score -->
+      <div id="score-container">
+          <p id="score">Score: 0</p>
+      </div>
+
+      <!-- Static Timer -->
+      <div id="timer-container">
+          <p id="quiz-timer">Time Left: 00:00</p>
+      </div>
+
+      <!-- Static Score Message -->
+      <div id="score-message-container"></div>
+  </div>
+</div>
+
+  <!-- Correct and Wrong -->
+  <audio id="correct-sound" src="correct.mp3"></audio>
+  <audio id="wrong-sound" src="wrong.mp3"></audio>
+
+  <!-- Main Content Section -->
+  <div class="container">
         
 <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
 <audio id="ricochet" src="whizzby-41134.mp3"></audio>
