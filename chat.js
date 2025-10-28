@@ -241,25 +241,47 @@ chatInput.addEventListener('keydown', (e) => {
 // 📤 Send message
 function sendChatMessage() {
   const message = chatInput.value.trim();
-  if (message) {
-    displayMessage(message, 'user', currentUsername);
-    socket.emit('sendMessage', {
-      message,
-      sender: 'user',
-      username: currentUsername
-    });
+  if (!message) return;
 
-    chatInput.value = '';
-    chatInput.style.transition = 'none'; // instant reset
-    chatInput.style.height = ''; // if auto-expanding
+  // ✅ Simple URL regex
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
 
-    requestAnimationFrame(() => {
-      chatHistory.scrollTo({
-        top: chatHistory.scrollHeight,
-        behavior: 'smooth'
-      });
+  // Escape HTML to prevent injection
+  const escapeHTML = (str) => str.replace(/[&<>"']/g, (m) => {
+    return {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[m];
+  });
+
+  // Replace URLs with clickable links safely
+  const safeMessage = escapeHTML(message).replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+
+  // Display in chat
+  displayMessage(safeMessage, 'user', currentUsername);
+
+  // Emit original message (optional: send raw text)
+  socket.emit('sendMessage', {
+    message, // raw message without <a> tags
+    sender: 'user',
+    username: currentUsername
+  });
+
+  // Reset input
+  chatInput.value = '';
+  chatInput.style.transition = 'none';
+  chatInput.style.height = '';
+
+  // Scroll to bottom
+  requestAnimationFrame(() => {
+    chatHistory.scrollTo({
+      top: chatHistory.scrollHeight,
+      behavior: 'smooth'
     });
-  }
+  });
 }
 
 // 🖱️ Send button
