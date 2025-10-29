@@ -148,35 +148,48 @@ questions.forEach(question => {
       alert(`${userName}, your score is: ${userScore} out of ${questions.length}`);
   }
   
-  // Get modal elements
-  const modal = document.getElementById("quiz-modal");
-  const openModalBtn = document.getElementById("open-modal-btn");
-  const closeModalBtn = document.getElementById("close-modal-btn");
-  const scoreContainer = document.getElementById("score-container");
-  const scoreText = document.getElementById("score");
-  
-  // Open the modal when the user clicks the "Start Quiz" button
-  openModalBtn.onclick = function () {
-      resetGame();
-      modal.style.display = "block";
-      startCountdown();
-      loadQuestion();
-  };
-  
-  // Close the modal when the user clicks the "X" button
-  closeModalBtn.onclick = function () {
-      modal.style.display = "none";
-      clearInterval(timer);
-  };
-  
-  // Close the modal if the user clicks anywhere outside of the modal content
-  window.onclick = function (event) {
-      if (event.target === modal) {
-          modal.style.display = "none";
-          clearInterval(timer);
-      }
-  };
-  
+// Get modal elements
+const modal = document.getElementById("quiz-modal");
+const openModalBtn = document.getElementById("open-modal-btn");
+const closeModalBtn = document.getElementById("close-modal-btn");
+const scoreContainer = document.getElementById("score-container");
+const scoreText = document.getElementById("score");
+
+// 🚫 Lock scrolling when modal is active
+function lockScroll() {
+    document.body.classList.add("modal-open");
+}
+
+// ✅ Unlock scrolling when modal closes
+function unlockScroll() {
+    document.body.classList.remove("modal-open");
+}
+
+// Open the modal when the user clicks the "Start Quiz" button
+openModalBtn.onclick = function () {
+    resetGame();
+    modal.style.display = "block";
+    lockScroll(); // ✨ Add scroll lock
+    startCountdown();
+    loadQuestion();
+};
+
+// Close the modal when the user clicks the "X" button
+closeModalBtn.onclick = function () {
+    modal.style.display = "none";
+    unlockScroll(); // ✨ Release scroll
+    clearInterval(timer);
+};
+
+// Close the modal if the user clicks anywhere outside of the modal content
+window.onclick = function (event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+        unlockScroll(); // ✨ Release scroll
+        clearInterval(timer);
+    }
+};
+
   // Reset game state
   function resetGame() {
       currentScore = 0;
@@ -269,24 +282,46 @@ questions.forEach(question => {
   
   // End the game and display the final score with a message and image
   function endGame() {
-      clearInterval(timer);
+    clearInterval(timer);
   
-      let message = "";
-      let imageSrc = "";
+    let message = "";
+    let imageSrc = "";
   
-      if (currentScore === 0) {
-          message = "Oh no! Yuuka is really upset because you failed! Better luck next time!";
-          imageSrc = "IMG_2432.GIF";
-      } else if (currentScore <= 549) {
-          message = "Yuuka's peeking at you, but she's not impressed. You were *this* close to failing!";
-          imageSrc = "IMG_2490.GIF";
-      } else if (currentScore <= 1099) {
-          message = "Yuuka’s impressed! You’re starting to make progress, but there’s still work to do!";
-          imageSrc = "IMG_2487.GIF";
-      } else if (currentScore <= 1650) {
-          message = "Wow! Yuuka is super proud of you! Your hard work is paying off, keep it up!";
-          imageSrc = "IMG_3442.GIF";
-      }    
+    if (currentScore === 0) {
+        message = "Oh no! Yuuka is really upset because you failed! Better luck next time!";
+        imageSrc = "IMG_2432.GIF";
+    } else if (currentScore <= 549) {
+        message = "Yuuka's peeking at you, but she's not impressed. You were *this* close to failing!";
+        imageSrc = "IMG_2490.GIF";
+    } else if (currentScore <= 1099) {
+        message = "Yuuka’s impressed! You’re starting to make progress, but there’s still work to do!";
+        imageSrc = "IMG_2487.GIF";
+    } else if (currentScore <= 1650) {
+        message = "Wow! Yuuka is super proud of you! Your hard work is paying off, keep it up!";
+        imageSrc = "IMG_3442.GIF";
+    }
+  
+    scoreText.textContent = "Final Score: " + currentScore;
+  
+    // Hide quiz modal
+    modal.style.display = "none";
+  
+    // Show score container
+    scoreContainer.style.display = "block";
+    document.body.classList.add("modal-open"); // Disable background scroll
+  
+    const scoreMessageContainer = document.getElementById("score-message-container");
+    scoreMessageContainer.innerHTML = "";
+  
+    const messageElement = document.createElement("p");
+    messageElement.textContent = message;
+  
+    const imageElement = document.createElement("img");
+    imageElement.src = imageSrc;
+    imageElement.alt = "Score Image";
+  
+    scoreMessageContainer.appendChild(messageElement);
+    scoreMessageContainer.appendChild(imageElement);
   
       console.log(`Message: ${message}, GIF: ${imageSrc}`);
   
@@ -400,16 +435,43 @@ questions.forEach(question => {
     container.classList.add('list-view');
   }
   
-    function saveResultImageToGallery(imageDataURL, playerName, score) {
-      const timestamp = new Date().toLocaleString();
-      const result = {
-          name: playerName,
-          score: score,
-          image: imageDataURL,
-          timestamp: timestamp
-      };
+  function saveResultImageToResults(imageDataURL, playerName, score) {
+    const timestamp = new Date().toLocaleString();
+    const result = {
+      name: playerName,
+      score: score,
+      image: imageDataURL,
+      timestamp: timestamp
+    };
   
-      const gallery = JSON.parse(localStorage.getItem("yuukaResultGallery")) || [];
-      gallery.push(result);
-      localStorage.setItem("yuukaResultGallery", JSON.stringify(gallery));
+    // 🧠 Unified storage key for everything Yuuka-related
+    const results = JSON.parse(localStorage.getItem("yuukaResults")) || [];
+    results.push(result);
+    localStorage.setItem("yuukaResults", JSON.stringify(results));
+  
+    // 💫 Optional feedback message
+    const message = document.createElement("div");
+    message.textContent = "💜 Yuuka saved your result successfully!";
+    message.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(70, 0, 120, 0.85);
+      color: #f0f0ff;
+      padding: 20px 40px;
+      border-radius: 15px;
+      text-align: center;
+      font-size: 18px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 25px rgba(170, 0, 255, 0.6);
+      z-index: 9999;
+    `;
+    document.body.appendChild(message);
+  
+    // ⏳ Redirect to results page after 10 seconds
+    setTimeout(() => {
+      window.location.href = "game-results.html";
+    }, 10000);
   }
+  

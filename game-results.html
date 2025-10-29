@@ -32,23 +32,23 @@
         <meta property="twitter:image" content="https://github.com/PaulTheBest1000/paulthebest1000-hayase-yuuka-website/blob/master/Screenshot-004.png" />
         <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />   
     <style>
-      .gallery-container {
+      .container {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 20px;
-          min-height: calc(50vh - 30px); /* 30px = header height, adjust if needed */
+          min-height: calc(73.75vh - 30px); /* 30px = header height, adjust if needed */
       }
 
-      .gallery-item {
-          background: #fff;
+      .item {
+        background: #f4d1f7; /* Soft pastel pink background */
           border: 1px solid #ccc;
           padding: 10px;
           width: 300px;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+          border-radius: 10px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
       }
 
-      .gallery-item img {
+      .item img {
           max-width: 100%;
           height: auto;
       }
@@ -221,15 +221,25 @@
   </div>
       
   <div class="container">
-    <h1>Yuuka Games Gallery</h1>
+    <h1>Yuuka Game Results</h1>
+  
     <div class="filters">
-        <label for="sortBy">Sort By: </label>
-        <select id="sortBy">
-            <option value="score">Top Scores</option>
-            <option value="date">Date</option>
-        </select>
-      </div> 
-
+      <label for="sortBy">Sort By: </label>
+      <select id="sortBy">
+        <option value="score">Top Scores</option>
+        <option value="date">Date</option>
+      </select>
+    </div>
+  
+    <div class="view-toggle">
+      <button id="clearResultsBtn" style="display: none;">🧼 Clear Results</button>
+    </div>
+  
+    <div class="yuukaResults" id="results-container">
+      <!-- Results dynamically appear here -->
+    </div>
+  </div>
+  
   <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
   <audio id="ricochet" src="whizzby-41134.mp3"></audio>
 
@@ -445,26 +455,6 @@ window.addEventListener('resize', () => {
   }
 });
 </script>
-
-  <h1>Game Results</h1>
-  <div id="results-container"></div>
-
-<!-- 🧹 Admin Buttons ABOVE their sections -->
-<div class="view-toggle">
-  <button id="clear-results-btn" style="display: none;">🧹 Clear Results</button>
-</div>
-
-<!-- 🧾 Results Section -->
-<div id="results-container"></div>
-
-<!-- 🎨 Gallery Section -->
-<div class="view-toggle">
-  <button id="clearGalleryBtn" style="display: none;">🧼 Clear Gallery</button>
-</div>
-
-<div class="gallery-container" id="gallery-container">
-  <!-- Gallery items will be dynamically inserted here -->
-</div>
 
 <script src="script.js"></script>
 <script src="results.js"></script>

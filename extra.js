@@ -5,8 +5,10 @@ const easyBtn = document.getElementById('easy-btn');
 const normalBtn = document.getElementById('normal-btn');
 const hardBtn = document.getElementById('hard-btn');
 const timerDisplay = document.getElementById('timer');
+const bootSection = document.getElementById('boot-section');
 const playerNameInput = document.getElementById('player-name');
-const gameResultSection = document.getElementById('game-result');
+const gameResultSection = document.getElementById('yuukaResults');
+const gameSection = document.getElementById('game-grid');
 const finalMessage = document.getElementById('final-message');
 const resultImage = document.getElementById('result-image');
 const downloadBtn = document.getElementById('download-btn');
@@ -24,7 +26,7 @@ const images = [
   "IMG_2432.GIF", // low score
   "IMG_2490.GIF", // mid-low score
   "IMG_2487.GIF", // mid-high score
-  "IMG_3422.GIF"  // high score
+  "IMG_3442.GIF"  // high score
 ];
 
 function getRandomCell() {
@@ -63,7 +65,9 @@ function startGame() {
   score = 0;
   scoreBoard.textContent = score;
   timeLeft = 75;
+  bootSection.style.display = 'none';
   gameResultSection.style.display = 'none';
+  gameSection.style.display = 'grid';
 
   countdownTimer = setInterval(() => {
     timeLeft--;
@@ -105,14 +109,15 @@ function stopGame() {
   const playerName = playerNameInput.value || "Anonymous";
   let resultImageSrc = images[0]; // Default to low score
 
-  if (score >= 60) {
-      resultImageSrc = images[3]; // High score
-  } else if (score >= 40) {
-      resultImageSrc = images[2]; // Mid-high
-  } else if (score >= 20) {
-      resultImageSrc = images[1]; // Mid-low
+  if (score >= 100) {
+      resultImageSrc = images[4]; // High score
+  } else if (score >= 50) {
+      resultImageSrc = images[3]; // Mid-high
+  } else if (score >= 25) {
+      resultImageSrc = images[2]; // Mid-low
+  } else {
+    resultImageSrc = images[1]; // Low score
   }
-
   finalMessage.textContent = `${playerName}, your score is ${score}!`;
   resultImage.src = resultImageSrc;
   gameResultSection.style.display = 'block';
@@ -124,9 +129,9 @@ function stopGame() {
     timestamp: new Date().toISOString(),
   };
 
-  let results = JSON.parse(localStorage.getItem('gameResults')) || [];
+  let results = JSON.parse(localStorage.getItem('yuukaResults')) || [];
   results.push(resultData);
-  localStorage.setItem('gameResults', JSON.stringify(results));
+  localStorage.setItem('yuukaResults', JSON.stringify(results));
 
   displayResults();
 }
@@ -172,14 +177,16 @@ function setDifficulty(difficulty) {
   }
 }
 
-function displayResults() { 
-  const results = JSON.parse(localStorage.getItem('gameResults')) || [];
+function displayResults() {  
+  const results = JSON.parse(localStorage.getItem('yuukaResults')) || [];
   
   // Save the results to localStorage before navigating
-  localStorage.setItem('gameResults', JSON.stringify(results));
+  localStorage.setItem('yuukaResults', JSON.stringify(results));
 
   // Redirect to the results page (results.html)
-  window.location.href = 'game-results.html';
+  setTimeout(() => {
+    window.location.href = "game-results.html";
+  }, 10000);
 }
 
 function downloadResult() {
@@ -223,32 +230,80 @@ hardBtn.addEventListener('click', () => {
   startGame();
 });
 
-const happySound = document.getElementById('happy-sound'); 
+const happySound = document.getElementById('happy-sound');
 const angrySound = document.getElementById('angry-sound');
 
+let soundQueue = [];
+let isPlaying = false;
+let lastPlayedAudio = null;  // To track the last played audio
+
+// Function to play the next sound in the queue
+function playNextSound() {
+    if (soundQueue.length === 0 || isPlaying) return;
+
+    const sound = soundQueue.shift();
+    isPlaying = true;
+    lastPlayedAudio = sound;  // Track the last played audio
+
+    sound.currentTime = 0;
+    sound.play();
+
+    sound.onended = () => {
+        isPlaying = false;
+        lastPlayedAudio = null;  // Reset after sound ends
+        playNextSound();
+    };
+}
+
+// Function to add a sound to the queue based on conditions
+function queueSound(sound) {
+    if (lastPlayedAudio === null || lastPlayedAudio !== sound) {
+        // If no sound is playing or the current sound is not the same as the last one, queue it
+        soundQueue.push(sound);
+        playNextSound();
+    }
+}
+
+// Function to change the color of the cell when it's clicked
+function changeCellColor(cell, color) {
+    cell.style.backgroundColor = color;  // Change the background color
+    setTimeout(() => {
+        cell.style.backgroundColor = '';  // Reset the color after a short delay
+    }, 500);  // You can adjust this delay to how long you want the color change to last
+}
+
 cells.forEach(cell => {
-    cell.addEventListener('click', event => {
-        if (event.target.classList.contains('mole')) {
-            score++;
-            scoreBoard.textContent = score;
-            event.target.classList.remove('mole');
+  cell.addEventListener('click', event => {
+      // Check if the clicked cell contains a mole (good or bad)
+      if (event.target.classList.contains('mole')) {
+          score++;
+          scoreBoard.textContent = score;
+          event.target.classList.remove('mole');
 
-            if (happySound.paused || happySound.ended) {
-                happySound.currentTime = 0;
-                happySound.play();
-            }
+          // Change the cell color to green after it's clicked
+          changeCellColor(event.target, 'green');  // Green for good mole
 
-        } else if (event.target.classList.contains('bad-mole')) {
-            score = Math.max(0, score - 1);
-            scoreBoard.textContent = score;
-            event.target.classList.remove('bad-mole');
+          // Queue the happy sound if not already playing
+          queueSound(happySound);
 
-            if (angrySound.paused || angrySound.ended) {
-                angrySound.currentTime = 0;
-                angrySound.play();
-            }
-        }
-    });
-})
+      } else if (event.target.classList.contains('bad-mole')) {
+          // Allow the score to go negative if the score is 0
+          score -= 1;
+          scoreBoard.textContent = score;
+          event.target.classList.remove('bad-mole');
+
+          // Change the cell color to red after it's clicked
+          changeCellColor(event.target, 'red');  // Red for bad mole
+
+          // Queue the angry sound if not already playing
+          queueSound(angrySound);
+
+      } else {
+          // If it's an empty cell, change its color to yellow
+          changeCellColor(event.target, 'yellow');  // Yellow for empty cell
+      }
+  });
+});
+
 
 downloadBtn.addEventListener('click', downloadResult);

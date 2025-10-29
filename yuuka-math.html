@@ -30,7 +30,7 @@
         <meta name="twitter:title" content="Hayase Yuuka Website" />
         <meta name="twitter:description" content="Hayase Yuuka from Blue Archive is my favorite!" />
         <meta property="twitter:image" content="https://github.com/PaulTheBest1000/paulthebest1000-hayase-yuuka-website/blob/master/Screenshot-004.png" />
-        <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />   
+        <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />  
 </head>
 <body>
 <header>
@@ -381,6 +381,7 @@ window.addEventListener('resize', () => {
 <script>
   const gameArea = document.getElementById('game-area');
   const moveCounterDisplay = document.getElementById('move-counter');
+  let score = 0; // Define score globally
   let moveCount = 0;
   let correctAnswers = 0;
   let totalQuestions = 5; // Number of math problems to solve
@@ -390,6 +391,13 @@ window.addEventListener('resize', () => {
 
   const userNameInput = document.getElementById('username');
   const diffButtons = document.querySelectorAll('.difficulty-buttons button');
+
+  const images = [
+    "IMG_2432.GIF", // low score
+    "IMG_2490.GIF", // mid-low score
+    "IMG_2487.GIF", // mid-high score
+    "IMG_3442.GIF"  // high score
+  ];
 
   // Watch player name input
   userNameInput.addEventListener('input', () => {
@@ -483,7 +491,7 @@ function showProblem() {
   const problemDiv = document.createElement('div');
   problemDiv.className = 'math-problem';
   problemDiv.innerHTML = `
-    <h2>Solve: ${problem.question}</h2>
+    <h1>Solve: ${problem.question}</h1>
     <input type="number" id="answerInput" placeholder="Enter answer" step="any">
     <button id="submitAnswer">Submit</button>
   `;
@@ -504,30 +512,50 @@ function showProblem() {
     const tolerance = 0.01;
     if (Math.abs(userAnswer - problem.answer) < tolerance) {
       correctAnswers++;
+      score += 10; // Increment score on correct answer (adjust points as needed)
       if (correctAnswers >= totalQuestions) {
-        endTime = new Date();
-        const timeTaken = Math.floor((endTime - startTime) / 1000);
-        showThankYouMessage(timeTaken);
-      } else {
-        showProblem();
-      }
+    endTime = new Date();
+    const timeTaken = Math.floor((endTime - startTime) / 1000);
+
+    // Decide which image to show
+    let resultImageSrc = images[0]; // Default to low score
+
+    if (score >= 100) {
+        resultImageSrc = images[4]; // High score
+    } else if (score >= 50) {
+    resultImageSrc = images[3]; // Mid-high
+    } else if (score >= 25) {
+    resultImageSrc = images[2]; // Mid-low
+    } else {
+    resultImageSrc = images[1]; // Low score
+    }
+    showThankYouMessage(timeTaken, resultImageSrc);
+} else {
+    showProblem();
+}
+
     } else {
       alert('Wrong answer! Try again!');
     }
   });
 }
 
-  function showThankYouMessage(timeTaken) {
+  function showThankYouMessage(timeTaken, resultImageSrc) {
     const playerName = localStorage.getItem('playerName') || 'Player';
 
     const thankYouMessage = document.createElement('div');
     thankYouMessage.className = 'thank-you-message';
     thankYouMessage.innerHTML = `
-      <h2>Yuuka: "Great work, ${playerName}! 🎉"</h2>
+      <h1>Yuuka: Great work, ${playerName}! 🎉</h1>
       <p>You solved ${totalQuestions} ${difficulty.toUpperCase()} math problems! 🧮</p>
       <p>It took you ${timeTaken} seconds with ${moveCount} attempts. ⏱️</p>
       <img id="resultImage" src="IMG_6212.JPG" style="display:none;">
       <p id="finalMessage" style="display:none;"></p>
+
+      <div class="thankyou-buttons">
+        <button id="play-again">🔁 Play Again</button>
+        <button id="downloadBtn">💾 Download Result</button>
+      </div>
     `;
 
     document.body.appendChild(thankYouMessage);
@@ -537,7 +565,7 @@ function showProblem() {
     finalMessage.style.display = 'block';
     finalMessage.textContent = `Yuuka is proud of you, ${playerName}! You completed ${difficulty.toUpperCase()} mode in ${timeTaken} seconds with ${moveCount} attempts!`;
 
-    saveAndShowResults(playerName, moveCount, resultImage.src);
+    saveResultImageToResults(resultImageSrc, playerName, score);
 
     document.getElementById('play-again').addEventListener('click', () => {
       localStorage.removeItem('playerName');
@@ -547,29 +575,36 @@ function showProblem() {
     document.getElementById('downloadBtn').addEventListener('click', downloadResult);
   }
 
-  function saveAndShowResults(playerName, score, resultImageSrc) {
-    const resultData = {
-      name: playerName,
-      score: score,
-      difficulty: difficulty,
-      image: resultImageSrc,
-      timestamp: new Date().toISOString(),
-    };
+  function saveResultImageToResults(resultImageSrc, playerName, score) {
+  const timestamp = new Date().toLocaleString();
+  const result = {
+    name: playerName,
+    score: score,
+    image: resultImageSrc,
+    timestamp: timestamp
+  };
 
-    let results = JSON.parse(localStorage.getItem('gameResults')) || [];
-    results.push(resultData);
-    localStorage.setItem('gameResults', JSON.stringify(results));
+  const results = JSON.parse(localStorage.getItem("yuukaResults")) || [];
+  results.push(result);
+  localStorage.setItem("yuukaResults", JSON.stringify(results));
 
-    displayResults();
-  }
+  // ✨ Optional: small status update
+  const message = document.createElement("div");
+  message.textContent = "✨ Saving your Yuuka result... please wait!";
+  message.style.cssText = `
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 18px;
+  `;
+  document.body.appendChild(message);
 
-  function displayResults() {
-    const results = JSON.parse(localStorage.getItem('gameResults')) || [];
-    localStorage.setItem('gameResults', JSON.stringify(results));
-    setTimeout(() => {
-      window.location.href = 'game-results.html';
-    }, 10000);
-  }
+  setTimeout(() => {
+    window.location.href = "game-results.html";
+  }, 10000);
+}
 
   function downloadResult() {
     const finalMessage = document.getElementById('finalMessage');
@@ -598,6 +633,13 @@ function showProblem() {
       link.click();
     };
   }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const submitAnswer = document.getElementById('submitAnswer');
+        if (submitAnswer) submitAnswer.click();
+    }
+});
 </script>
 
       <script src="script.js"></script>

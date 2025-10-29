@@ -1,8 +1,10 @@
-#username {
-    padding: 8px;
-    font-size: 18px;
-    margin: 10px 0;
-    color: #4a3a00; /* Dark green text */
+#player-name, #username {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  margin-top: 10px;
+  width: 250px;
 }
 
 .paragraph-3 {
@@ -152,4 +154,130 @@ display:none;
 }
 #online-users li:active {
   transform: translateX(1px);
+}
+
+.difficulty-buttons {
+  margin-top: 15px;
+}
+
+.difficulty-buttons button {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.difficulty-buttons button.active {
+  background: #4cc9f0;
+  color: #1b1b1b;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+.difficulty-buttons button:hover {
+  background: #4895ef;
+}
+
+#game-area {
+  display: none;
+  text-align: center;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 600px;
+  animation: fadeIn 0.6s ease;
+}
+
+.math-problem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.math-problem h1 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #caf0f8;
+}
+
+#answerInput {
+  padding: 10px;
+  width: 200px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+#submitAnswer {
+  background: linear-gradient(135deg, #00eaff, #0088ff);
+  border: none;
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+#submitAnswer:hover {
+  background: linear-gradient(135deg, #00b4d8, #0077b6);
+  transform: scale(1.07);
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
+}
+
+.thank-you-message {
+  color: cyan;
+  padding: 30px 40px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 600px;
+  margin: 40px auto;
+  animation: fadeIn 1s ease;
+}
+
+.thank-you-message h2 {
+  font-size: 26px;
+}
+
+.thank-you-message p {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #caf0f8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.thankyou-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.thankyou-buttons button {
+  background: linear-gradient(90deg, #6a5acd, #00bfff);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.thankyou-buttons button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #00bfff, #6a5acd);
 }

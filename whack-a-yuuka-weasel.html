@@ -30,7 +30,16 @@
         <meta name="twitter:title" content="Hayase Yuuka Website" />
         <meta name="twitter:description" content="Hayase Yuuka from Blue Archive is my favorite!" />
         <meta property="twitter:image" content="https://github.com/PaulTheBest1000/paulthebest1000-hayase-yuuka-website/blob/master/Screenshot-004.png" />
-        <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />   
+        <meta name="twitter:url" content="https://paulthebest1000.github.io/fun-blue-archive-hayase-yuuka-website/" />  
+
+    <style>
+      .game-instructions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        min-height: calc(31.25vh - 30px); /* 30px = header height, adjust if needed */
+      }
+    </style>
 </head>
 <body>
     <audio id="happy-sound" src="happy.mp3" preload="auto"></audio>
@@ -149,9 +158,55 @@
         });
     });
     </script>
+          <div class="container">
+            <h1>Whack-a-Yuuka-Weasel!</h1>
+
+            <div id="boot-section">
+              <div class="game-instructions">
+                <h1>How to Play?</h1>
+                <p>Click on the Yuuka weasel when it pops up to score points!</p>
+                <p>But don't click on the real cute Yuuka or you'll lose points!</p>
+                <p>Try to score as many points as you can in 1 minute and 15 seconds!</p>
+              </div>
+    
+            <!-- Name Input -->
+            <input type="text" id="player-name" placeholder="Enter your name">
+  
+            <!-- Difficulty Buttons -->
+            <div class="difficulty-buttons">
+                <button id="easy-btn">Easy</button>
+                <button id="normal-btn">Normal</button>
+                <button id="hard-btn">Hard</button>
+            </div>
+          </div>
+
+          <!-- Timer -->
+          <div id="timer">Time Left: 75s</div>
+  
+          <!-- Score -->
+          <div>Score: <span id="score">0</span></div>
             
-    <div class="container">
-        <h1>Whack-a-Yuuka-Weasel!</h1>
+          <!-- Game Grid -->
+          <div id="game-grid" style= "display: none;">
+              <!-- 9 clickable cells -->
+              <div class="cell"></div>
+              <div class="cell"></div>
+              <div class="cell"></div>
+              <div class="cell"></div>
+              <div class="cell"></div>
+              <div class="cell"></div>
+              <div class="cell"></div>
+              <div class="cell"></div>
+              <div class="cell"></div>
+          </div>
+  
+          <!-- Game Result Section -->
+          <div id="yuukaResults" style="display: none;">
+              <p id="final-message"></p>
+              <img id="result-image" src="" alt="Result Image">
+              <button id="download-btn">Download Result</button>
+          </div>
+  
         <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
     <audio id="ricochet" src="whizzby-41134.mp3"></audio>
 
@@ -367,50 +422,6 @@ window.addEventListener('resize', () => {
   }
 });
 </script>
-
-        <div class="game-instructions">
-            <h1>How to Play?</h1>
-            <p>Click on the Yuuka weasel when it pops up to score points! But don't click on the real cute Yuuka or you'll lose points!</p>
-            <p>Try to score as many points as you can in 1 minute and 15 seconds!</p>
-        </div> 
-  
-        <!-- Timer -->
-        <div id="timer">Time Left: 75s</div>
-
-        <!-- Score -->
-        <div>Score: <span id="score">0</span></div>
-
-        <!-- Name Input -->
-        <input type="text" id="player-name" placeholder="Enter your name">
-
-        <!-- Difficulty Buttons -->
-        <div class="difficulty-buttons">
-            <button id="easy-btn">Easy</button>
-            <button id="normal-btn">Normal</button>
-            <button id="hard-btn">Hard</button>
-        </div>
-
-        <!-- Game Grid -->
-        <div id="game-grid">
-            <!-- 9 clickable cells -->
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-        </div>
-
-        <!-- Game Result Section -->
-        <div id="game-result" style="display: none;">
-            <p id="final-message"></p>
-            <img id="result-image" src="" alt="Result Image">
-            <button id="download-btn">Download Result</button>
-        </div>
-
     <!-- JavaScript -->
     <script src="script.js"></script>
     <script src="extra.js"></script>

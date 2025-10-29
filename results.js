@@ -1,94 +1,72 @@
-// results.js
 window.addEventListener("DOMContentLoaded", () => {
-  const galleryContainer = document.getElementById("gallery-container");
+  const resultsContainer = document.getElementById("results-container");
   const sortBySelect = document.getElementById("sortBy");
-  const savedGallery = JSON.parse(localStorage.getItem("yuukaResultGallery")) || [];
+  const savedResults = JSON.parse(localStorage.getItem("yuukaResults")) || [];
 
   const adminPassword = "YuukaLovesYouAlways!";
-  const clearGalleryBtn = document.getElementById("clearGalleryBtn");
+  const clearResultsBtn = document.getElementById("clearResultsBtn");
   let adminAuthorized = false;
-  let promptActive = false; // 🧠 Prevents double triggering
-  clearGalleryBtn.style.display = "none";
+  let promptActive = false;
+  clearResultsBtn.style.display = "none";
 
-  // 🔐 Unified admin prompt logic
-  function openAdminPrompt() {
-    if (promptActive) return; // prevents duplicates
-    promptActive = true;
+  // 🔐 Admin prompt
+function openAdminPrompt() {
+  if (promptActive) return;
+  promptActive = true;
 
-    if (adminAuthorized) {
-      alert("🟢 You’re already logged in as admin!");
-      showAdminControls();
-      promptActive = false;
-      return;
-    }
-
-    const inputPassword = prompt("Enter the admin password to access gallery settings:");
-    promptActive = false;
-    if (inputPassword === null) return;
-
-    if (inputPassword === adminPassword) {
-      adminAuthorized = true;
-      alert("✅ Admin access granted!");
-      showAdminControls();
-    } else {
-      alert("❌ Incorrect password.");
-    }
+  // If already admin, don't show the "Already logged in as admin" message
+  if (adminAuthorized) {
+    alert("🟢 Already logged in as admin!"); 
+    promptActive = false; // End prompt process immediately
+    return;
   }
+
+  const inputPassword = prompt("Enter the admin password:");
+  promptActive = false;
+  if (inputPassword === null) return; // User canceled, exit
+
+  if (inputPassword === adminPassword) {
+    adminAuthorized = true;
+    alert("✅ Access granted!");
+    showAdminControls(); // Show admin controls after successful login
+  } else {
+    alert("❌ Incorrect password.");
+  }
+}
 
   // 🎛️ Admin controls
   function showAdminControls() {
-    clearGalleryBtn.style.display = "block";
-    const clearResultsBtn = document.getElementById("clear-results-btn");
-    if (clearResultsBtn) clearResultsBtn.style.display = "block";
+    clearResultsBtn.style.display = "block";
 
-    // 🧹 Clear Gallery button
-    clearGalleryBtn.onclick = () => {
-      const galleryData = JSON.parse(localStorage.getItem("yuukaResultGallery")) || [];
-      const galleryCount = galleryData.length;
+    clearResultsBtn.onclick = () => {
+      const results = JSON.parse(localStorage.getItem("yuukaResults")) || [];
+      const count = results.length;
 
-      if (galleryCount === 0) {
-        alert("🖼️ No gallery items to clear!");
+      if (count === 0) {
+        alert("📋 No results to clear!");
         return;
       }
 
-      if (confirm(`Clear ${galleryCount} gallery item(s)?`)) {
-        localStorage.removeItem("yuukaResultGallery");
-        alert(`🧹 Cleared ${galleryCount} gallery item(s)!`);
-        galleryContainer.innerHTML = "<p style='text-align:center; color:gray;'>No gallery entries available.</p>";
+      if (confirm(`Clear ${count} saved result(s)?`)) {
+        localStorage.removeItem("yuukaResults");
+        alert(`🧹 Cleared ${count} results!`);
+        resultsContainer.innerHTML = "<p style='text-align:center; color:gray;'>No results available.</p>";
       }
     };
-
-    // 🧽 Clear Results button
-    if (clearResultsBtn) {
-      clearResultsBtn.onclick = () => {
-        const resultData = JSON.parse(localStorage.getItem("yuukaQuizResults")) || [];
-        const resultCount = resultData.length || 0;
-
-        if (resultCount === 0) {
-          alert("📋 No quiz results to clear!");
-          return;
-        }
-
-        if (confirm(`Clear ${resultCount} saved result(s)?`)) {
-          localStorage.removeItem("yuukaQuizResults");
-          alert(`🧼 Cleared ${resultCount} saved result(s)!`);
-        }
-      };
-    }
   }
 
-  // 🎨 Render Gallery
-  function renderGallery(gallery) {
-    galleryContainer.innerHTML = "";
+  // 🎨 Render results
+  function renderResults(results) {
+    resultsContainer.innerHTML = "";
 
-    if (gallery.length === 0) {
-      galleryContainer.innerHTML = "<p style='text-align:center; color:gray;'>No gallery entries yet!</p>";
+    if (results.length === 0) {
+      resultsContainer.innerHTML = "<p style='text-align:center; color:gray;'>No results yet!</p>";
       return;
     }
 
-    gallery.forEach((entry, index) => {
+    results.forEach((entry, index) => {
       const item = document.createElement("div");
-      item.className = "gallery-item";
+      item.className = "yuukaResults";
 
       const img = document.createElement("img");
       img.src = entry.image;
@@ -104,47 +82,46 @@ window.addEventListener("DOMContentLoaded", () => {
 
       const downloadLink = document.createElement("a");
       downloadLink.href = entry.image;
-      downloadLink.download = `Yuuka_Quiz_Result_${entry.name}_${index + 1}.png`;
+      downloadLink.download = `Yuuka_Result_${entry.name}_${index + 1}.png`;
       downloadLink.textContent = "⬇️ Download Image";
       downloadLink.className = "download-link";
 
+      // Append everything to the result item and to the results container
       item.appendChild(img);
       item.appendChild(details);
-      item.appendChild(downloadLink);
-      galleryContainer.appendChild(item);
+      item.appendChild(downloadLink); // Add download link as well
+      resultsContainer.appendChild(item);  // Add item to the container
     });
   }
 
   // 🔄 Sorting logic
-  function sortGallery() {
+  function sortResults() {
     const sortBy = sortBySelect.value;
-    let sortedGallery;
+    let sortedResults;
 
     if (sortBy === "score") {
-      sortedGallery = [...savedGallery].sort((a, b) => b.score - a.score);
+      sortedResults = [...savedResults].sort((a, b) => b.score - a.score);
     } else {
-      sortedGallery = [...savedGallery].sort(
+      sortedResults = [...savedResults].sort(
         (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
       );
     }
 
-    renderGallery(sortedGallery);
+    renderResults(sortedResults);
   }
 
-  sortGallery();
-  sortBySelect.addEventListener("change", sortGallery);
+  sortResults();
+  sortBySelect.addEventListener("change", sortResults);
 
-  // 💻 Ctrl + Enter for desktop or 📱 long press for mobile
+  // 💻 Ctrl+Enter (desktop) or 📱 long press (mobile)
   let pressTimer;
   document.addEventListener("keydown", (event) => {
-    if (event.ctrlKey && event.key === "Enter") {
-      openAdminPrompt();
-    }
+    if (event.ctrlKey && event.key === "Enter") openAdminPrompt();
   });
-  galleryContainer.addEventListener("touchstart", () => {
+
+  // Touchstart and touchend for mobile long press
+  resultsContainer.addEventListener("touchstart", () => {
     pressTimer = setTimeout(openAdminPrompt, 2000);
   });
-  galleryContainer.addEventListener("touchend", () => {
-    clearTimeout(pressTimer);
-  });
+  resultsContainer.addEventListener("touchend", () => clearTimeout(pressTimer));
 });
