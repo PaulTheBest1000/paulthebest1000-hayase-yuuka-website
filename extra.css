@@ -35,23 +35,17 @@ display:none;
   cursor:pointer;
 }
 
-  .yuuka {
-   position: absolute;
-   width: min(120px, 25vw);
-   height: min(120px, 25vw); /* force same as width */
-   object-fit: cover;        /* crop/stretch image to fit square */
-   user-select: none;
-   pointer-events: none;
-   transition: border 0.1s;
-  }
 .yuuka {
   position: fixed;
   width: min(120px, 25vw);
-  height: min(120px, 25vw); /* force square hitbox */
-  object-fit: cover;
+  height: min(120px, 25vw); /* force same as width */
+  cursor: pointer;
+  z-index: 10000;
+  object-fit: cover;     /* crop/stretch image to fit square */
+  border-radius: 5%;
   user-select: none;
-  pointer-events: none;
-  transition: border 0.1s;
+  pointer-events: auto !important;
+  transition: border 0.1s, box-shadow 0.3s ease, border 0.3s ease;
 }
 
 #toggleBtn, #toggleBtn1 {
@@ -78,8 +72,8 @@ display:none;
        screen and (max-height: 600px) and (orientation: landscape) {
   
   .yuuka {
-    width: min(60px, 12.5vw);
-    height: min(60px, 12.5vw); /* force square hitbox */
+    width: min(90px, 18.75vw);
+    height: min(90px, 18.75vw); /* force square hitbox */
   }
 
   #toggleBtn, 

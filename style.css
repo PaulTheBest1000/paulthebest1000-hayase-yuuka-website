@@ -309,7 +309,7 @@ header {
   
   /* Media items */
   .media-item {
-    background-color: gray;
+    background-color: rgba(128, 128, 128, 0.75);
     border-radius: 12px;
     padding: 10px;
     box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);

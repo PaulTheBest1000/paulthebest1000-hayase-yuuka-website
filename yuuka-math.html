@@ -194,13 +194,12 @@ function spawnYuuka() {
   img.classList.add('yuuka');
   document.body.appendChild(img);
 
-  const width = img.offsetWidth || 120; // fallback if not loaded yet
+  const width = img.offsetWidth || 120;
   const height = img.offsetHeight || 120;
 
   let x, y;
   let maxAttempts = 100, attempt = 0;
   do {
-    // Clamp to current viewport dynamically
     x = Math.random() * (window.innerWidth - width);
     y = headerHeight + Math.random() * (window.innerHeight - height - headerHeight);
     attempt++;
@@ -208,6 +207,22 @@ function spawnYuuka() {
 
   const dx = (Math.random() * 3 + 2) * (Math.random() < 0.5 ? 1 : -1);
   const dy = (Math.random() * 3 + 2) * (Math.random() < 0.5 ? 1 : -1);
+
+  // ✨ CLICK TO GLOW ✨
+  img.addEventListener('click', () => {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const duration = (Math.random() * 4 + 1) * 1000; // 1–5s glow
+
+    // Apply glowing border and shadow
+    img.style.boxShadow = `0 0 25px 5px ${color}`;
+    img.style.border = `3px solid ${color}`;
+
+    // Stop glowing after duration
+    setTimeout(() => {
+      img.style.boxShadow = 'none';
+      img.style.border = 'none';
+    }, duration);
+  });
 
   return { element: img, x, y, dx, dy, width, height };
 }
