@@ -41,10 +41,11 @@ display:none;
   height: min(120px, 25vw); /* force same as width */
   cursor: pointer;
   z-index: 10000;
+  background-color: rgba(128,128,128,0.75);
   object-fit: cover;     /* crop/stretch image to fit square */
   border-radius: 5%;
   user-select: none;
-  pointer-events: auto !important;
+  pointer-events: auto!important;
   transition: border 0.1s, box-shadow 0.3s ease, border 0.3s ease;
 }
 
