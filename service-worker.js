@@ -56,3 +56,14 @@ self.addEventListener('activate', (event) => {
         })
     );
 });
+
+self.addEventListener('push', event => {
+    const data = event.data ? event.data.json() : {};
+    const title = data.title || 'New mention!';
+    const options = {
+      body: data.body,
+      icon: 'IMG_6281.ico'
+    };
+    event.waitUntil(self.registration.showNotification(title, options));
+  });
+  

@@ -416,12 +416,20 @@ socket.on('receiveMessage', (data) => {
           requireInteraction: false
         });
 
-        // 🖱️ Click to focus window
-        mentionNotification.onclick = () => {
-          window.focus();
-          chatInput.focus();
-          mentionNotification.close();
-        };
+        // ✅ Use service worker if available (better for PWAs/mobile)
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification(title, options);
+          });
+        } else {
+        // 💻 Fallback for desktop/tab use
+          const mentionNotification = new Notification(title, options);
+          mentionNotification.onclick = () => {
+            window.focus();
+            chatInput.focus();
+            mentionNotification.close();
+          };
+        }
       }
     }
 
