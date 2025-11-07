@@ -9,7 +9,7 @@
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background-color: blueviolet;
+    background: linear-gradient(180deg, blueviolet, cyan);
     scrollbar-color: blueviolet cyan; /* thumb and track color */
     text-align: center;
     padding: 20px;
