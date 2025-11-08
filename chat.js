@@ -408,21 +408,33 @@ socket.on('receiveMessage', (data) => {
 
       // 🖥️ Desktop/mobile notification
       if (Notification.permission === "granted") {
-        const mentionNotification = new Notification(`You were mentioned by ${data.username}!`, {
+        const title = `You were mentioned by ${data.username}!`;
+        const options = {
           body: data.message,
           icon: "IMG_6281.ico",
           tag: `mention-${data.username}`,
           renotify: true,
           requireInteraction: false
-        });
+        };
 
-        // ✅ Use service worker if available (better for PWAs/mobile)
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        // ✅ Use service worker if available (better for mobile/PWA)
+        if ('serviceWorker' in navigator) {
           navigator.serviceWorker.ready.then(reg => {
-            reg.showNotification(title, options);
+            if (reg && reg.showNotification) {
+              reg.showNotification(title, options);
+            } else {
+              console.warn('No active service worker registration found.');
+              // fallback to Notification API
+              const fallback = new Notification(title, options);
+              fallback.onclick = () => {
+                window.focus();
+                chatInput.focus();
+                fallback.close();
+              };
+            }
           });
         } else {
-        // 💻 Fallback for desktop/tab use
+          // 💻 Fallback for desktop/tab use
           const mentionNotification = new Notification(title, options);
           mentionNotification.onclick = () => {
             window.focus();
@@ -441,46 +453,6 @@ socket.on('receiveMessage', (data) => {
         behavior: 'smooth'
       });
     }, 50);
-
-    // 🔔 Desktop/mobile notifications
-    if (Notification.permission === "granted") {
-      // 🔊 Play ping sound
-      playPing();
-
-      // 🧠 Markdown-style text beautifier
-      const formatMarkdownForNotification = (text) => {
-        return text
-          // Bold + Italic (***word*** → ⚡word⚡)
-          .replace(/\*\*\*(.*?)\*\*\*/g, (_, word) => `⚡${word}⚡`)
-          // Bold (**word** → WORD)
-          .replace(/\*\*(.*?)\*\*/g, (_, word) => word.toUpperCase())
-          // Italic (*word* → _word_)
-          .replace(/\*(.*?)\*/g, (_, word) => `_${word}_`)
-          // Strikethrough (~~word~~ → ~word~)
-          .replace(/~~(.*?)~~/g, (_, word) => `~${word}~`)
-          // Inline code (`word` → [word])
-          .replace(/`(.*?)`/g, (_, code) => `[${code}]`);
-      };
-
-      // 🖌️ Format the incoming message
-      const formattedMessage = formatMarkdownForNotification(data.message);
-
-      // 💬 Create the notification
-      const notification = new Notification(`${data.username} says:`, {
-        body: formattedMessage,
-        icon: "IMG_6281.ico",
-        tag: `chat-${data.username}`, // group notifications per user
-        renotify: true,
-        requireInteraction: false, // disappear automatically
-      });
-
-      // 🖱️ Clicking the notification brings the tab to focus
-      notification.onclick = () => {
-        window.focus();
-        chatInput.focus();
-        notification.close();
-      };
-    }
   }
 });
 

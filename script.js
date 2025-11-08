@@ -1,4 +1,12 @@
 // script.js
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').then(() => {
+      console.log('Service Worker registered ✅');
+    }).catch(err => {
+      console.error('Service Worker registration failed:', err);
+    });
+  }
+  
   // Function to update the time
   function updateTime() {
       const timeElement = document.getElementById('time');
