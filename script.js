@@ -1,6 +1,6 @@
 // script.js
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').then(() => {
+    navigator.serviceWorker.register('paulthebest1000-hayase-yuuka-website/service-worker.js').then(() => {
       console.log('Service Worker registered ✅');
     }).catch(err => {
       console.error('Service Worker registration failed:', err);
