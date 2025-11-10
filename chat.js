@@ -1,6 +1,4 @@
 const socket = io('https://paulthebest1000-hayase-yuuka-website.onrender.com'); // Replace with your actual Render URL
-const typingIndicator = document.getElementById('typing-indicator');
-let typingTimeout;
 const chatInput = document.getElementById('chat-input');
 const chatHistory = document.getElementById('chat-history');
 const sendBtn = document.getElementById('send-btn');
@@ -11,6 +9,8 @@ const onlineUsersList = document.getElementById('online-users');
 const toggleSafeBtn = document.getElementById("toggle-safe-btn");
 const emojiMenu = document.getElementById("emoji-menu");
 const emojiList = document.getElementById("emoji-list");
+const typingIndicator = document.getElementById('typing-indicator');
+let typingTimeout;
 const emojiPicker = {
   smileys: [
     "😀","😁","😂","🤣","😃","😄","😅","😆","😉","😊","😋","😎","😍","😘","😗","😙","😚",

@@ -1,6 +1,6 @@
 // ✅ service-worker.js
 
-const CACHE_NAME = 'offline-cache-v2';
+const CACHE_NAME = 'offline-cache-prototype';
 const urlsToCache = [
   '/chat.css',
   '/chat.js',
@@ -31,6 +31,20 @@ self.addEventListener('install', (event) => {
         .then(() => console.log('[SW] Installation complete! ✅'))
         .catch((err) => console.error('[SW] Installation failed:', err))
     );
+  });
+
+  function logToPage(message) {
+    self.clients.matchAll().then(clients => {
+      clients.forEach(client => client.postMessage({ type: 'sw-log', message }));
+    });
+  }
+  
+  self.addEventListener('install', event => {
+    logToPage('[SW] Installing...');
+  });
+  
+  self.addEventListener('activate', event => {
+    logToPage('[SW] Activated!');
   });
   
 // 🧹 ACTIVATE — Remove old cache versions
@@ -105,3 +119,4 @@ self.addEventListener('notificationclick', (event) => {
     })
   );
 });
+ 

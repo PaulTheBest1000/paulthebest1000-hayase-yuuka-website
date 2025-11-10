@@ -1,10 +1,17 @@
 // script.js
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/paulthebest1000-hayase-yuuka-website/service-worker.js').then(() => {
-      console.log('Service Worker registered ✅');
-    }).catch(err => {
-      console.error('Service Worker registration failed:', err);
-    });
+    // Determine the SW path depending on environment
+    const swPath = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+      ? '/service-worker.js' // Local server (SW in root of local project)
+      : '/paulthebest1000-hayase-yuuka-website/service-worker.js'; // GitHub Pages
+  
+    navigator.serviceWorker.register(swPath)
+      .then(() => {
+        console.log('Service Worker registered ✅ at', swPath);
+      })
+      .catch(err => {
+        console.error('Service Worker registration failed:', err);
+      });
   }
   
   // Function to update the time

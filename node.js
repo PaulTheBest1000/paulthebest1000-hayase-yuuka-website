@@ -5,9 +5,9 @@ const socketIo = require('socket.io');
 
 // Define allowed origins
 const allowedOrigins = [
-  'https://paulthebest1000.github.io',
-  'http://127.0.0.1:5500',
-  'http://localhost:5500'
+  'https://paulthebest1000-hayase-yuuka-website.onrender.com',
+  'http://127.0.0.1:5501',
+  'http://localhost:5501'
 ];
 
 // Set up Express app and HTTP server
