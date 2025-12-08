@@ -38,7 +38,7 @@ app.use(cors({
 const VAPID_PUBLIC_KEY = "BPLN0LnYfOWlxZZNZ3wFW_6JDae1hQqODw82IBUWQwUJAsKQdBrzOh_O8PA762v2Ju-oK_fpXLvR6Y_qLRsgSU4";
 
 webpush.setVapidDetails(
-  "paulandsam1000@gmail.com",
+  "mailto:paulandsam1000@gmail.com",
   process.env.VAPID_PUBLIC_KEY,
   process.env.VAPID_PRIVATE_KEY
 );
