@@ -415,7 +415,7 @@ header {
     display: inline-block;
     font-size: 1rem; /* Smaller font for better scaling */
     color: violet;
-    background-color: cyan;
+    background: linear-gradient(120deg, violet, cyan, violet);
     padding: 6px 10px;
     border-radius: 8px;
     margin: 5px;
@@ -423,6 +423,14 @@ header {
     text-align: center;
     box-sizing: border-box;
     word-wrap: break-word; /* Allows long words to break if needed */
+    background-size: 200% 200%;
+    animation: gradientShift 10s ease infinite;
+}
+    
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 /* Mobile-specific adjustments */
