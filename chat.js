@@ -10,6 +10,7 @@ const toggleSafeBtn = document.getElementById("toggle-safe-btn");
 const emojiMenu = document.getElementById("emoji-menu");
 const emojiList = document.getElementById("emoji-list");
 const typingIndicator = document.getElementById('typing-indicator');
+const PUBLIC_VAPID_KEY = "BPLN0LnYfOWlxZZNZ3wFW_6JDae1hQqODw82IBUWQwUJAsKQdBrzOh_O8PA762v2Ju-oK_fpXLvR6Y_qLRsgSU4";
 let typingTimeout;
 const emojiPicker = {
   smileys: [
@@ -151,6 +152,22 @@ emojiCategories.addEventListener("click", (e) => {
     currentCategory = category;
   }
 });
+
+async function subscribeUser() {
+  const reg = await navigator.serviceWorker.ready;
+  const subscription = await reg.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY)
+  });
+
+  await fetch('/save-subscription', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(subscription)
+  });
+
+  console.log("Subscribed for push notifications!");
+}
 
 // Store the username (can be fetched from localStorage or set on user login)
 const userName = localStorage.getItem('playerName') || 'User'; // Default to 'Player' if no name is found
@@ -563,19 +580,3 @@ document.addEventListener("touchmove", (e) => {
 document.addEventListener("touchend", () => {
   isDragging = false;
 });
-
-async function subscribeUser() {
-  const reg = await navigator.serviceWorker.ready;
-  const subscription = await reg.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY)
-  });
-
-  await fetch('/save-subscription', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(subscription)
-  });
-
-  console.log("Subscribed for push notifications!");
-}
