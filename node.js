@@ -2,6 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const webpush = require("web-push");
 
 // Define allowed origins
 const allowedOrigins = [
@@ -33,6 +34,30 @@ app.use(cors({
   }
 }));
 
+// Example VAPID keys (replace with your own keys or use environment variables)
+const VAPID_PUBLIC_KEY = "BPLN0LnYfOWlxZZNZ3wFW_6JDae1hQqODw82IBUWQwUJAsKQdBrzOh_O8PA762v2Ju-oK_fpXLvR6Y_qLRsgSU4";
+
+webpush.setVapidDetails(
+  "paulandsam1000@gmail.com",
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
+
+// Parse JSON bodies
+app.use(express.json());
+
+// Store subscriptions
+const subscriptions = []; // simple in-memory storage (use DB for production)
+
+app.post('/save-subscription', (req, res) => {
+  const subscription = req.body;
+  if (!subscriptions.find(sub => sub.endpoint === subscription.endpoint)) {
+    subscriptions.push(subscription);
+  }
+  console.log("New subscription saved:", subscription.endpoint);
+  res.status(201).json({ message: 'Subscription saved!' });
+});
+
 // Store clients
 const clients = {};
 
@@ -52,6 +77,17 @@ io.on('connection', (socket) => {
   // Handle message sending
   socket.on('sendMessage', (data) => {
     console.log(`${data.username}: ${data.message}`);
+
+  const payload = JSON.stringify({
+    title: `New message from ${data.username}`,
+    body: data.message
+  });
+
+  subscriptions.forEach(sub => {
+    webpush.sendNotification(sub, payload).catch(err => {
+      console.error("Push error:", err);
+    });
+  });
 
     // Broadcast the message to everyone including sender
     io.emit('receiveMessage', {

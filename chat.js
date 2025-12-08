@@ -563,3 +563,19 @@ document.addEventListener("touchmove", (e) => {
 document.addEventListener("touchend", () => {
   isDragging = false;
 });
+
+async function subscribeUser() {
+  const reg = await navigator.serviceWorker.ready;
+  const subscription = await reg.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY)
+  });
+
+  await fetch('/save-subscription', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(subscription)
+  });
+
+  console.log("Subscribed for push notifications!");
+}
