@@ -518,3 +518,12 @@ window.onclick = function (event) {
     alert("Notifications disabled or dismissed.");
   }
 }
+
+  window.addEventListener("load", () => {
+  if (!localStorage.getItem("askedNotification")) {
+    setTimeout(async () => {
+      await requestNotificationPermission();
+      localStorage.setItem("askedNotification", "yes");
+    }, 800); // small delay so the page feels loaded
+  }
+});

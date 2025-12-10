@@ -73,7 +73,7 @@ let currentCategory = null;
 // 💫 Emoji Menu Container — keeps everything locked inside
 emojiMenu.style.width = "100%";
 emojiMenu.style.boxSizing = "border-box";
-emojiMenu.style.maxWidth = "270px";
+emojiMenu.style.maxWidth = "350px";
 emojiMenu.style.overflow = "hidden";
 emojiMenu.style.borderRadius = "8px";
 emojiMenu.style.marginTop = "8px";
@@ -152,22 +152,6 @@ emojiCategories.addEventListener("click", (e) => {
     currentCategory = category;
   }
 });
-
-async function subscribeUser() {
-  const reg = await navigator.serviceWorker.ready;
-  const subscription = await reg.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY)
-  });
-
-  await fetch('/save-subscription', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(subscription)
-  });
-
-  console.log("Subscribed for push notifications!");
-}
 
 // Store the username (can be fetched from localStorage or set on user login)
 const userName = localStorage.getItem('playerName') || 'User'; // Default to 'Player' if no name is found
@@ -423,44 +407,40 @@ socket.on('receiveMessage', (data) => {
         }
       });
 
-      // 🖥️ Desktop/mobile notification
-      if (Notification.permission === "granted") {
-        const title = `You were mentioned by ${data.username}!`;
-        const options = {
-          body: data.message,
-          icon: "IMG_6281.ico",
-          tag: `mention-${data.username}`,
-          renotify: true,
-          requireInteraction: false
-        };
+async function sendMentionNotification(username, message) {
+  if (Notification.permission !== "granted") {
+    console.warn("Notifications not allowed");
+    return;
+  }
 
-        // ✅ Use service worker if available (better for mobile/PWA)
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.ready.then(reg => {
-            if (reg && reg.showNotification) {
-              reg.showNotification(title, options);
-            } else {
-              console.warn('No active service worker registration found.');
-              // fallback to Notification API
-              const fallback = new Notification(title, options);
-              fallback.onclick = () => {
-                window.focus();
-                chatInput.focus();
-                fallback.close();
-              };
-            }
-          });
-        } else {
-          // 💻 Fallback for desktop/tab use
-          const mentionNotification = new Notification(title, options);
-          mentionNotification.onclick = () => {
-            window.focus();
-            chatInput.focus();
-            mentionNotification.close();
-          };
-        }
-      }
-    }
+  const title = `You were mentioned by ${username}!`;
+  const options = {
+    body: message,
+    icon: "IMG_6281.ico",
+    tag: `mention-${username}`,
+    renotify: true,
+    requireInteraction: false
+  };
+
+  // If service worker is active
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    // Send message to service worker to trigger notification
+    navigator.serviceWorker.controller.postMessage({
+      type: "SHOW_NOTIFICATION",
+      title,
+      options
+    });
+  } else {
+    // Fallback for desktop/tab
+    const notif = new Notification(title, options);
+    notif.onclick = () => {
+      window.focus();
+      const chatInput = document.querySelector("#chatInput");
+      if (chatInput) chatInput.focus();
+      notif.close();
+    };
+  }
+}}    // 🎯 Send notification
 
     // 🎨 Auto-scroll smoothly to bottom
     const chatBox = document.getElementById("chat-box");

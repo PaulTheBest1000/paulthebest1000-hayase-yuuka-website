@@ -205,35 +205,6 @@
         <p class="paragraph-1">This is my second website using VS Code.</p>
         <p style="color: cyan;">Enrolled in the Millennium Science School, Yuuka is the treasurer of the student council known as "Seminar".</p>
 
-<button id="testPushBtn" style="
-  padding: 12px 18px;
-  font-size: 18px;
-  border-radius: 10px;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  margin: 15px;
-">
-  Test Push Notification
-</button>
-
-<script>
-document.getElementById("testPushBtn").addEventListener("click", async () => {
-  await requestNotificationPermission(); // <--- NEW!
-
-  try {
-    const res = await fetch("https://paulthebest1000-hayase-yuuka-website.onrender.com", {
-      method: "POST"
-    });
-
-    const data = await res.json();
-    alert("Server says: " + data.message);
-  } catch (err) {
-    alert("Something went wrong: " + err);
-  }
-});
-</script>
-
         <p>If you love Hayase Yuuka, click the button below:</p>
         <button class="button" onclick="showMessage()">Click Me!</button>
 

@@ -43,40 +43,6 @@ webpush.setVapidDetails(
 console.log("Public key:", process.env.VAPID_PUBLIC_KEY);
 console.log("Private key:", process.env.VAPID_PRIVATE_KEY);
 
-// Parse JSON bodies
-app.use(express.json());
-
-// Store subscriptions
-const subscriptions = []; // simple in-memory storage (use DB for production)
-
-app.post('/save-subscription', (req, res) => {
-  const subscription = req.body;
-  if (!subscriptions.find(sub => sub.endpoint === subscription.endpoint)) {
-    subscriptions.push(subscription);
-  }
-  console.log("New subscription saved:", subscription.endpoint);
-  res.status(201).json({ message: 'Subscription saved!' });
-});
-
-app.post('/test-push', async (req, res) => {
-  const payload = JSON.stringify({
-    title: "Test Notification",
-    body: "If you see this, your PWA push works!",
-    icon: "/icon-192.png"
-  });
-
-  try {
-    for (const sub of subscriptions) {
-      await webpush.sendNotification(sub, payload);
-    }
-
-    res.json({ message: "Push sent!" });
-  } catch (err) {
-    console.error("Push error:", err);
-    res.status(500).json({ message: "Failed to send push." });
-  }
-});
-
 // Store clients
 const clients = {};
 
