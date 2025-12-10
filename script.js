@@ -490,3 +490,31 @@ window.onclick = function (event) {
     }, 10000);
   }
   
+  async function requestNotificationPermission() {
+  // If Notifications are NOT supported
+  if (!("Notification" in window)) {
+    alert("Notifications are not supported on this device.");
+    return;
+  }
+
+  // If permission is already granted → done
+  if (Notification.permission === "granted") {
+    console.log("Notifications already enabled.");
+    return;
+  }
+
+  // If permission is denied → nothing you can do
+  if (Notification.permission === "denied") {
+    alert("You blocked notifications earlier. Enable them in browser settings.");
+    return;
+  }
+
+  // If permission is default → ask for permission
+  const permission = await Notification.requestPermission();
+
+  if (permission === "granted") {
+    alert("Notifications enabled!");
+  } else {
+    alert("Notifications disabled or dismissed.");
+  }
+}

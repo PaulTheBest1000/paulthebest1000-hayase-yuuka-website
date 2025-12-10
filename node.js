@@ -58,6 +58,25 @@ app.post('/save-subscription', (req, res) => {
   res.status(201).json({ message: 'Subscription saved!' });
 });
 
+app.post('/test-push', async (req, res) => {
+  const payload = JSON.stringify({
+    title: "Test Notification",
+    body: "If you see this, your PWA push works!",
+    icon: "/icon-192.png"
+  });
+
+  try {
+    for (const sub of subscriptions) {
+      await webpush.sendNotification(sub, payload);
+    }
+
+    res.json({ message: "Push sent!" });
+  } catch (err) {
+    console.error("Push error:", err);
+    res.status(500).json({ message: "Failed to send push." });
+  }
+});
+
 // Store clients
 const clients = {};
 
@@ -117,10 +136,6 @@ io.on('connection', (socket) => {
 
 // Start the server
 const PORT = process.env.PORT || 3000;
-
-app.get('/', (req, res) => {
-  res.send('Server is alive!');
-});
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
