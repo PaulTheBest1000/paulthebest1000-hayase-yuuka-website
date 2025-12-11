@@ -527,3 +527,37 @@ window.onclick = function (event) {
     }, 800); // small delay so the page feels loaded
   }
 });
+
+async function sendMentionNotification(username, message) {
+  if (Notification.permission !== "granted") {
+    console.warn("Notifications not allowed");
+    return;
+  }
+
+  const title = `You were mentioned by ${username}!`;
+  const options = {
+    body: message,
+    icon: "IMG_6281.ico",
+    tag: `mention-${username}`,
+    renotify: true,
+    requireInteraction: false
+  };
+
+  // If service worker is active
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: "SHOW_NOTIFICATION",
+      title,
+      options
+    });
+  } else {
+    // Fallback for desktop/tab
+    const notif = new Notification(title, options);
+    notif.onclick = () => {
+      window.focus();
+      const chatInput = document.querySelector("#chatInput");
+      if (chatInput) chatInput.focus();
+      notif.close();
+    };
+  }
+}

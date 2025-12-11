@@ -15,6 +15,13 @@ const allowedOrigins = [
 const app = express();
 const server = http.createServer(app);
 
+// Allow ALL origins (for dev)
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"]
+}));
+
 // Set up Socket.IO with CORS settings
 const io = socketIo(server, {
   cors: {
@@ -33,6 +40,10 @@ app.use(cors({
     }
   }
 }));
+
+app.get("/", (req, res) => {
+  res.send("Yuuka server alive 💙");
+});
 
 webpush.setVapidDetails(
   "mailto:paulandsam1000@gmail.com",
