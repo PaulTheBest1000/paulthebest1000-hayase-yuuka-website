@@ -54,8 +54,30 @@ webpush.setVapidDetails(
 console.log("Public key:", process.env.VAPID_PUBLIC_KEY);
 console.log("Private key:", process.env.VAPID_PRIVATE_KEY);
 
+// Store subscriptions
+const subscriptions = [];
+
 // Store clients
 const clients = {};
+
+// Endpoint to handle push subscription
+app.post('/save-subscription', (req, res) => {
+  const sub = req.body;
+
+  if (!subscriptions.find(s => s.endpoint === sub.endpoint)) {
+    subscriptions.push(sub);
+  }
+
+  res.status(201).json({ message: "Subscription saved!" });
+});
+
+(subscriptions || []).forEach(sub => {
+  try {
+    webpush.sendNotification(sub, payload);
+  } catch (err) {
+    console.error("Push error:", err);
+  }
+});
 
 // Socket.IO connection
 io.on('connection', (socket) => {
