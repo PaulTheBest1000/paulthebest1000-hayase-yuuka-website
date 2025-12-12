@@ -375,6 +375,59 @@ function initSafePingSystem() {
 // Initialize
 const playPing = initSafePingSystem();
 
+  async function requestNotificationPermission() {
+  // If Notifications are NOT supported
+  if (!("Notification" in window)) {
+    alert("Notifications are not supported on this device.");
+    return;
+  }
+
+  // If permission is already granted → done
+  if (Notification.permission === "granted") {
+    console.log("Notifications already enabled.");
+    return;
+  }
+
+  // If permission is denied → nothing you can do
+  if (Notification.permission === "denied") {
+    alert("You blocked notifications earlier. Enable them in browser settings.");
+    return;
+  }
+
+  // If permission is default → ask for permission
+  const permission = await Notification.requestPermission();
+
+  if (permission === "granted") {
+    alert("Notifications enabled!");
+  } else {
+    alert("Notifications disabled or dismissed.");
+  }
+}
+
+  window.addEventListener("load", () => {
+  if (!localStorage.getItem("askedNotification")) {
+    setTimeout(async () => {
+      await requestNotificationPermission();
+      localStorage.setItem("askedNotification", "yes");
+    }, 800); // small delay so the page feels loaded
+  }
+});
+
+async function sendMentionNotification(username, message) {
+  if (Notification.permission !== "granted") {
+    console.warn("Notifications not allowed");
+    return;
+  }
+
+  const title = `You were mentioned by ${username}!`;
+  const options = {
+    body: message,
+    icon: "IMG_6281.ico",
+    tag: `mention-${username}`,
+    renotify: true,
+    requireInteraction: false
+  };
+
 // Listen for messages from the server
 socket.on('receiveMessage', (data) => {
   if (data.username !== currentUsername) {
@@ -418,6 +471,25 @@ socket.on('receiveMessage', (data) => {
     }, 50);
   }
 });
+
+  // If service worker is active
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: "SHOW_NOTIFICATION",
+      title,
+      options
+    });
+  } else {
+    // Fallback for desktop/tab
+    const notif = new Notification(title, options);
+    notif.onclick = () => {
+      window.focus();
+      const chatInput = document.querySelector("#chatInput");
+      if (chatInput) chatInput.focus();
+      notif.close();
+    };
+  }
+}
 
 socket.on('onlineUsers', (users) => {
     onlineUsersList.innerHTML = '';
