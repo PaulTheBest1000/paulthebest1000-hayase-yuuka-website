@@ -1,6 +1,6 @@
 // ✅ service-worker.js
 
-const CACHE_NAME = 'offline-cache-prototype';
+const CACHE_NAME = 'offline-cache';
 const urlsToCache = [
   '/chat.css',
   '/chat.js',
@@ -89,10 +89,8 @@ self.addEventListener('push', (event) => {
     badge: '/IMG_6281.ico',
     tag: data.tag || 'chat-update',
     renotify: true,
-    vibrate: [200, 100, 200], // subtle mobile buzz
-    data: {
-      url: data.url || '/', // open the chat or homepage
-    },
+    vibrate: [200, 100, 200],
+    data: { url: data.url || '/' }
   };
 
   event.waitUntil(
@@ -106,6 +104,7 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   const targetUrl = event.notification.data?.url || '/';
+
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
@@ -119,4 +118,20 @@ self.addEventListener('notificationclick', (event) => {
     })
   );
 });
- 
+
+
+// 🆕 NEW — Listen for in-app requests to show notifications
+self.addEventListener('message', (event) => {
+  if (!event.data) return;
+
+  if (event.data.type === "SHOW_NOTIFICATION") {
+    console.log("[SW] SHOW_NOTIFICATION received:", event.data);
+
+    const title = event.data.title || "Notification";
+    const options = event.data.options || {};
+
+    event.waitUntil(
+      self.registration.showNotification(title, options)
+    );
+  }
+});

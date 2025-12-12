@@ -1,4 +1,5 @@
 const socket = io('https://paulthebest1000-hayase-yuuka-website.onrender.com'); // Replace with your actual Render URL
+const PUBLIC_VAPID_KEY = "BPLN0LnYfOWlxZZNZ3wFW_6JDae1hQqODw82IBUWQwUJAsKQdBrzOh_O8PA762v2Ju-oK_fpXLvR6Y_qLRsgSU4";
 const chatInput = document.getElementById('chat-input');
 const chatHistory = document.getElementById('chat-history');
 const sendBtn = document.getElementById('send-btn');
@@ -10,7 +11,6 @@ const toggleSafeBtn = document.getElementById("toggle-safe-btn");
 const emojiMenu = document.getElementById("emoji-menu");
 const emojiList = document.getElementById("emoji-list");
 const typingIndicator = document.getElementById('typing-indicator');
-const PUBLIC_VAPID_KEY = "BPLN0LnYfOWlxZZNZ3wFW_6JDae1hQqODw82IBUWQwUJAsKQdBrzOh_O8PA762v2Ju-oK_fpXLvR6Y_qLRsgSU4";
 let typingTimeout;
 const emojiPicker = {
   smileys: [
@@ -413,24 +413,10 @@ const playPing = initSafePingSystem();
   }
 });
 
-async function sendMentionNotification(username, message) {
-  if (Notification.permission !== "granted") {
-    console.warn("Notifications not allowed");
-    return;
-  }
-
-  const title = `You were mentioned by ${username}!`;
-  const options = {
-    body: message,
-    icon: "IMG_6281.ico",
-    tag: `mention-${username}`,
-    renotify: true,
-    requireInteraction: false
-  };
-
 // Listen for messages from the server
 socket.on('receiveMessage', (data) => {
   if (data.username !== currentUsername) {
+
     // 💬 Display in chat with mention highlights
     const messageHTML = highlightMentions(parseMarkdown(data.message));
     const msgElement = document.createElement('div');
@@ -459,9 +445,12 @@ socket.on('receiveMessage', (data) => {
           setTimeout(() => m.classList.remove('mention-me'), 1500);
         }
       });
+
+      // 🎯 Send notification (NEW CLEAN FUNCTION)
+      sendMentionNotification(data.username, data.message);
     }
 
-    // 🎨 Auto-scroll smoothly to bottom
+    // 🎨 Final scroll adjustment
     const chatBox = document.getElementById("chat-box");
     setTimeout(() => {
       chatBox.scrollTo({
@@ -472,7 +461,22 @@ socket.on('receiveMessage', (data) => {
   }
 });
 
-  // If service worker is active
+async function sendMentionNotification(username, message) {
+  if (Notification.permission !== "granted") {
+    console.warn("Notifications not allowed");
+    return;
+  }
+
+  const title = `You were mentioned by ${username}!`;
+  const options = {
+    body: message,
+    icon: "IMG_6281.ico",
+    tag: `mention-${username}`,
+    renotify: true,
+    requireInteraction: false
+  };
+
+  // Prefer service worker (PWA mode)
   if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
     navigator.serviceWorker.controller.postMessage({
       type: "SHOW_NOTIFICATION",
@@ -480,7 +484,7 @@ socket.on('receiveMessage', (data) => {
       options
     });
   } else {
-    // Fallback for desktop/tab
+    // Desktop/tab fallback
     const notif = new Notification(title, options);
     notif.onclick = () => {
       window.focus();

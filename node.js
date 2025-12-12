@@ -6,6 +6,7 @@ const webpush = require("web-push");
 
 // Define allowed origins
 const allowedOrigins = [
+  'https://paulthebest1000.github.io',
   'https://paulthebest1000-hayase-yuuka-website.onrender.com',
   'http://127.0.0.1:5501',
   'http://localhost:5501'
