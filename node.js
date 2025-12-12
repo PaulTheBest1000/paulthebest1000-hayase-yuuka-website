@@ -2,7 +2,12 @@ const cors = require('cors');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+require('dotenv').config({ path: './vapid-keys.env' });
 const webpush = require("web-push");
+
+// Set up Express app and HTTP server
+const app = express();
+const server = http.createServer(app);
 
 app.use(express.json());
 
@@ -13,11 +18,7 @@ const allowedOrigins = [
   'http://localhost:5501'
 ];
 
-// Set up Express app and HTTP server
-const app = express();
-const server = http.createServer(app);
-
-// Allow ALL origins (for dev)
+// Allow origins
 app.use(cors({
   origin: allowedOrigins,
   methods: ["GET", "POST"],
@@ -47,14 +48,24 @@ app.get("/", (req, res) => {
   res.send("Yuuka server alive 💙");
 });
 
+// Load VAPID keys from environment variables
+const PUBLIC_VAPID_KEY = process.env.VAPID_PUBLIC_KEY;
+const PRIVATE_VAPID_KEY = process.env.VAPID_PRIVATE_KEY;
+
+// Make sure they exist
+if (!PUBLIC_VAPID_KEY || !PRIVATE_VAPID_KEY) {
+  throw new Error("VAPID keys are not set in environment variables!");
+}
+
+// Set up web-push
 webpush.setVapidDetails(
   "mailto:paulandsam1000@gmail.com",
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
+  PUBLIC_VAPID_KEY,
+  PRIVATE_VAPID_KEY
 );
 
-console.log("Public key:", process.env.VAPID_PUBLIC_KEY);
-console.log("Private key:", process.env.VAPID_PRIVATE_KEY);
+console.log("VAPID public key:", PUBLIC_VAPID_KEY ? "✅ Set" : "❌ Missing");
+console.log("VAPID private key:", PRIVATE_VAPID_KEY ? "✅ Set" : "❌ Missing");
 
 // Store subscriptions
 const subscriptions = [];
