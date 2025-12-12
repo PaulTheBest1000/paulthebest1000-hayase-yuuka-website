@@ -4,10 +4,11 @@ const http = require('http');
 const socketIo = require('socket.io');
 const webpush = require("web-push");
 
+app.use(express.json());
+
 // Define allowed origins
 const allowedOrigins = [
   'https://paulthebest1000.github.io',
-  'https://paulthebest1000-hayase-yuuka-website.onrender.com',
   'http://127.0.0.1:5501',
   'http://localhost:5501'
 ];
@@ -72,14 +73,6 @@ app.post('/save-subscription', (req, res) => {
   res.status(201).json({ message: "Subscription saved!" });
 });
 
-(subscriptions || []).forEach(sub => {
-  try {
-    webpush.sendNotification(sub, payload);
-  } catch (err) {
-    console.error("Push error:", err);
-  }
-});
-
 // Socket.IO connection
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -102,12 +95,13 @@ io.on('connection', (socket) => {
     body: data.message
   });
 
-  subscriptions.forEach(sub => {
-    webpush.sendNotification(sub, payload).catch(err => {
-      console.error("Push error:", err);
-    });
-  });
-
+  (subscriptions || []).forEach(sub => {
+  try {
+    webpush.sendNotification(sub, payload);
+  } catch (err) {
+    console.error("Push error:", err);
+  }
+});
     // Broadcast the message to everyone including sender
     io.emit('receiveMessage', {
       message: data.message,
