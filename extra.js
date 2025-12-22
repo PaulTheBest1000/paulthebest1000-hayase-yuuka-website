@@ -305,5 +305,4 @@ cells.forEach(cell => {
   });
 });
 
-
 downloadBtn.addEventListener('click', downloadResult);

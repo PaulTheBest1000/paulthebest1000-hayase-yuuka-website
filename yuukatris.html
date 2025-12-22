@@ -126,39 +126,27 @@
     <div id="online-users-header">🟢 Online Users</div>
      <ul id="online-users"></ul>
   </div>
-  
-  <div class="container">
-    <h1>Welcome to Yuuka's Math Game!</h1>
-    <p>Are you smart like Yuuka?</p>
+
+  <h1>🧩 Yuukatris</h1>
+  <input type="text" id="username-input" placeholder="Enter your name">
+  <canvas id="game" width="300" height="600"></canvas>
+  <p style="color: #6a5acd; font: bold;">Arrow keys/WASD to move • Mouse scroll/Q and E to rotate • Space to Play/Pause</p>
+
+  <div id="hud">
+    <div>Score: <span id="score">0</span></div>
+    <div><span id="username-display"></span></div>
+    <div>Lines: <span id="lines">0</span></div>
   </div>
 
-  <script>
-        document.addEventListener('DOMContentLoaded', () => {
-    // Highlight the active menu item
-    document.querySelectorAll('.menu a').forEach(link => {
-        link.addEventListener('click', () => {
-            document.querySelector('.menu a.active')?.classList.remove('active');
-            link.classList.add('active');
-        });
-    });
-
-    // Toggle dropdowns when clicking menu items
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            const dropdown = item.querySelector('.dropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('open');
-                e.stopPropagation();  // Prevent menu toggle from closing when clicking dropdown
-            }
-        });
-    });
-
-    // Toggle the mobile menu on hamburger click
-    document.querySelector('.menu-toggle').addEventListener('click', () => {
-        document.getElementById('nav-menu').classList.toggle('active');
-    });
-});
-</script>
+  <div id="mobile-controls">
+    <button alt="Rotate Counter-Clockwise" id="rotateCCW">⟲</button>
+    <button alt="Hard Drop" id="hardDrop">⇩</button>
+    <button alt="Rotate Clockwise" id="rotateCW">⟳</button>
+    <button alt="Move Left" id="left">◀</button>
+    <button alt="Start and Pause" id="startPause">⏯</button>
+    <button alt="Move Right" id="right">▶</button>
+    <button alt="Soft Drop" id="softDrop">▼</button>
+  </div>
 
   <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
   <audio id="ricochet" src="whizzby-41134.mp3"></audio>
@@ -190,13 +178,6 @@ async function loadGalleryImages(fromExternal = true) {
     return [];
   }
 }
-
-// Usage in your bumper game
-let yuukaImages = [];
-loadGalleryImages().then(imgs => {
-  yuukaImages = imgs;
-  console.log("Loaded Yuuka images:", yuukaImages);
-});
 
 const colors = ['#ff0000','#00ff00','#0000ff','#ffff00','#ff00ff','#00ffff'];
 const numYuukas = 4;
@@ -391,236 +372,461 @@ window.addEventListener('resize', () => {
 });
 </script>
 
-<!-- Start Screen -->
-<div id="start-screen">
-  <input type="text" id="username" placeholder="Enter your name">
-
-<div id="move-counter">Attempts: 0</div>
-
-  <div class="difficulty-buttons" style="display:inline-block; vertical-align: middle;">
-    <button id="easy-btn" data-difficulty="easy" type="button">Easy</button>
-    <button id="normal-btn" data-difficulty="normal" type="button">Normal</button>
-    <button id="hard-btn" data-difficulty="hard" type="button">Hard</button>
-  </div>
-</div>
-
-<!-- Game Area -->
-<div id="game-area">
-  <!-- math problems will be injected here -->
-</div>
-
-  <p class="paragraph-1">Please don't use phone calculator!</p>
-  <p class="paragraph-1">Use your brain or a simple calculator!</p>
-  <p class="paragraph-2">Good luck!</p>
-
 <script>
-  const gameArea = document.getElementById('game-area');
-  const moveCounterDisplay = document.getElementById('move-counter');
-  let score = 0; // Define score globally
-  let moveCount = 0;
-  let correctAnswers = 0;
-  let totalQuestions = 5; // Number of math problems to solve
-  let startTime, endTime;
-  let difficulty = null;
-  let gameStarted = false;
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-  const userNameInput = document.getElementById('username');
-  const diffButtons = document.querySelectorAll('.difficulty-buttons button');
+const COLS = 10;
+const ROWS = 20;
+const BLOCK = 30;
 
-  const images = [
-    "IMG_2432.GIF", // low score
-    "IMG_2490.GIF", // mid-low score
-    "IMG_2487.GIF", // mid-high score
-    "IMG_3442.GIF"  // high score
-  ];
+let gameRunning = false;
+let dropInterval = null;
+let fastDropInterval = null;
 
-  // Watch player name input
-  userNameInput.addEventListener('input', () => {
-    tryAutoStart();
-  });
+const board = Array.from({ length: ROWS }, () =>
+  Array(COLS).fill(null)
+);
 
-  // Watch difficulty selection
-  diffButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      diffButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      difficulty = btn.dataset.difficulty;
-      tryAutoStart();
+// Yuuka images (Option B)
+const images = {
+  I: new Image(),
+  O: new Image(),
+  T: new Image(),
+  S: new Image(),
+  Z: new Image(),
+  J: new Image(),
+  L: new Image(),
+};
+
+images.I.src = "20251111_151954.jpg";
+images.O.src = "575989133_760886856982641_8907810304730099885_n.jpg";
+images.T.src = "575657884_760537723684221_3441208500950391250_n.jpg";
+images.S.src = "illust_125601203_20251127_073221.jpg";
+images.Z.src = "20251130_210520.jpg";
+images.J.src = "20251118_204537.jpg";
+images.L.src = "574835868_760538287017498_1540375751419056094_n.jpg";
+
+const SHAPES = {
+  I: [[1,1,1,1]],
+  O: [[1,1],[1,1]],
+  T: [[0,1,0],[1,1,1]],
+  S: [[0,1,1],[1,1,0]],
+  Z: [[1,1,0],[0,1,1]],
+  J: [[1,0,0],[1,1,1]],
+  L: [[0,0,1],[1,1,1]],
+};
+
+function randomPiece() {
+  const keys = Object.keys(SHAPES);
+  const type = keys[Math.floor(Math.random() * keys.length)];
+  return { type, shape: SHAPES[type], x: 3, y: 0 };
+}
+
+let piece = randomPiece();
+
+function drawBlock(x, y, type) {
+  ctx.drawImage(images[type], x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+}
+
+function drawGrid() {
+  ctx.strokeStyle = 'rgba(200, 200, 200, 0.2)'; // light gray, transparent
+  ctx.lineWidth = 1;
+
+  // vertical lines
+  for (let x = 0; x <= COLS; x++) {
+    ctx.beginPath();
+    ctx.moveTo(x * BLOCK, 0);
+    ctx.lineTo(x * BLOCK, ROWS * BLOCK);
+    ctx.stroke();
+  }
+
+  // horizontal lines
+  for (let y = 0; y <= ROWS; y++) {
+    ctx.beginPath();
+    ctx.moveTo(0, y * BLOCK);
+    ctx.lineTo(COLS * BLOCK, y * BLOCK);
+    ctx.stroke();
+  }
+}
+
+  // 🚫 Don't draw falling piece unless game is running
+  function drawBoard() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // draw grid first
+    drawGrid();
+
+  // Draw placed blocks
+  board.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (cell) drawBlock(x, y, cell);
     });
   });
 
-  // Try starting the game when both username + difficulty are set
-  function tryAutoStart() {
-    const userName = userNameInput.value.trim();
-    if (userName && difficulty && !gameStarted) {
-      startGame(userName);
-    }
-  }
+  // 🚫 Don't draw falling piece unless game is running
+  if (!gameRunning) return;
 
-  function startGame(userName) {
-    gameStarted = true;
-    localStorage.setItem('userName', userName);
-    document.getElementById('start-screen').style.display = 'none';
-    gameArea.style.display = 'block';
-
-    startTime = new Date();
-    moveCount = 0;
-    correctAnswers = 0;
-    moveCounterDisplay.textContent = `Attempts: ${moveCount}`;
-
-    showProblem();
-  }
-
-function generateProblem() {
-  let a, b, operators, operator, answer;
-
-  if (difficulty === 'easy') {
-    a = Math.floor(Math.random() * 10) + 1;
-    b = Math.floor(Math.random() * 10) + 1;
-    operators = ['+', '-'];
-  } else if (difficulty === 'normal') {
-    a = Math.floor(Math.random() * 100) + 1;
-    b = Math.floor(Math.random() * 100) + 1;
-    if (Math.random() < 0.5) a *= -1;
-    if (Math.random() < 0.5) b *= -1;
-    operators = ['+', '-'];
-  } else if (difficulty === 'hard') {
-    a = Math.floor(Math.random() * 1000) + 1;
-    b = Math.floor(Math.random() * 1000) + 1;
-    if (Math.random() < 0.5) a *= -1;
-    if (Math.random() < 0.5) b *= -1;
-    operators = ['+', '-', '*', '/'];
-  }
-
-  // Pick operator randomly
-  operator = operators[Math.floor(Math.random() * operators.length)];
-
-  // Hard mode division handling
-  if (difficulty === 'hard' && operator === '/') {
-    if (Math.random() < 0.5) {
-      // Make exact integer division 50% of the time
-      b = Math.floor(Math.random() * 1000) + 1;
-      a = b * (Math.floor(Math.random() * 20) + 1);
-    } else {
-      // Otherwise, normal decimal division
-      b = Math.floor(Math.random() * 999) + 1; // avoid zero
-    }
-  }
-
-  // Compute answer
-  switch (operator) {
-    case '+': answer = a + b; break;
-    case '-': answer = a - b; break;
-    case '*': answer = a * b; break;
-    case '/':
-      answer = a / b;
-      answer = parseFloat(answer.toFixed(2)); // round to 2 decimals
-      break;
-  }
-
-  return { question: `${a} ${operator} ${b}`, answer };
+  piece.shape.forEach((row, y) => {
+    row.forEach((val, x) => {
+      if (val) drawBlock(piece.x + x, piece.y + y, piece.type);
+    });
+  });
 }
 
-function showProblem() {
-  const problem = generateProblem();
-  const problemDiv = document.createElement('div');
-  problemDiv.className = 'math-problem';
-  problemDiv.innerHTML = `
-    <h1>Solve: ${problem.question}</h1>
-    <input type="number" id="answerInput" placeholder="Enter answer" step="any">
-    <button id="submitAnswer">Submit</button>
-  `;
-  gameArea.innerHTML = '';
-  gameArea.appendChild(problemDiv);
+function collide(p) {
+  return p.shape.some((row, y) =>
+    row.some((val, x) => {
+      if (!val) return false;
+      const nx = p.x + x;
+      const ny = p.y + y;
+      return nx < 0 || nx >= COLS || ny >= ROWS || board[ny]?.[nx];
+    })
+  );
+}
 
-  document.getElementById('submitAnswer').addEventListener('click', () => {
-    const userAnswer= parseFloat(document.getElementById('answerInput').value);
-    moveCount++;
-    moveCounterDisplay.textContent = `Attempts: ${moveCount}`;
+function merge() {
+  piece.shape.forEach((row, y) =>
+    row.forEach((val, x) => {
+      if (val) board[piece.y + y][piece.x + x] = piece.type;
+    })
+  );
+}
 
-    if (isNaN(userAnswer)) {
-      alert('Please enter a valid number!');
+function clearLines() {
+  let totalCleared = 0;
+
+  function checkAndClear() {
+    let rowsToClear = [];
+
+    // Find all full rows
+    for (let y = ROWS - 1; y >= 0; y--) {
+      if (board[y].every(cell => cell)) {
+        rowsToClear.push(y);
+      }
+    }
+
+    // No more lines → finish
+    if (rowsToClear.length === 0) {
+      if (totalCleared > 0) {
+        linesCleared += totalCleared;
+
+        // 🔥 Score: 1=100, 2=200, 3=400, 4=800
+        const gained = 100 * Math.pow(2, totalCleared - 1);
+        score += gained;
+
+        updateHUD();
+      }
       return;
     }
 
-    // Allow a small difference (tolerance) for decimals
-    const tolerance = 0.01;
-    if (Math.abs(userAnswer - problem.answer) < tolerance) {
-      correctAnswers++;
-      score += 10; // Increment score on correct answer (adjust points as needed)
-      if (correctAnswers >= totalQuestions) {
-    endTime = new Date();
-    const timeTaken = Math.floor((endTime - startTime) / 1000);
+    // Count combo clears
+    totalCleared += rowsToClear.length;
 
-    // Decide which image to show
-    let resultImageSrc = images[0]; // Default to low score
+    // ✨ Blink animation
+    let blink = 0;
+    const blinkInterval = setInterval(() => {
+      rowsToClear.forEach(y => {
+        for (let x = 0; x < COLS; x++) {
+          ctx.fillStyle =
+            blink % 2 === 0
+              ? "rgba(255,255,255,0.7)"
+              : "rgba(0,0,0,0)";
+          ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+        }
+      });
 
-    if (score >= 100) {
-        resultImageSrc = images[4]; // High score
-    } else if (score >= 50) {
-    resultImageSrc = images[3]; // Mid-high
-    } else if (score >= 25) {
-    resultImageSrc = images[2]; // Mid-low
-    } else {
-    resultImageSrc = images[1]; // Low score
-    }
-    showThankYouMessage(timeTaken, resultImageSrc);
-} else {
-    showProblem();
-}
+      blink++;
 
-    } else {
-      alert('Wrong answer! Try again!');
-    }
-  });
-}
+      if (blink > 3) {
+        clearInterval(blinkInterval);
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        const submitAnswer = document.getElementById('submitAnswer');
-        if (submitAnswer) submitAnswer.click();
-    }
-});
+        // Remove rows
+        rowsToClear.forEach(y => {
+          board.splice(y, 1);
+          board.unshift(Array(COLS).fill(null));
+        });
 
-  function showThankYouMessage(timeTaken, resultImageSrc) {
-    const playerName = localStorage.getItem('playerName') || 'Player';
+        drawBoard();
 
-    const thankYouMessage = document.createElement('div');
-    thankYouMessage.className = 'thank-you-message';
-    thankYouMessage.innerHTML = `
-      <h1>Yuuka: Great work, ${playerName}! 🎉</h1>
-      <p>You solved ${totalQuestions} ${difficulty.toUpperCase()} math problems! 🧮</p>
-      <p>It took you ${timeTaken} seconds with ${moveCount} attempts. ⏱️</p>
-      <img id="resultImage" src="IMG_6212.JPG" style="display:none;">
-      <p id="finalMessage" style="display:none;"></p>
-
-      <div class="thankyou-buttons">
-        <button id="play-again">🔁 Play Again</button>
-        <button id="downloadBtn">💾 Download Result</button>
-      </div>
-    `;
-
-    document.body.appendChild(thankYouMessage);
-
-    const resultImage = document.getElementById('resultImage');
-    const finalMessage = document.getElementById('finalMessage');
-    finalMessage.style.display = 'block';
-    finalMessage.textContent = `Yuuka is proud of you, ${playerName}! You completed ${difficulty.toUpperCase()} mode in ${timeTaken} seconds with ${moveCount} attempts!`;
-
-    saveResultImageToResults(resultImageSrc, playerName, score);
-
-    document.getElementById('play-again').addEventListener('click', () => {
-      localStorage.removeItem('playerName');
-      location.reload();
-    });
-
-    document.getElementById('downloadBtn').addEventListener('click', downloadResult);
+        // 🔁 RECHECK after gravity settles
+        setTimeout(checkAndClear, 50);
+      }
+    }, 100);
   }
 
-  function saveResultImageToResults(resultImageSrc, playerName, score) {
+  checkAndClear();
+}
+
+function rotate(p) {
+  const rotated = p.shape[0].map((_, i) =>
+    p.shape.map(row => row[i]).reverse()
+  );
+  const old = p.shape;
+  p.shape = rotated;
+  if (collide(p)) p.shape = old;
+}
+
+function drop() {
+  piece.y++;
+  
+  if (collide(piece)) {
+    piece.y--;
+    merge();
+    clearLines();
+    
+    // Spawn a new piece
+    piece = randomPiece();
+    
+    // Check if the new piece immediately collides
+    if (collide(piece)) {
+      gameOver(); // ← THIS is the Game Over trigger
+      return;
+    }
+  }
+  
+  drawBoard();
+}
+
+// 🎮 Game Control
+let wasRunningBeforeHidden = false;
+let gamerName = localStorage.getItem("yuukatrisUser");
+let score = 0;
+let linesCleared = 0;
+updateHUD();
+
+function registerUser() {
+  gamerName = prompt("Register your name to play Yuukatris 👀");
+
+  if (!gamerName || !gamerName.trim()) {
+    alert("⚠️ Name is required to play.");
+    registerUser(); // force registration
+  } else {
+    gamerName = gamerName.trim();
+    localStorage.setItem("yuukatrisUser", gamerName);
+    updateHUD();
+  }
+}
+
+// Force registration before game starts
+if (!gamerName) {
+  registerUser();
+}
+
+function updateHUD() {
+  document.getElementById("username-display").textContent = gamerName;
+  document.getElementById("score").textContent = score;
+  document.getElementById("lines").textContent = linesCleared;
+}
+
+function startGame() {
+  if (gameRunning) return;
+
+  // 🧍 Ensure username is registered
+  if (!syncUsername()) {
+    document.getElementById("username-input").focus();
+    return; // no name, no game 😤
+  }
+
+  document.getElementById("username-input").disabled = true;
+  // 🎮 Start fresh run
+  gameRunning = true;
+  updateHUD(); // reflect username / score / lines
+  dropInterval = setInterval(drop, 700);
+}
+
+function syncUsername() {
+  const input = document.getElementById("username-input");
+  const name = input.value.trim();
+
+  if (!name) return false;
+
+  gamerName = name;
+  localStorage.setItem("yuukatrisUser", gamerName);
+  return true;
+}
+
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("yuukatrisUser");
+  if (saved) {
+    document.getElementById("username-input").value = saved;
+    gamerName = saved;
+  }
+});
+
+function pauseGame() {
+  gameRunning = false;
+  clearInterval(dropInterval);
+  clearInterval(fastDropInterval);
+  dropInterval = null;
+  fastDropInterval = null;
+}
+
+function toggleGame() {
+  gameRunning ? pauseGame() : startGame();
+}
+
+function gameOver() {
+  pauseGame();
+  alert(`💀 Game Over! Yuuka has reached the top.
+
+  User: ${gamerName}
+  Score: ${score}
+  Lines: ${linesCleared}`);
+
+  setTimeout(() => {
+    // Clear board
+    for (let y = 0; y < ROWS; y++) board[y].fill(null);
+    drawBoard();
+
+    // Reset piece so nothing renders early
+    piece = randomPiece();
+
+    gameRunning = false;
+    fastDropInterval && clearInterval(fastDropInterval);
+    fastDropInterval = null;
+
+    drawBoard(); // now shows clean empty grid
+  }, 500);
+      score = 0;
+    linesCleared = 0;
+    updateHUD();
+  } 1000;
+
+
+function moveLeft() {
+  piece.x--;
+  if (collide(piece)) piece.x++;
+  drawBoard();
+}
+
+function moveRight() {
+  piece.x++;
+  if (collide(piece)) piece.x--;
+  drawBoard();
+}
+
+function hardDrop() {
+  while (!collide(piece)) piece.y++;
+  piece.y--;
+  merge();
+  clearLines();
+  piece = randomPiece();
+
+  if (collide(piece)) {
+    gameOver();
+    return;
+  }
+  drawBoard();
+}
+
+function startFastDrop(speed = 1) {
+  if (fastDropInterval) return;
+
+  fastDropInterval = setInterval(() => {
+    piece.y++;
+    if (collide(piece)) {
+      piece.y--;
+      merge();
+      clearLines();
+      piece = randomPiece();
+
+      if (collide(piece)) {
+        gameOver();
+        return;
+      }
+    }
+    drawBoard();
+  }, speed);
+}
+
+function stopFastDrop() {
+  if (fastDropInterval) {
+    clearInterval(fastDropInterval);
+    fastDropInterval = null;
+  }
+}
+
+function rotateCW() {
+  rotate(piece);
+  drawBoard();
+}
+
+function rotateCCW() {
+  for (let i = 0; i < 3; i++) rotate(piece);
+  drawBoard();
+}
+
+document.addEventListener("keydown", e => {
+  const blockKeys = [
+    "ArrowUp","ArrowDown","ArrowLeft","ArrowRight",
+    "KeyW","KeyA","KeyS","KeyD","Space","KeyQ","KeyE"
+  ];
+  if (blockKeys.includes(e.code)) e.preventDefault();
+
+  if (e.code === "Space") {
+    toggleGame();
+    return;
+  }
+
+  if (!gameRunning) return;
+
+  if (["ArrowLeft","KeyA"].includes(e.code)) moveLeft();
+  if (["ArrowRight","KeyD"].includes(e.code)) moveRight();
+
+  // HARD DROP
+  if (["ArrowDown","KeyW"].includes(e.code)) {
+    hardDrop();
+    return;
+  }
+
+  // FAST DROP (hold)
+  if (["ArrowUp","KeyS"].includes(e.code)) {
+    startFastDrop(70); // ⚡ fast
+  }
+
+  // ROTATION
+  if (e.code === "KeyE") rotateCW();
+  if (e.code === "KeyQ") rotateCCW();
+});
+
+document.addEventListener("keyup", e => {
+  if (["ArrowUp","KeyS"].includes(e.code)) {
+    stopFastDrop();
+  }
+});
+
+canvas.addEventListener("wheel", e => {
+  if (!gameRunning) return;
+  e.preventDefault();
+
+  if (e.deltaY > 0) rotateCW();
+  else rotateCCW();
+}, { passive: false });
+
+document.getElementById("left").onclick = moveLeft;
+document.getElementById("right").onclick = moveRight;
+
+document.getElementById("hardDrop").onclick = hardDrop;
+
+document.getElementById("softDrop").ontouchstart =
+document.getElementById("softDrop").onmousedown = () => startFastDrop(120);
+
+document.getElementById("softDrop").ontouchend =
+document.getElementById("softDrop").onmouseup = stopFastDrop;
+
+document.getElementById("rotateCW").onclick = rotateCW;
+document.getElementById("rotateCCW").onclick = rotateCCW;
+
+document.getElementById("startPause").onclick = toggleGame;
+
+// Initial draw
+drawBoard();
+
+function saveResultImageToResults(resultImageSrc, gamerName, score) {
   const timestamp = new Date().toLocaleString();
   const result = {
-    name: playerName,
+    name: gamerName,
     score: score,
     image: resultImageSrc,
     timestamp: timestamp
@@ -630,51 +836,29 @@ function showProblem() {
   results.push(result);
   localStorage.setItem("yuukaResults", JSON.stringify(results));
 
-  // ✨ Optional: small status update
+  // Optional small status update
   const message = document.createElement("div");
-  message.textContent = "✨ Saving your Yuuka result... please wait!";
+  message.textContent = "✨ Saving your Yuuka result...";
   message.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     color: #fff;
     background: rgba(0, 0, 0, 0.7);
     padding: 20px;
     text-align: center;
     border-radius: 10px;
     font-size: 18px;
+    z-index: 999;
   `;
   document.body.appendChild(message);
 
+  // Redirect to results page after a short delay
   setTimeout(() => {
     window.location.href = "game-results.html";
   }, 10000);
 }
-
-  function downloadResult() {
-    const finalMessage = document.getElementById('finalMessage');
-    const resultImage = document.getElementById('resultImage');
-
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = 500;
-    canvas.height = 300;
-
-    context.fillStyle = '#fff';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    context.fillStyle = '#000';
-    context.font = '20px Arial';
-    context.fillText(finalMessage.textContent, 20, 50);
-
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = resultImage.src;
-    img.onload = () => {
-      context.drawImage(img, 20, 80, 100, 100);
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL();
-      link.download = 'game_result.png';
-      link.click();
-    };
-  }
 </script>
 
       <script src="script.js"></script>
