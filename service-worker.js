@@ -8,8 +8,6 @@ const urlsToCache = [
   '/extra.css',
   '/extra.js',
   '/game-results.html',
-  '/hayase-yuuka-photos.html',
-  '/hayase-yuuka-videos.html',
   '/index.html',
   '/results.js',
   '/script.js',
