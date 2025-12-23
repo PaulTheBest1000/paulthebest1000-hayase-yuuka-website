@@ -388,7 +388,8 @@ Object.assign(Sounds, {
   move: Object.assign(Sounds.move, { volume: 0.25 }),
   rotate: Object.assign(Sounds.rotate, { volume: 0.35 }),
   drop: Object.assign(Sounds.drop, { volume: 0.45 }),
-  line: Object.assign(Sounds.line, { volume: 0.6 }),
+  line1: Object.assign(Sounds.line1, { volume: 0.6 }),
+  line2: Object.assign(Sounds.line2, { volume: 0.6 }),
   gameOver: Object.assign(Sounds.gameOver, { volume: 0.3 }),
   start: Object.assign(Sounds.start, { volume: 0.35 })
 });
@@ -456,6 +457,33 @@ function randomPiece() {
 }
 
 let piece = randomPiece();
+
+let lastResultImage = null; // store final image
+
+// Capture the board as an image
+function captureResultImage() {
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = canvas.width;
+  tempCanvas.height = canvas.height;
+  const tempCtx = tempCanvas.getContext("2d");
+
+  // Draw background
+  tempCtx.fillStyle = "#111";
+  tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+  // Draw current blocks
+  board.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (cell) tempCtx.drawImage(images[cell], x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+    });
+  });
+
+  lastResultImage = tempCanvas.toDataURL(); // save as base64 string
+}
+
+function drawBlockOnCtx(context, x, y, type) {
+  context.drawImage(images[type], x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+}
 
 function drawBlock(x, y, type) {
   ctx.drawImage(images[type], x * BLOCK, y * BLOCK, BLOCK, BLOCK);
@@ -548,6 +576,11 @@ function clearLines() {
         score += gained;
 
         updateHUD();
+
+        // Save result if game over (example)
+        if (!gameRunning && lastResultImage) {
+          saveResultImageToResults(lastResultImage, gamerName, score);
+        }
       }
       return;
     }
@@ -671,6 +704,12 @@ function updateHUD() {
   document.getElementById("lines").textContent = linesCleared;
 }
 
+function playSound(sound) {
+  if (!sound) return;
+  sound.currentTime = 0;
+  sound.play().catch(() => {}); // mobile autoplay safety
+}
+
 function startGame() {
   if (gameRunning) return;
 
@@ -688,12 +727,6 @@ function startGame() {
   gameRunning = true;
   updateHUD();
   dropInterval = setInterval(drop, 700);
-}
-
-function playSound(sound) {
-  if (!sound) return;
-  sound.currentTime = 0;
-  sound.play().catch(() => {}); // mobile autoplay safety
 }
 
 // Utility function to play sound
@@ -727,6 +760,7 @@ window.addEventListener("load", () => {
 });
 
 function pauseGame() {
+  playSound(Sounds.start);
   gameRunning = false;
   clearInterval(dropInterval);
   clearInterval(fastDropInterval);
@@ -741,6 +775,14 @@ function toggleGame() {
 function gameOver() {
   pauseGame();
   playSound(Sounds.gameOver);
+  captureResultImage(); // set lastResultImage before saving
+  
+  // Capture final board as image
+  const resultImageSrc = canvas.toDataURL("image/png");
+
+  // Save result to localStorage
+  saveResultImageToResults(resultImageSrc, gamerName, score);
+
   alert(`💀 Game Over! Yuuka has reached the top.
 
   User: ${gamerName}
@@ -766,6 +808,51 @@ function gameOver() {
     updateHUD();
   } 1000;
 
+// Save function (unchanged except it now assumes image is ready)
+function saveResultImageToResults(resultImageSrc, gamerName, score) {
+  const timestamp = new Date().toLocaleString();
+  const result = {
+    name: gamerName,
+    score: score,
+    image: resultImageSrc,
+    timestamp: timestamp
+  };
+
+  // Get existing results or create empty array
+  let results;
+  try {
+    results = JSON.parse(localStorage.getItem("yuukaResults")) || [];
+  } catch(e) {
+    console.error("⚠️ Failed to parse yuukaResults, resetting array.", e);
+    results = [];
+  }
+
+  results.push(result);
+  localStorage.setItem("yuukaResults", JSON.stringify(results));
+  console.log("✅ Result saved:", result);
+
+  const message = document.createElement("div");
+  message.textContent = "✨ Saving your Yuuka result...";
+  message.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 18px;
+    z-index: 999;
+  `;
+  document.body.appendChild(message);
+
+  // Redirect after delay
+  setTimeout(() => {
+    window.location.href = "game-results.html";
+  }, 10000);
+}
 
 function moveLeft() {
   piece.x--;
@@ -813,6 +900,7 @@ function startFastDrop(speed = 1) {
         return;
       }
     }
+    else playSound(Sounds.move);
     drawBoard();
   }, speed);
 }
@@ -913,43 +1001,6 @@ document.getElementById("startPause").onclick = toggleGame;
 
 // Initial draw
 drawBoard();
-
-function saveResultImageToResults(resultImageSrc, gamerName, score) {
-  const timestamp = new Date().toLocaleString();
-  const result = {
-    name: gamerName,
-    score: score,
-    image: resultImageSrc,
-    timestamp: timestamp
-  };
-
-  const results = JSON.parse(localStorage.getItem("yuukaResults")) || [];
-  results.push(result);
-  localStorage.setItem("yuukaResults", JSON.stringify(results));
-
-  // Optional small status update
-  const message = document.createElement("div");
-  message.textContent = "✨ Saving your Yuuka result...";
-  message.style.cssText = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
-    font-size: 18px;
-    z-index: 999;
-  `;
-  document.body.appendChild(message);
-
-  // Redirect to results page after a short delay
-  setTimeout(() => {
-    window.location.href = "game-results.html";
-  }, 10000);
-}
 </script>
 
       <script src="script.js"></script>
