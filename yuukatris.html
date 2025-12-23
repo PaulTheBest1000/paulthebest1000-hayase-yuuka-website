@@ -373,6 +373,38 @@ window.addEventListener('resize', () => {
 </script>
 
 <script>
+const Sounds = {
+  move: new Audio("click2.ogg"),
+  rotate: new Audio("rollover2.ogg"),
+  drop: new Audio("drop_001.ogg"),
+  line1: new Audio("confirmation_002.ogg"),
+  line2: new Audio("confirmation_003.ogg"),
+  gameOver: new Audio("error_003.ogg"),
+  start: new Audio("open_002.ogg")
+};
+
+// 🎚️ Set sane default volumes
+Object.assign(Sounds, {
+  move: Object.assign(Sounds.move, { volume: 0.25 }),
+  rotate: Object.assign(Sounds.rotate, { volume: 0.35 }),
+  drop: Object.assign(Sounds.drop, { volume: 0.45 }),
+  line: Object.assign(Sounds.line, { volume: 0.6 }),
+  gameOver: Object.assign(Sounds.gameOver, { volume: 0.3 }),
+  start: Object.assign(Sounds.start, { volume: 0.35 })
+});
+
+document.addEventListener("click", unlockAudio, { once: true });
+document.addEventListener("keydown", unlockAudio, { once: true });
+
+function unlockAudio() {
+  Object.values(Sounds).forEach(s => {
+    s.play().then(() => {
+      s.pause();
+      s.currentTime = 0;
+    }).catch(() => {});
+  });
+}
+
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -541,6 +573,8 @@ function clearLines() {
       if (blink > 3) {
         clearInterval(blinkInterval);
 
+        playLineSound(rowsToClear.length);
+
         // Remove rows
         rowsToClear.forEach(y => {
           board.splice(y, 1);
@@ -590,23 +624,41 @@ function drop() {
 
 // 🎮 Game Control
 let wasRunningBeforeHidden = false;
-let gamerName = localStorage.getItem("yuukatrisUser");
+let gamerName = localStorage.getItem("yuukatrisUser") || "";
 let score = 0;
 let linesCleared = 0;
 updateHUD();
 
-function registerUser() {
-  gamerName = prompt("Register your name to play Yuukatris 👀");
+const usernameInput = document.getElementById("username-input");
 
-  if (!gamerName || !gamerName.trim()) {
-    alert("⚠️ Name is required to play.");
-    registerUser(); // force registration
-  } else {
-    gamerName = gamerName.trim();
-    localStorage.setItem("yuukatrisUser", gamerName);
-    updateHUD();
-  }
+// Pre-fill input if user already registered
+if (gamerName) {
+  usernameInput.value = gamerName;
+  updateHUD();
 }
+
+// Register / update username
+function registerUser() {
+  const value = usernameInput.value.trim();
+
+  if (!value) {
+    usernameInput.classList.add("error");
+    usernameInput.placeholder = "Name required 👀";
+    return;
+  }
+
+  gamerName = value;
+  localStorage.setItem("yuukatrisUser", gamerName);
+
+  usernameInput.classList.remove("error");
+  updateHUD();
+  startGame(); // 🚀 start only after valid name
+}
+
+// Enter key support (nice UX)
+usernameInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") registerUser();
+});
 
 // Force registration before game starts
 if (!gamerName) {
@@ -629,10 +681,30 @@ function startGame() {
   }
 
   document.getElementById("username-input").disabled = true;
+
+  playSound(Sounds.start);
+
   // 🎮 Start fresh run
   gameRunning = true;
-  updateHUD(); // reflect username / score / lines
+  updateHUD();
   dropInterval = setInterval(drop, 700);
+}
+
+function playSound(sound) {
+  if (!sound) return;
+  sound.currentTime = 0;
+  sound.play().catch(() => {}); // mobile autoplay safety
+}
+
+// Utility function to play sound
+function playLineSound(linesClearedNow) {
+  if (linesClearedNow === 1) {
+    Sounds.line1.currentTime = 0;
+    Sounds.line1.play();
+  } else if (linesClearedNow > 1) {
+    Sounds.line2.currentTime = 0;
+    Sounds.line2.play();
+  }
 }
 
 function syncUsername() {
@@ -668,6 +740,7 @@ function toggleGame() {
 
 function gameOver() {
   pauseGame();
+  playSound(Sounds.gameOver);
   alert(`💀 Game Over! Yuuka has reached the top.
 
   User: ${gamerName}
@@ -697,12 +770,14 @@ function gameOver() {
 function moveLeft() {
   piece.x--;
   if (collide(piece)) piece.x++;
+  else playSound(Sounds.move);
   drawBoard();
 }
 
 function moveRight() {
   piece.x++;
   if (collide(piece)) piece.x--;
+  else playSound(Sounds.move);
   drawBoard();
 }
 
@@ -711,6 +786,7 @@ function hardDrop() {
   piece.y--;
   merge();
   clearLines();
+  playSound(Sounds.drop);
   piece = randomPiece();
 
   if (collide(piece)) {
@@ -729,6 +805,7 @@ function startFastDrop(speed = 1) {
       piece.y--;
       merge();
       clearLines();
+      playSound(Sounds.drop);
       piece = randomPiece();
 
       if (collide(piece)) {
@@ -749,11 +826,13 @@ function stopFastDrop() {
 
 function rotateCW() {
   rotate(piece);
+  playSound(Sounds.rotate);
   drawBoard();
 }
 
 function rotateCCW() {
   for (let i = 0; i < 3; i++) rotate(piece);
+  playSound(Sounds.rotate);
   drawBoard();
 }
 
@@ -764,10 +843,22 @@ document.addEventListener("keydown", e => {
   ];
   if (blockKeys.includes(e.code)) e.preventDefault();
 
-  if (e.code === "Space") {
-    toggleGame();
-    return;
-  }
+  // 🧠 SMART SPACE KEY
+    if (e.code === "Space") {
+      // If game isn't running yet → register username & start
+      if (!gameRunning) {
+        if (!syncUsername()) {
+          document.getElementById("username-input").focus();
+          return;
+        }
+        startGame();
+        return;
+      }
+
+      // Otherwise → pause / resume
+      toggleGame();
+      return;
+    }
 
   if (!gameRunning) return;
 

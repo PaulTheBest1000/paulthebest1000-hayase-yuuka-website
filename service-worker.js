@@ -9,9 +9,11 @@ const urlsToCache = [
   '/extra.js',
   '/game-results.html',
   '/index.html',
+  '/node.js',
   '/results.js',
   '/script.js',
   '/style.css',
+  '/vapid-keys.env',
   '/whack-a-yuuka-weasel.html',
   '/yuuka-math.html',
   '/IMG_6281.ico', // 🧩 add the icon too!
