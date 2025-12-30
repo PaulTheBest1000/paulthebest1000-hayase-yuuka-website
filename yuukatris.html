@@ -609,10 +609,15 @@ function clearLines() {
         playLineSound(rowsToClear.length);
 
         // Remove rows
-        rowsToClear.forEach(y => {
-          board.splice(y, 1);
+        rowsToClear
+          .sort((a, b) => b - a) // important!
+          .forEach(y => {
+            board.splice(y, 1);
+          });
+
+        while (board.length < ROWS) {
           board.unshift(Array(COLS).fill(null));
-        });
+        }
 
         drawBoard();
 
@@ -760,7 +765,6 @@ window.addEventListener("load", () => {
 });
 
 function pauseGame() {
-  playSound(Sounds.start);
   gameRunning = false;
   clearInterval(dropInterval);
   clearInterval(fastDropInterval);
