@@ -1,31 +1,43 @@
 const fs = require('fs');
 const path = require('path');
 
-const projectDir = path.resolve(__dirname); // your project folder
-const imagesDir = path.join(projectDir); // folder with images
+const projectDir = path.resolve(__dirname);
 
-// Get all files in the project (HTML, CSS, JS)
-function getProjectFiles(dir) {
-    let results = [];
-    fs.readdirSync(dir).forEach(file => {
-        const fullPath = path.join(dir, file);
-        if (fs.statSync(fullPath).isDirectory()) {
-            results = results.concat(getProjectFiles(fullPath));
-        } else if (/\.(html|css|js)$/.test(file)) {
-            results.push(fullPath);
-        }
-    });
-    return results;
+// Media extensions (images + videos)
+const MEDIA_EXTENSIONS = /\.(png|jpg|jpeg|gif|svg|webp|mp4|webm|mov|avi|mkv)$/i;
+
+// Code files to check references
+const CODE_EXTENSIONS = /\.(html|css|js|json)$/i;
+
+// Read only ROOT directory
+const rootFiles = fs.readdirSync(projectDir);
+
+// Media files in root only
+const mediaFiles = rootFiles.filter(file => MEDIA_EXTENSIONS.test(file));
+
+// Code files in root only
+const codeFiles = rootFiles.filter(file => CODE_EXTENSIONS.test(file));
+
+// Combine all code text
+const codeText = codeFiles
+  .map(file =>
+    fs.readFileSync(path.join(projectDir, file), 'utf8')
+  )
+  .join('\n');
+
+// Check if media is referenced (filename + extension)
+function isUsed(fileName) {
+  return codeText.includes(fileName);
 }
 
-// Get all image files
-const images = fs.readdirSync(imagesDir).filter(f => /\.(png|jpg|jpeg|gif|svg)$/.test(f));
-const projectFiles = getProjectFiles(projectDir);
+// Find unused media
+const unusedMedia = mediaFiles.filter(file => !isUsed(file));
 
-// Check which images are unused
-const unusedImages = images.filter(img => {
-    return !projectFiles.some(file => fs.readFileSync(file, 'utf8').includes(img));
+// Output
+console.log('\n🧹 Unused media files (ROOT ONLY):\n');
+
+unusedMedia.forEach(file => {
+  console.log('❌', file);
 });
 
-console.log("Unused images:");
-console.log(unusedImages);
+console.log(`\n✨ Done. Found ${unusedMedia.length} unused media file(s).`);
