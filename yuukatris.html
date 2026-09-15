@@ -79,58 +79,67 @@
 
     <button id="chat-toggle-btn">💬 Chat</button>
 
-    <div id="chat-container">
-      <div id="chat-header">💬 Chat</div>
-    
-      <!-- Chat display area -->
-      <div id="chat-box">
-        <div id="chat-history"></div>
-        <div id="missed-counter"></div>
-      </div>
-    
-      <!-- Chat input area -->
-      <div id="chat-input-area">
-        <input type="text" id="chat-input" placeholder="Type a message..." />
-        <button id="send-btn">Send</button>
-        <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
-      </div>
-    
-      <!-- Emoji menu -->
-      <div id="emoji-menu" class="emoji-menu">
-        <!-- Category tabs -->
-        <div id="emoji-categories" class="emoji-categories">
-          <button data-category="smileys">😄</button>
-          <button data-category="gestures">🙌</button>
-          <button data-category="hearts">❤️</button>
-          <button data-category="animals">🐶</button>
-          <button data-category="food">🍕</button>
-          <button data-category="symbols">🔥</button>
-        </div>
-        <!-- Emoji list container -->
-        <div id="emoji-list" class="emoji-list"></div>
-      </div>
-    
-      <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-    
-      <!-- Username change -->
-      <div id="username-change-area">
-        <input type="text" id="change-username-input" placeholder="New username" />
-        <button id="change-username-btn">Change Username</button>
-      </div>
-    
-      <!-- Safe ping toggle -->
-      <button id="toggle-safe-btn">Safe Pings ON</button>
-    </div>
+        <div id="chat-container">
+          <div id="chat-header">💬 Chat</div>
+        
+          <!-- Chat display area -->
+          <div id="chat-box">
+            <div id="chat-history"></div>
+            <div id="missed-counter"></div>
+          </div>
+        
+          <!-- Chat input area -->
+          <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type a message..." />
+            <button id="send-btn">Send</button>
+            <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
+          </div>
+        
+          <!-- Emoji menu -->
+          <div id="emoji-menu" class="emoji-menu">
+            <!-- Category tabs -->
+            <div id="emoji-categories" class="emoji-categories">
+              <button data-category="smileys">😄</button>
+              <button data-category="gestures">🙌</button>
+              <button data-category="hearts">❤️</button>
+              <button data-category="animals">🐶</button>
+              <button data-category="food">🍕</button>
+              <button data-category="symbols">🔥</button>
+            </div>
+            <!-- Emoji list container -->
+            <div id="emoji-list" class="emoji-list"></div>
+          </div>
+        
+          <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+        
+          <!-- Username change -->
+          <div id="username-change-area">
+            <input type="text" id="change-username-input" placeholder="New username" />
+            <button id="change-username-btn">Change Username</button>
+          </div>
 
-   <div id="online-users-container">
-    <div id="online-users-header">🟢 Online Users</div>
-     <ul id="online-users"></ul>
-  </div>
+          <!-- Ping types -->
+          <button id="notifications-mentions">
+            🔔 Mentions Only
+          </button>
 
-  <h1>🧩 Yuukatris</h1>
-  <input type="text" id="username-input" placeholder="Enter your name">
-  <canvas id="game" width="300" height="600"></canvas>
-  <p style="color: #6a5acd; font: bold;">Arrow keys/WASD to move • Mouse scroll/Q and E to rotate • Space to Play/Pause</p>
+          <button id="notifications-all">
+            🔔 All Messages
+          </button>
+          
+          <!-- Safe ping toggle -->
+          <button id="toggle-safe-btn">Safe Pings ON</button>
+        </div> 
+
+      <div id="online-users-container">
+        <div id="online-users-header">🟢 Online Users</div>
+        <ul id="online-users"></ul>
+      </div>
+
+    <h1>🧩 Yuukatris</h1>
+    <input type="text" id="username-input" placeholder="Enter your name">
+    <canvas id="game" width="300" height="600"></canvas>
+    <p style="color: #6a5acd; font: bold;">Arrow keys/WASD to move • Mouse scroll/Q and E to rotate • Space to Play/Pause</p>
 
   <div id="hud">
     <div>Score: <span id="score">0</span></div>
@@ -139,13 +148,30 @@
   </div>
 
   <div id="mobile-controls">
-    <button alt="Rotate Counter-Clockwise" id="rotateCCW">⟲</button>
-    <button alt="Hard Drop" id="hardDrop">⇩</button>
-    <button alt="Rotate Clockwise" id="rotateCW">⟳</button>
-    <button alt="Move Left" id="left">◀</button>
-    <button alt="Start and Pause" id="startPause">⏯</button>
-    <button alt="Move Right" id="right">▶</button>
-    <button alt="Soft Drop" id="softDrop">▼</button>
+
+    <!-- Movement -->
+    <div id="movement-controls">
+      <button id="left">←</button>
+      <button id="softDrop">↓</button>
+      <button id="right">→</button>
+    </div>
+
+    <!-- Rotation -->
+    <div id="rotation-controls">
+      <button id="rotateCCW">↺</button>
+      <button id="rotateCW">↻</button>
+    </div>
+
+    <!-- Hard drop -->
+    <div id="drop-controls">
+      <button id="hardDrop">⤓</button>
+    </div>
+
+    <!-- Start / Pause -->
+    <div id="game-controls">
+      <button id="startPause">▶</button>
+    </div>
+
   </div>
 
   <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
@@ -411,7 +437,45 @@ const ctx = canvas.getContext("2d");
 
 const COLS = 10;
 const ROWS = 20;
-const BLOCK = 30;
+
+// Block size will automatically scale to fit below the header.
+let BLOCK = 30;
+
+function resizeGameCanvas() {
+  const header = document.querySelector("header");
+
+  const headerHeight =
+    header?.getBoundingClientRect().height || 0;
+
+  const horizontalPadding = 20;
+  const verticalPadding = 20;
+
+  const availableWidth =
+    window.innerWidth - horizontalPadding;
+
+  const availableHeight =
+    window.innerHeight -
+    headerHeight -
+    verticalPadding;
+
+  const blockByWidth =
+    Math.floor(availableWidth / COLS);
+
+  const blockByHeight =
+    Math.floor(availableHeight / ROWS);
+
+  BLOCK = Math.max(
+    1,
+    Math.min(blockByWidth, blockByHeight)
+  );
+
+  canvas.width = COLS * BLOCK;
+  canvas.height = ROWS * BLOCK;
+
+  drawBoard();
+}
+
+window.addEventListener("resize", resizeGameCanvas);
 
 let gameRunning = false;
 let dropInterval = null;
@@ -453,7 +517,15 @@ const SHAPES = {
 function randomPiece() {
   const keys = Object.keys(SHAPES);
   const type = keys[Math.floor(Math.random() * keys.length)];
-  return { type, shape: SHAPES[type], x: 3, y: 0 };
+
+  const shape = SHAPES[type];
+
+  return {
+    type,
+    shape,
+    x: Math.floor((COLS - shape[0].length) / 2),
+    y: 0
+  };
 }
 
 let piece = randomPiece();
@@ -489,6 +561,30 @@ function drawBlock(x, y, type) {
   ctx.drawImage(images[type], x * BLOCK, y * BLOCK, BLOCK, BLOCK);
 }
 
+function drawGhostPiece() {
+  if (!gameRunning) return;
+
+  const ghostY = getGhostY();
+
+  ctx.save();
+
+  ctx.globalAlpha = 0.25;
+
+  piece.shape.forEach((row, y) => {
+    row.forEach((val, x) => {
+      if (!val) return;
+
+      drawBlock(
+        piece.x + x,
+        ghostY + y,
+        piece.type
+      );
+    });
+  });
+
+  ctx.restore();
+}
+
 function drawGrid() {
   ctx.strokeStyle = 'rgba(200, 200, 200, 0.2)'; // light gray, transparent
   ctx.lineWidth = 1;
@@ -520,16 +616,28 @@ function drawGrid() {
   // Draw placed blocks
   board.forEach((row, y) => {
     row.forEach((cell, x) => {
-      if (cell) drawBlock(x, y, cell);
+      if (cell) {
+        drawBlock(x, y, cell);
+      }
     });
   });
 
-  // 🚫 Don't draw falling piece unless game is running
+  // Don't draw falling/ghost pieces unless game is running
   if (!gameRunning) return;
 
+  // 👻 Draw ghost piece first
+  drawGhostPiece();
+
+  // 🎮 Draw actual falling piece on top
   piece.shape.forEach((row, y) => {
     row.forEach((val, x) => {
-      if (val) drawBlock(piece.x + x, piece.y + y, piece.type);
+      if (val) {
+        drawBlock(
+          piece.x + x,
+          piece.y + y,
+          piece.type
+        );
+      }
     });
   });
 }
@@ -543,6 +651,25 @@ function collide(p) {
       return nx < 0 || nx >= COLS || ny >= ROWS || board[ny]?.[nx];
     })
   );
+}
+
+function getGhostY() {
+  let ghostY = piece.y;
+
+  while (true) {
+    const testPiece = {
+      ...piece,
+      y: ghostY + 1
+    };
+
+    if (collide(testPiece)) {
+      break;
+    }
+
+    ghostY++;
+  }
+
+  return ghostY;
 }
 
 function merge() {
@@ -718,19 +845,22 @@ function playSound(sound) {
 function startGame() {
   if (gameRunning) return;
 
-  // 🧍 Ensure username is registered
   if (!syncUsername()) {
     document.getElementById("username-input").focus();
-    return; // no name, no game 😤
+    return;
   }
 
   document.getElementById("username-input").disabled = true;
 
   playSound(Sounds.start);
 
-  // 🎮 Start fresh run
   gameRunning = true;
+
   updateHUD();
+
+  // 🎮 Draw the newly spawned piece immediately
+  drawBoard();
+
   dropInterval = setInterval(drop, 700);
 }
 
@@ -858,6 +988,35 @@ function saveResultImageToResults(resultImageSrc, gamerName, score) {
   }, 10000);
 }
 
+function isMobileDevice() {
+  return (
+    /Android|iPhone|iPad|iPod|Windows Phone/i.test(
+      navigator.userAgent
+    ) ||
+    (
+      navigator.maxTouchPoints > 0 &&
+      window.matchMedia("(pointer: coarse)").matches
+    )
+  );
+}
+
+function updateMobileControls() {
+  const controls =
+    document.getElementById("mobile-controls");
+
+  if (!controls) return;
+
+  controls.style.display =
+    isMobileDevice() ? "flex" : "none";
+}
+
+window.addEventListener(
+  "resize",
+  updateMobileControls
+);
+
+updateMobileControls();
+
 function moveLeft() {
   piece.x--;
   if (collide(piece)) piece.x++;
@@ -965,7 +1124,7 @@ document.addEventListener("keydown", e => {
 
   // FAST DROP (hold)
   if (["ArrowUp","KeyS"].includes(e.code)) {
-    startFastDrop(70); // ⚡ fast
+    startFastDrop(60); // ⚡ fast
   }
 
   // ROTATION
@@ -993,7 +1152,7 @@ document.getElementById("right").onclick = moveRight;
 document.getElementById("hardDrop").onclick = hardDrop;
 
 document.getElementById("softDrop").ontouchstart =
-document.getElementById("softDrop").onmousedown = () => startFastDrop(120);
+document.getElementById("softDrop").onmousedown = () => startFastDrop(20);
 
 document.getElementById("softDrop").ontouchend =
 document.getElementById("softDrop").onmouseup = stopFastDrop;
@@ -1004,7 +1163,7 @@ document.getElementById("rotateCCW").onclick = rotateCCW;
 document.getElementById("startPause").onclick = toggleGame;
 
 // Initial draw
-drawBoard();
+resizeGameCanvas();
 </script>
 
       <script src="script.js"></script>

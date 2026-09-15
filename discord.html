@@ -80,58 +80,67 @@
 
 <button id="chat-toggle-btn">💬 Chat</button>
 
-<div id="chat-container">
-  <div id="chat-header">💬 Chat</div>
+        <div id="chat-container">
+          <div id="chat-header">💬 Chat</div>
+        
+          <!-- Chat display area -->
+          <div id="chat-box">
+            <div id="chat-history"></div>
+            <div id="missed-counter"></div>
+          </div>
+        
+          <!-- Chat input area -->
+          <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type a message..." />
+            <button id="send-btn">Send</button>
+            <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
+          </div>
+        
+          <!-- Emoji menu -->
+          <div id="emoji-menu" class="emoji-menu">
+            <!-- Category tabs -->
+            <div id="emoji-categories" class="emoji-categories">
+              <button data-category="smileys">😄</button>
+              <button data-category="gestures">🙌</button>
+              <button data-category="hearts">❤️</button>
+              <button data-category="animals">🐶</button>
+              <button data-category="food">🍕</button>
+              <button data-category="symbols">🔥</button>
+            </div>
+            <!-- Emoji list container -->
+            <div id="emoji-list" class="emoji-list"></div>
+          </div>
+        
+          <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+        
+          <!-- Username change -->
+          <div id="username-change-area">
+            <input type="text" id="change-username-input" placeholder="New username" />
+            <button id="change-username-btn">Change Username</button>
+          </div>
 
-  <!-- Chat display area -->
-  <div id="chat-box">
-    <div id="chat-history"></div>
-    <div id="missed-counter"></div>
-  </div>
+          <!-- Ping types -->
+          <button id="notifications-mentions">
+            🔔 Mentions Only
+          </button>
 
-  <!-- Chat input area -->
-  <div id="chat-input-area">
-    <input type="text" id="chat-input" placeholder="Type a message..." />
-    <button id="send-btn">Send</button>
-    <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
-  </div>
+          <button id="notifications-all">
+            🔔 All Messages
+          </button>
+          
+          <!-- Safe ping toggle -->
+          <button id="toggle-safe-btn">Safe Pings ON</button>
+        </div> 
 
-  <!-- Emoji menu -->
-  <div id="emoji-menu" class="emoji-menu">
-    <!-- Category tabs -->
-    <div id="emoji-categories" class="emoji-categories">
-      <button data-category="smileys">😄</button>
-      <button data-category="gestures">🙌</button>
-      <button data-category="hearts">❤️</button>
-      <button data-category="animals">🐶</button>
-      <button data-category="food">🍕</button>
-      <button data-category="symbols">🔥</button>
-    </div>
-    <!-- Emoji list container -->
-    <div id="emoji-list" class="emoji-list"></div>
-  </div>
+      <div id="online-users-container">
+        <div id="online-users-header">🟢 Online Users</div>
+        <ul id="online-users"></ul>
+      </div> 
 
-  <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-
-  <!-- Username change -->
-  <div id="username-change-area">
-    <input type="text" id="change-username-input" placeholder="New username" />
-    <button id="change-username-btn">Change Username</button>
-  </div>
-
-  <!-- Safe ping toggle -->
-  <button id="toggle-safe-btn">Safe Pings ON</button>
-</div>
-
-<div id="online-users-container">
-  <div id="online-users-header">🟢 Online Users</div>
-  <ul id="online-users"></ul>
-</div> 
-
-        <h1>Join My Discord Server</h1>
-        <div class="box" id="discord"><button class="button" onclick="window.location.href='https://discord.gg/bws3ZCRDbA'">Check out my Discord</button></div>
-        <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
-        <audio id="ricochet" src="whizzby-41134.mp3"></audio>
+    <h1>Join My Discord Server</h1>
+      <div class="box" id="discord"><button class="button" onclick="window.location.href='https://discord.gg/bws3ZCRDbA'">Check out my Discord</button></div>
+      <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
+    <audio id="ricochet" src="whizzby-41134.mp3"></audio>
 
 <script>
 async function loadGalleryImages(fromExternal = true) {

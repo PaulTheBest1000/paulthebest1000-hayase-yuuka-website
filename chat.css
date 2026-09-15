@@ -3,13 +3,13 @@
   display: none; /* Initially hidden */
   bottom: 40px;
   right: 20px;
-  width: 375px;
-  max-height: 4200px;
+  width: 350px;
+  max-height: 4000px;
   background: linear-gradient(90deg, cyan, blueviolet);
   border: 2px solid #ccc;
   border-radius: 10px;
   padding: 10px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 9999;
   resize: none;
@@ -36,7 +36,7 @@
   line-height: 1.5;
   background: black;
   border-bottom: 1px solid gray;
-  max-height: 300px;
+  max-height: 250px;
 }
 
 #chat-history {
@@ -198,4 +198,77 @@ button {
 .link-embed a {
   text-decoration: none;
   color: #0072ff;
+}
+
+#mention-dropdown {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: min(220px, 90%);
+    max-height: 200px;
+
+    overflow-y: auto;
+
+    background: #111111;
+    border: 1px solid #555;
+    border-radius: 8px;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+
+    z-index: 10001;
+}
+
+.mention-user {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.mention-user:hover {
+    background: #333333;
+}
+
+/* Notification mode buttons */
+#notifications-mentions,
+#notifications-all {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* 🔔 Mentions Only */
+#notifications-mentions {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+#notifications-mentions:hover:not(:disabled) {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    transform: scale(1.03);
+}
+
+/* 🔔 All Messages */
+#notifications-all {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+#notifications-all:hover:not(:disabled) {
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    transform: scale(1.03);
+}
+
+/* Currently selected / disabled option */
+#notifications-mentions:disabled,
+#notifications-all:disabled {
+    background: #555;
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
 }

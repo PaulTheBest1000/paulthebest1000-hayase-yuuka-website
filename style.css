@@ -29,7 +29,6 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 600px;
     padding: 20px;
     text-align: center;
     margin-left: auto; /* Center horizontally */
@@ -65,6 +64,23 @@ p {
     font-size: 18px;
     color: lightgreen;
     font-style: italic;
+}
+
+.gallery-text {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    margin: 0;
+    padding: 7px 10px;
+    box-sizing: border-box;
+
+    font-weight: bold;
+    font-size: 0.9rem;
+    line-height: 1.2;
+
+    color: blueviolet;
+    background: rgba(0, 0, 255, 0.45);
+    border-radius: 10px;
 }
 
 /* Button styling */
@@ -266,110 +282,165 @@ header {
     }
 }
 
-/* Default (desktop/tablet) grid layout */
+/* ==================================================
+   MEDIA CONTAINER
+   ================================================== */
+
+.media-container {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    padding: 8px;
+    box-sizing: border-box;
+
+    /* Snug translucent gray backdrop */
+    background: rgba(128, 128, 128, 0.20);
+    border-radius: 12px;
+}
+
+
+/* ==================================================
+   GRID VIEW
+   ================================================== */
+
 .media-container.grid-view {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 10px;
-    box-sizing: border-box;
-    overflow-y: auto;
-  }
-  
-  /* Default list layout */
-  .media-container.list-view {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+
+/* ==================================================
+   LIST VIEW
+   ================================================== */
+
+.media-container.list-view {
     display: flex;
     flex-direction: column;
+
     gap: 20px;
+
     width: 100%;
     max-width: 400px;
+
     align-items: center;
+
     margin: 0 auto;
     padding: 10px;
+
     box-sizing: border-box;
-    overflow-y: auto;
-  }
-  
-  /* Common container styling */
-  .media-container {
-    transition: all 0.3s ease-in-out;
-    margin: 0 auto;
-    padding: 10px;
+}
+
+
+/* ==================================================
+   MEDIA ITEMS
+   ================================================== */
+
+.media-item {
     width: 100%;
-    max-width: 1000px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
+    max-width: none;
+    margin: 0;
+    padding: 6px;
     box-sizing: border-box;
-  }
-  
-  /* Media items */
-  .media-item {
-    background-color: rgba(128, 128, 128, 0.75);
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(102, 153, 255, 0.15);
-    text-align: center;
-    width: 100%;
-    max-width: 350px;
-    height: auto;
-    max-height: 360px;
-    overflow-y: auto;
-    box-sizing: border-box;
-  }
-  
-  /* Responsive media (images/videos) */
-  .media-item video,
-  .media-item img {
+
+    background: rgba(128, 128, 128, 0.45);
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+
+/* ==================================================
+   IMAGES + VIDEOS
+   ================================================== */
+
+.media-item img,
+.media-item video {
+    display: block;
     width: 100%;
     max-width: 100%;
-    max-height: 250px;
     height: auto;
-    border-radius: 8px;
+    max-height: 250px;
     object-fit: contain;
-    display: block;
-  }
-  
-  /* 💡 Responsive adjustments 💡 */
-  @media (max-width: 1024px) {
+}
+
+
+/* ==================================================
+   TABLETS
+   ================================================== */
+
+@media (max-width: 1024px) {
+
     .media-container.grid-view {
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      max-width: 100%;
+        grid-template-columns:
+            repeat(auto-fill, minmax(200px, 1fr));
+
+        max-width: 100%;
     }
-  }
-  
-  @media (max-width: 768px) {
-    /* 👇 Two items per row on mobile */
+
+}
+
+
+/* ==================================================
+   MOBILE
+   ================================================== */
+
+@media (max-width: 768px) {
+
+    .media-container {
+        width: 100%;
+        padding: 8px;
+    }
+
     .media-container.grid-view {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      max-width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 6px;
+        padding: 5px;
     }
-  
+
+    .media-container.list-view {
+        width: 100%;
+        max-width: 500px;
+
+        gap: 15px;
+    }
+
     .media-item {
-      max-width: 100%;
-      padding: 8px;
+        padding: 4px;
     }
-  }
-  
-  @media (max-width: 480px) {
-    /* For super small phones — still 2 columns but tighter */
+
+}
+
+
+/* ==================================================
+   SMALL PHONES
+   ================================================== */
+
+@media (max-width: 480px) {
+
+    .media-container {
+        padding: 5px;
+    }
+
     .media-container.grid-view {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 4px;
+        padding: 4px;
     }
-  
+
+    .media-container.list-view {
+        gap: 10px;
+        padding: 5px;
+    }
+
     .media-item {
-      padding: 6px;
+        padding: 3px;
+        border-radius: 7px;
     }
-  
-    .media-item video,
-    .media-item img {
-      max-height: 180px;
+
+    .media-item img,
+    .media-item video {
+        max-height: 180px;
     }
   }
   
@@ -503,7 +574,6 @@ header {
 .image-container {
     position: relative;
     width: 100%; /* Full width */
-    max-width: 400px; /* Set max width for the image */
     margin: 0 auto; /* Center container */
 }
 
@@ -516,15 +586,21 @@ header {
 /* Hidden text by default */
 .text {
     position: absolute;
-    bottom: 10px; /* Adjust position to where you want the text */
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent background */
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: auto;
+    max-width: 90%;
+    box-sizing: border-box;
+
     border-radius: 12px;
-    color: gray;
     padding: 10px;
-    opacity: 0; /* Text is hidden initially */
-    transition: opacity 0.3s ease; /* Smooth transition */
-    width: 90%; /* Optional, to control text width */
+
+    text-align: center;
+
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 /* Show the text when hovering over the image container */

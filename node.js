@@ -86,7 +86,21 @@ app.post('/save-subscription', (req, res) => {
 
 // Socket.IO connection
 io.on('connection', (socket) => {
-  console.log('A user connected');
+  console.log('🟢 SOCKET CONNECTED');
+  console.log('   Socket ID:', socket.id);
+  console.log(
+    '   Transport:',
+    socket.conn.transport.name
+  );
+
+  socket.conn.on('upgrade', () => {
+    console.log(
+      '⬆️ TRANSPORT UPGRADED:',
+      socket.conn.transport.name,
+      '| Socket:',
+      socket.id
+    );
+  });
 
   // Typing events
   socket.on('typing', (username) => {
@@ -101,43 +115,88 @@ io.on('connection', (socket) => {
   socket.on('sendMessage', (data) => {
     console.log(`${data.username}: ${data.message}`);
 
-  const payload = JSON.stringify({
-    title: `New message from ${data.username}`,
-    body: data.message
-  });
+    const messageId =
+        `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
-  (subscriptions || []).forEach(sub => {
-  try {
-    webpush.sendNotification(sub, payload);
-  } catch (err) {
-    console.error("Push error:", err);
-  }
-});
-    // Broadcast the message to everyone including sender
-    io.emit('receiveMessage', {
-      message: data.message,
-      sender: 'user',
-      username: data.username
+    const messageData = {
+        messageId,
+        senderId: socket.id,
+        message: data.message,
+        sender: 'user',
+        username: data.username
+    };
+
+    console.log('📨 Sending message:', messageData);
+
+    const payload = JSON.stringify({
+        title: `New message from ${data.username}`,
+        body: data.message
     });
+
+    (subscriptions || []).forEach(sub => {
+        try {
+            webpush.sendNotification(sub, payload);
+        } catch (err) {
+            console.error("Push error:", err);
+        }
+    });
+
+  // Broadcast the message to everyone including sender
+    socket.broadcast.emit('receiveMessage', {
+        message: data.message,
+        sender: 'user',
+        username: data.username
+    });
+});
+
+    console.log(
+      '📡 BROADCASTED TO',
+      io.engine.clientsCount,
+      'CONNECTED CLIENT(S)'
+    );
   });
 
-  // Register username
-  socket.on('register', (username) => {
-    clients[socket.id] = username;
-    console.log(`${username} connected`);
+  // Register username and user ID
+  socket.on('register', (data) => {
+    const { userId, username } = data;
 
-    io.emit('onlineUsers', Object.values(clients));
+    clients[socket.id] = {
+      userId,
+      username
+    };
+
+    console.log(`👤 ${username} connected`);
+    console.log(`   User ID: ${userId}`);
+    console.log(`   Socket ID: ${socket.id}`);
+
+    // Get one username per unique user ID
+    const uniqueUsers = [
+      ...new Map(
+        Object.values(clients).map(user => [
+          user.userId,
+          user.username
+        ])
+      ).values()
+    ];
+
+    io.emit('onlineUsers', uniqueUsers);
   });
 
   // Handle disconnect
-  socket.on('disconnect', () => {
-    const username = clients[socket.id]; // grab username before deleting
-    delete clients[socket.id];
-    console.log(`${username || 'A user'} disconnected`);
+  socket.on('disconnect', (reason) => {
+    const username = clients[socket.id];
 
-    io.emit('onlineUsers', Object.values(clients));
+    console.log('🔴 SOCKET DISCONNECTED');
+    console.log('   Socket ID:', socket.id);
+    console.log('   Username:', username || 'Unknown');
+    console.log('   Reason:', reason);
+
+    delete clients[socket.id];
+
+    const uniqueUsers = [...new Set(Object.values(clients))];
+
+    io.emit('onlineUsers', uniqueUsers);
   });
-});
 
 // Start the server
 const PORT = process.env.PORT || 3000;

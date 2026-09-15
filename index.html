@@ -148,15 +148,24 @@
             <input type="text" id="change-username-input" placeholder="New username" />
             <button id="change-username-btn">Change Username</button>
           </div>
-        
+
+          <!-- Ping types -->
+          <button id="notifications-mentions">
+            🔔 Mentions Only
+          </button>
+
+          <button id="notifications-all">
+            🔔 All Messages
+          </button>
+          
           <!-- Safe ping toggle -->
           <button id="toggle-safe-btn">Safe Pings ON</button>
-        </div>
+        </div>          
         
           <div id="online-users-container">
             <div id="online-users-header">🟢 Online Users</div>
-             <ul id="online-users"></ul>
-          </div> 
+            <ul id="online-users"></ul>
+          </div>
 
     <!-- Modal Structure -->
 <div id="quiz-modal" class="modal">
@@ -513,20 +522,20 @@ window.addEventListener('resize', () => {
             <img id="gif" src="IMG_3442.GIF" alt="Hayase Yuuka GIF">
         </div>
 
-        <div class="img-responsive image-container carousel">
-            <div class="image-item">
+        <div class="carousel">
+            <div class="img-responsive image-container image-item">
                 <img src="IMG_3441.GIF" alt="Nice Yuuka" class="image wiggle">
                 <div class="text" style="color: cyan;">This is Yuuka from Blue Archive!</div>
             </div>
-            <div class="image-item">
+            <div class="img-responsive image-container image-item">
                 <img src="IMG_2490.GIF" alt="Peeking Yuuka" class="image zoom">
                 <div class="text" style="color: violet;">Yuuka is peeking around and leaving!</div>
             </div>
-            <div class="image-item">
+            <div class="img-responsive image-container image-item">
                 <img src="IMG_3794.JPG" alt="Cute Yuuka" class="image wiggle">
                 <div class="text" style="color: violet;">Yuuka is so cute!</div>
             </div>
-            <div class="image-item">
+            <div class="img-responsive image-container image-item">
                 <img src="IMG_6422.JPG" alt="Bill Yuuka" class="image zoom">
                 <div class="text" style="color: cyan;">Yuuka shows the bill on Reddit?</div>
             </div>
@@ -551,18 +560,42 @@ window.addEventListener('resize', () => {
         <style>
             .carousel {
                 position: relative;
+                width: 100%;
+                max-width: 200px;
+                margin: 0 auto;
+                box-sizing: border-box;
             }
+
             .image-item {
+                width: 100%;
                 text-align: center;
+                box-sizing: border-box;
             }
+
             .image {
-                border-radius: 12px;
-                max-width: 100%;
+                display: block;
+                width: 100%;
+                max-width: 220px;
                 height: auto;
+                margin: 0 auto;
+                border-radius: 10px;
+                object-fit: contain;
             }
+
             .text {
-                margin-top: 10px;
-                font-size: 1.2em;
+                margin-top: 4px;
+                font-size: 0.9rem;
+                line-height: 1.2;
+            }
+
+            @media (max-width: 480px) {
+                .image {
+                    max-width: 150px;
+                }
+
+                .text {
+                    font-size: 0.8rem;
+                }
             }
         </style>
 
@@ -606,7 +639,7 @@ window.addEventListener('resize', () => {
             <div class="text" style="color: blueviolet;">Yuuka is Happy!</div>
         </div>
 
-        <p style="font-weight: bold; border-radius: 12px; color: blueviolet; background-color: blue; margin-top: 0px; padding: 10px;">Some Yuuka Photos Are Below</p>
+        <p class="gallery-text" style="font-weight: bold; border-radius: 12px; color: cyan; background-color: blue; margin-top: 0px; padding: 10px;">Some Yuuka Photos Are Below</p>
 
         <div class="img-responsive image-container media-item">
             <img src="IMG_3793.JPG" alt="Yuuka has coffee" class="image wiggle">
@@ -638,7 +671,7 @@ window.addEventListener('resize', () => {
             <div class="text" style="color: violet;">Yuuka what are you doing?</div>
         </div>
 
-        <p style="font-weight: bold; border-radius: 12px; color: blueviolet; background-color: violet; margin-top: 0px; padding: 10px;">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</p>
+        <p class="gallery-text" style="font-weight: bold; border-radius: 12px; color: blueviolet; background-color: violet; margin-top: 0px; padding: 10px;">Hayase Yuuka's special skill lies in her mathematical prowess, which she utilizes in her role as the treasurer of the Millennium.</p>
     </div>
 
         <div id="easter-egg" onclick="showSecret()" style="color: rgb(0, 250, 250);">Click me for a surprise!</div>

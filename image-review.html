@@ -1,0 +1,5227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Media Safety Review</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+#stats {
+    text-align: center;
+    font-size: 18px;
+    margin: 15px 0;
+}
+
+.warning-box {
+    max-width: 1000px;
+    margin: 0 auto 20px;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(255, 180, 0, 0.12);
+    border: 1px solid rgba(255, 180, 0, 0.35);
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.controls button {
+    padding: 9px 13px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.bulk-safe {
+    background: #267a3a;
+    color: white;
+}
+
+.bulk-unsafe {
+    background: #a83232;
+    color: white;
+}
+
+#gallery {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.image-card {
+    background: #222;
+    border-radius: 12px;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.image-card img,
+.image-card video {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    background: #000;
+    border-radius: 8px;
+    display: block;
+}
+
+.file-type {
+    margin-top: 6px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+.filename {
+    margin-top: 5px;
+    font-size: 13px;
+    word-break: break-all;
+}
+
+.status {
+    margin-top: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.buttons {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.buttons button {
+    flex: 1;
+    padding: 7px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.safe {
+    background: #267a3a;
+    color: white;
+}
+
+.unsafe {
+    background: #a83232;
+    color: white;
+}
+
+.reset {
+    background: #555;
+    color: white;
+}
+
+.copy {
+    width: 100%;
+    margin-top: 6px;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #3568a8;
+    color: white;
+}
+
+.copy:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+#duplicates {
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+#duplicates h2 {
+    text-align: center;
+}
+
+.duplicate-group {
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.duplicate-title {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.duplicate-hash {
+    font-size: 11px;
+    opacity: 0.6;
+    word-break: break-all;
+    margin-bottom: 8px;
+}
+
+.duplicate-file {
+    padding: 5px 0;
+    border-top: 1px solid #333;
+    word-break: break-all;
+}
+
+.no-duplicates {
+    text-align: center;
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+#copy-output {
+    position: fixed;
+    left: -99999px;
+    top: -99999px;
+}
+
+@media (max-width: 768px) {
+
+    body {
+        padding: 10px;
+    }
+
+    #gallery {
+        grid-template-columns:
+            repeat(auto-fill, minmax(120px, 1fr));
+        gap: 7px;
+    }
+
+    .image-card {
+        padding: 5px;
+    }
+
+    .image-card img,
+    .image-card video {
+        height: 120px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .buttons button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    #gallery {
+        grid-template-columns:
+            repeat(auto-fill, minmax(95px, 1fr));
+        gap: 5px;
+    }
+
+    .image-card img,
+    .image-card video {
+        height: 95px;
+    }
+
+    .filename {
+        font-size: 11px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🖼️ Media Safety Review</h1>
+
+<div id="stats">
+    Reviewed: 0 / 62
+</div>
+
+
+
+<div class="controls">
+
+    <button onclick="filterMedia('all')">
+        📁 All
+    </button>
+
+    <button onclick="filterMedia('unreviewed')">
+        🟡 Unreviewed
+    </button>
+
+    <button onclick="filterMedia('safe')">
+        🟢 Safe
+    </button>
+
+    <button onclick="filterMedia('unsafe')">
+        🔴 Unsafe
+    </button>
+
+    <button onclick="filterMedia('IMAGE')">
+        🖼️ Images
+    </button>
+
+    <button onclick="filterMedia('VIDEO')">
+        🎬 Videos
+    </button>
+
+    <button onclick="filterMedia('PNG')">
+        PNG
+    </button>
+
+    <button onclick="filterMedia('JPG')">
+        JPG
+    </button>
+
+    <button onclick="filterMedia('JPEG')">
+        JPEG
+    </button>
+
+    <button onclick="filterMedia('GIF')">
+        GIF
+    </button>
+
+    <button onclick="filterMedia('SVG')">
+        SVG
+    </button>
+
+    <button onclick="filterMedia('WEBP')">
+        WEBP
+    </button>
+
+    <button onclick="filterMedia('MP4')">
+        MP4
+    </button>
+
+    <button onclick="filterMedia('WEBM')">
+        WEBM
+    </button>
+
+    <button
+        class="bulk-safe"
+        onclick="copyBulk('safe')"
+    >
+        📋 Copy All Safe
+    </button>
+
+    <button
+        class="bulk-unsafe"
+        onclick="copyBulk('unsafe')"
+    >
+        📋 Copy All Unsafe
+    </button>
+
+    <button onclick="exportResults()">
+        💾 Export JSON
+    </button>
+
+</div>
+
+<div id="gallery">
+    
+                <div
+                    class="image-card"
+                    data-file="20260112_060455.jpg"
+                    data-src="20260112_060455.jpg"
+                    data-type="JPG"
+                    data-media-type="IMAGE"
+                    data-index="0"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="20260112_060455.jpg"
+                            alt="20260112_060455.jpg"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        JPG
+                    </div>
+
+                    <div class="filename">
+                        20260112_060455.jpg
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="20260112_060459.jpg"
+                    data-src="20260112_060459.jpg"
+                    data-type="JPG"
+                    data-media-type="IMAGE"
+                    data-index="1"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="20260112_060459.jpg"
+                            alt="20260112_060459.jpg"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        JPG
+                    </div>
+
+                    <div class="filename">
+                        20260112_060459.jpg
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="20260112_060502.jpg"
+                    data-src="20260112_060502.jpg"
+                    data-type="JPG"
+                    data-media-type="IMAGE"
+                    data-index="2"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="20260112_060502.jpg"
+                            alt="20260112_060502.jpg"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        JPG
+                    </div>
+
+                    <div class="filename">
+                        20260112_060502.jpg
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="20260112_060505.jpg"
+                    data-src="20260112_060505.jpg"
+                    data-type="JPG"
+                    data-media-type="IMAGE"
+                    data-index="3"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="20260112_060505.jpg"
+                            alt="20260112_060505.jpg"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        JPG
+                    </div>
+
+                    <div class="filename">
+                        20260112_060505.jpg
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="G8_lLK0aYAAF_UU.png"
+                    data-src="G8_lLK0aYAAF_UU.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="4"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="G8_lLK0aYAAF_UU.png"
+                            alt="G8_lLK0aYAAF_UU.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        G8_lLK0aYAAF_UU.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="G8fM4w6a4AAaaKP.png"
+                    data-src="G8fM4w6a4AAaaKP.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="5"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="G8fM4w6a4AAaaKP.png"
+                            alt="G8fM4w6a4AAaaKP.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        G8fM4w6a4AAaaKP.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\android\mipmap-hdpi\IMG_6281.JPG.png"
+                    data-src="icons/android/mipmap-hdpi/IMG_6281.JPG.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="6"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/android/mipmap-hdpi/IMG_6281.JPG.png"
+                            alt="icons\android\mipmap-hdpi\IMG_6281.JPG.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\android\mipmap-hdpi\IMG_6281.JPG.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\android\mipmap-mdpi\IMG_6281.JPG.png"
+                    data-src="icons/android/mipmap-mdpi/IMG_6281.JPG.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="7"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/android/mipmap-mdpi/IMG_6281.JPG.png"
+                            alt="icons\android\mipmap-mdpi\IMG_6281.JPG.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\android\mipmap-mdpi\IMG_6281.JPG.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\android\mipmap-xhdpi\IMG_6281.JPG.png"
+                    data-src="icons/android/mipmap-xhdpi/IMG_6281.JPG.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="8"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/android/mipmap-xhdpi/IMG_6281.JPG.png"
+                            alt="icons\android\mipmap-xhdpi\IMG_6281.JPG.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\android\mipmap-xhdpi\IMG_6281.JPG.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\android\mipmap-xxhdpi\IMG_6281.JPG.png"
+                    data-src="icons/android/mipmap-xxhdpi/IMG_6281.JPG.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="9"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/android/mipmap-xxhdpi/IMG_6281.JPG.png"
+                            alt="icons\android\mipmap-xxhdpi\IMG_6281.JPG.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\android\mipmap-xxhdpi\IMG_6281.JPG.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\android\mipmap-xxxhdpi\IMG_6281.JPG.png"
+                    data-src="icons/android/mipmap-xxxhdpi/IMG_6281.JPG.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="10"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/android/mipmap-xxxhdpi/IMG_6281.JPG.png"
+                            alt="icons\android\mipmap-xxxhdpi\IMG_6281.JPG.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\android\mipmap-xxxhdpi\IMG_6281.JPG.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\appstore.png"
+                    data-src="icons/appstore.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="11"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/appstore.png"
+                            alt="icons\appstore.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\appstore.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\16.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/16.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="12"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/16.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\16.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\16.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\20.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/20.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="13"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/20.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\20.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\20.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\29.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/29.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="14"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/29.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\29.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\29.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\32.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/32.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="15"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/32.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\32.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\32.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\40.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/40.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="16"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/40.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\40.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\40.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\48.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/48.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="17"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/48.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\48.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\48.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\50.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/50.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="18"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/50.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\50.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\50.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\55.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/55.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="19"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/55.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\55.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\55.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\57.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/57.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="20"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/57.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\57.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\57.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\58.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/58.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="21"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/58.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\58.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\58.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\60.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/60.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="22"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/60.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\60.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\60.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\64.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/64.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="23"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/64.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\64.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\64.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\66.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/66.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="24"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/66.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\66.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\66.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\72.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/72.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="25"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/72.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\72.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\72.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\76.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/76.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="26"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/76.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\76.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\76.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\80.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/80.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="27"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/80.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\80.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\80.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\87.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/87.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="28"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/87.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\87.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\87.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\88.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/88.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="29"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/88.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\88.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\88.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\92.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/92.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="30"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/92.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\92.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\92.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\100.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/100.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="31"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/100.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\100.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\100.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\102.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/102.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="32"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/102.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\102.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\102.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\108.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/108.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="33"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/108.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\108.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\108.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\114.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/114.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="34"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/114.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\114.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\114.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\120.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/120.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="35"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/120.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\120.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\120.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\128.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/128.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="36"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/128.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\128.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\128.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\144.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/144.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="37"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/144.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\144.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\144.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\152.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/152.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="38"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/152.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\152.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\152.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\167.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/167.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="39"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/167.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\167.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\167.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\172.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/172.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="40"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/172.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\172.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\172.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\180.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/180.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="41"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/180.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\180.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\180.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\196.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/196.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="42"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/196.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\196.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\196.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\216.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/216.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="43"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/216.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\216.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\216.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\234.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/234.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="44"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/234.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\234.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\234.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\256.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/256.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="45"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/256.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\256.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\256.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\258.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/258.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="46"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/258.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\258.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\258.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\512.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/512.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="47"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/512.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\512.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\512.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\Assets.xcassets\AppIcon.appiconset\1024.png"
+                    data-src="icons/Assets.xcassets/AppIcon.appiconset/1024.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="48"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/Assets.xcassets/AppIcon.appiconset/1024.png"
+                            alt="icons\Assets.xcassets\AppIcon.appiconset\1024.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\Assets.xcassets\AppIcon.appiconset\1024.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="icons\playstore.png"
+                    data-src="icons/playstore.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="49"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="icons/playstore.png"
+                            alt="icons\playstore.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        icons\playstore.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="Screenshot-001.jpg"
+                    data-src="Screenshot-001.jpg"
+                    data-type="JPG"
+                    data-media-type="IMAGE"
+                    data-index="50"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="Screenshot-001.jpg"
+                            alt="Screenshot-001.jpg"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        JPG
+                    </div>
+
+                    <div class="filename">
+                        Screenshot-001.jpg
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="Screenshot-002.jpg"
+                    data-src="Screenshot-002.jpg"
+                    data-type="JPG"
+                    data-media-type="IMAGE"
+                    data-index="51"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="Screenshot-002.jpg"
+                            alt="Screenshot-002.jpg"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        JPG
+                    </div>
+
+                    <div class="filename">
+                        Screenshot-002.jpg
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="Screenshot-003.jpg"
+                    data-src="Screenshot-003.jpg"
+                    data-type="JPG"
+                    data-media-type="IMAGE"
+                    data-index="52"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="Screenshot-003.jpg"
+                            alt="Screenshot-003.jpg"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        JPG
+                    </div>
+
+                    <div class="filename">
+                        Screenshot-003.jpg
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="Screenshot-004.png"
+                    data-src="Screenshot-004.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="53"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="Screenshot-004.png"
+                            alt="Screenshot-004.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        Screenshot-004.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="Screenshot-005.png"
+                    data-src="Screenshot-005.png"
+                    data-type="PNG"
+                    data-media-type="IMAGE"
+                    data-index="54"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <img
+                            src="Screenshot-005.png"
+                            alt="Screenshot-005.png"
+                            loading="lazy"
+                        >
+                    
+
+                    <div class="file-type">
+                        PNG
+                    </div>
+
+                    <div class="filename">
+                        Screenshot-005.png
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="go (6).mp4"
+                    data-src="go (6).mp4"
+                    data-type="MP4"
+                    data-media-type="VIDEO"
+                    data-index="55"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <video
+                            src="go (6).mp4"
+                            controls
+                            preload="metadata"
+                        ></video>
+                    
+
+                    <div class="file-type">
+                        MP4
+                    </div>
+
+                    <div class="filename">
+                        go (6).mp4
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="go (7).mp4"
+                    data-src="go (7).mp4"
+                    data-type="MP4"
+                    data-media-type="VIDEO"
+                    data-index="56"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <video
+                            src="go (7).mp4"
+                            controls
+                            preload="metadata"
+                        ></video>
+                    
+
+                    <div class="file-type">
+                        MP4
+                    </div>
+
+                    <div class="filename">
+                        go (7).mp4
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="go (8).mp4"
+                    data-src="go (8).mp4"
+                    data-type="MP4"
+                    data-media-type="VIDEO"
+                    data-index="57"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <video
+                            src="go (8).mp4"
+                            controls
+                            preload="metadata"
+                        ></video>
+                    
+
+                    <div class="file-type">
+                        MP4
+                    </div>
+
+                    <div class="filename">
+                        go (8).mp4
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="go~2.mp4"
+                    data-src="go~2.mp4"
+                    data-type="MP4"
+                    data-media-type="VIDEO"
+                    data-index="58"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <video
+                            src="go~2.mp4"
+                            controls
+                            preload="metadata"
+                        ></video>
+                    
+
+                    <div class="file-type">
+                        MP4
+                    </div>
+
+                    <div class="filename">
+                        go~2.mp4
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="go~3.mp4"
+                    data-src="go~3.mp4"
+                    data-type="MP4"
+                    data-media-type="VIDEO"
+                    data-index="59"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <video
+                            src="go~3.mp4"
+                            controls
+                            preload="metadata"
+                        ></video>
+                    
+
+                    <div class="file-type">
+                        MP4
+                    </div>
+
+                    <div class="filename">
+                        go~3.mp4
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="nkmkGRnL7LT8Vdvc.mp4"
+                    data-src="nkmkGRnL7LT8Vdvc.mp4"
+                    data-type="MP4"
+                    data-media-type="VIDEO"
+                    data-index="60"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <video
+                            src="nkmkGRnL7LT8Vdvc.mp4"
+                            controls
+                            preload="metadata"
+                        ></video>
+                    
+
+                    <div class="file-type">
+                        MP4
+                    </div>
+
+                    <div class="filename">
+                        nkmkGRnL7LT8Vdvc.mp4
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+
+                <div
+                    class="image-card"
+                    data-file="v14025g50000cm4jcmfog65t3p7r6750.mov"
+                    data-src="v14025g50000cm4jcmfog65t3p7r6750.mov"
+                    data-type="MOV"
+                    data-media-type="VIDEO"
+                    data-index="61"
+                    data-status="unreviewed"
+                >
+
+                    
+                        <video
+                            src="v14025g50000cm4jcmfog65t3p7r6750.mov"
+                            controls
+                            preload="metadata"
+                        ></video>
+                    
+
+                    <div class="file-type">
+                        MOV
+                    </div>
+
+                    <div class="filename">
+                        v14025g50000cm4jcmfog65t3p7r6750.mov
+                    </div>
+
+                    <div class="status">
+                        🟡 UNREVIEWED
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="safe"
+                            onclick="setStatus(this, 'safe')"
+                        >
+                            🟢 Safe
+                        </button>
+
+                        <button
+                            class="unsafe"
+                            onclick="setStatus(this, 'unsafe')"
+                        >
+                            🔴 Unsafe
+                        </button>
+
+                        <button
+                            class="reset"
+                            onclick="setStatus(this, 'unreviewed')"
+                        >
+                            ↩ Reset
+                        </button>
+
+                    </div>
+
+                    <button
+                        class="copy"
+                        onclick="copyHTML(this)"
+                        disabled
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                </div>
+            
+</div>
+
+<div id="duplicates">
+
+    <h2>
+        🔍 Exact Duplicate Files
+    </h2>
+
+    
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 1
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                85bf4087d9c55c6c3137f67dc39f5e6bf28d7362ebd51b40e4e036562e1b2aff
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 icons\android\mipmap-hdpi\IMG_6281.JPG.png
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 icons\Assets.xcassets\AppIcon.appiconset\72.png
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 2
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                d16282be7db1d8c093304f471e98afb3c14af0b72c6818c24bea30b13440a648
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 icons\android\mipmap-mdpi\IMG_6281.JPG.png
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 icons\Assets.xcassets\AppIcon.appiconset\48.png
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 3
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                06205c356778470568b0f2c168ff824c0695a6397a772064760e9e9792c1f20b
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 icons\android\mipmap-xxhdpi\IMG_6281.JPG.png
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 icons\Assets.xcassets\AppIcon.appiconset\144.png
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 4
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                85a2463b8b6640eef869d387bccc83e9b73b5c19412f390fbfef13c0412a0fcb
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 icons\appstore.png
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 icons\Assets.xcassets\AppIcon.appiconset\1024.png
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 5
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                43948f0754df1c468306fad548a24a87b38eb510b09f2d1718c966ac2317f572
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 icons\Assets.xcassets\AppIcon.appiconset\512.png
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 icons\playstore.png
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 6
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                770655650ac0f80cf8c3cb820931ac6b47b8ebb127407b01b641b55dffa5f24e
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 IMG_2432.GIF
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 IMG_3602.GIF
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 7
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                3e2bac820845f73dc4fddf964da919307672958c919a0a95864cd8b6e5a803a0
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 IMG_2487.GIF
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 IMG_3599.GIF
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 8
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                7a039c98f6a4b776f36942a991496c8d2e23c294e384cd82a234f1da1838be14
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 IMG_2489.GIF
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 IMG_3596.GIF
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 9
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                dbee45d31a1b5f9c2822d6a37c12f104aed0f6ae60c93adb1cc93494c40d5f27
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 IMG_2490.GIF
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 IMG_3595.GIF
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 10
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                2a1b2333711c190a430b08af4bab0b3846bf155b21ff3d6fce3d2e094cad5088
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 IMG_2496.GIF
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 IMG_3591.GIF
+                                    </div>
+                                
+
+                        </div>
+                    
+
+                        <div class="duplicate-group">
+
+                            <div class="duplicate-title">
+                                🔁 Duplicate Group 11
+                            </div>
+
+                            <div class="duplicate-hash">
+                                SHA-256:
+                                8f64517c459b4a9677e8dce30e199bd496322134a1e707248eecb4a900b028a5
+                            </div>
+
+                            
+                                    <div class="duplicate-file">
+                                        📄 Wihh_apa_nih_yangg..selfie2_di_hpku.._Hmm_kamu_ini.jpg
+                                    </div>
+                                
+                                    <div class="duplicate-file">
+                                        📄 Yuuka 6.jpg
+                                    </div>
+                                
+
+                        </div>
+                    
+
+</div>
+
+<textarea id="copy-output"></textarea>
+
+<script>
+
+const STORAGE_KEY =
+    'imageSafetyReview';
+
+let results =
+    JSON.parse(
+        localStorage.getItem(
+            STORAGE_KEY
+        ) || '{}'
+    );
+
+// ==================================================
+// Set status
+// ==================================================
+
+function setStatus(
+    button,
+    status
+) {
+
+    const card =
+        button.closest(
+            '.image-card'
+        );
+
+    const file =
+        card.dataset.file;
+
+    card.dataset.status =
+        status;
+
+    if (
+        status === 'unreviewed'
+    ) {
+
+        delete results[file];
+
+    } else {
+
+        results[file] =
+            status;
+    }
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(results)
+    );
+
+    updateCard(card);
+    updateStats();
+}
+
+// ==================================================
+// Update card
+// ==================================================
+
+function updateCard(card) {
+
+    const status =
+        card.dataset.status;
+
+    const statusElement =
+        card.querySelector(
+            '.status'
+        );
+
+    const copyButton =
+        card.querySelector(
+            '.copy'
+        );
+
+    if (
+        status === 'safe'
+    ) {
+
+        statusElement.textContent =
+            '🟢 SAFE';
+
+        copyButton.disabled =
+            false;
+
+    } else if (
+        status === 'unsafe'
+    ) {
+
+        statusElement.textContent =
+            '🔴 UNSAFE';
+
+        copyButton.disabled =
+            false;
+
+    } else {
+
+        statusElement.textContent =
+            '🟡 UNREVIEWED';
+
+        copyButton.disabled =
+            true;
+    }
+}
+
+// ==================================================
+// Generate gallery HTML
+// ==================================================
+
+function getMediaHTML(card) {
+
+    const src =
+        card.dataset.src;
+
+    const status =
+        card.dataset.status;
+
+    if (
+        status !== 'safe' &&
+        status !== 'unsafe'
+    ) {
+        return '';
+    }
+
+    const safeValue =
+        status === 'safe'
+            ? 'true'
+            : 'false';
+
+    const mediaType =
+        card.dataset.mediaType;
+
+    if (
+        mediaType === 'VIDEO'
+    ) {
+
+        return (
+            '<div class="media-item img-responsive zoom">' +
+            '<video src="' +
+            src +
+            '" controls data-safe="' +
+            safeValue +
+            '" loading="lazy"></video>' +
+            '</div>'
+        );
+
+    }
+
+    return (
+        '<div class="media-item img-responsive zoom">' +
+        '<img src="' +
+        src +
+        '" alt="Hayase Yuuka" data-safe="' +
+        safeValue +
+        '" loading="lazy">' +
+        '</div>'
+    );
+}
+
+// ==================================================
+// Copy one item
+// ==================================================
+
+async function copyHTML(button) {
+
+    const card =
+        button.closest(
+            '.image-card'
+        );
+
+    const html =
+        getMediaHTML(card);
+
+    if (!html) {
+        return;
+    }
+
+    await copyText(
+        html,
+        button
+    );
+}
+
+// ==================================================
+// Bulk copy
+// ==================================================
+
+async function copyBulk(status) {
+
+    const cards =
+        [
+            ...document.querySelectorAll(
+                '.image-card'
+            )
+        ];
+
+    const matchingCards =
+        cards.filter(card =>
+            card.dataset.status === status
+        );
+
+    if (
+        matchingCards.length === 0
+    ) {
+
+        alert(
+            status === 'safe'
+                ? 'No safe media has been reviewed yet.'
+                : 'No unsafe media has been reviewed yet.'
+        );
+
+        return;
+    }
+
+    const html =
+        matchingCards
+            .map(card =>
+                getMediaHTML(card)
+            )
+            .filter(Boolean)
+            .join('\n');
+
+    try {
+
+        await navigator.clipboard.writeText(
+            html
+        );
+
+        alert(
+            '📋 Copied ' +
+            matchingCards.length +
+            ' ' +
+            status +
+            ' media item(s)!'
+        );
+
+    } catch (error) {
+
+        const output =
+            document.getElementById(
+                'copy-output'
+            );
+
+        output.value =
+            html;
+
+        output.select();
+
+        document.execCommand(
+            'copy'
+        );
+
+        alert(
+            '📋 Copied ' +
+            matchingCards.length +
+            ' ' +
+            status +
+            ' media item(s)!'
+        );
+    }
+}
+
+// ==================================================
+// Copy helper
+// ==================================================
+
+async function copyText(
+    text,
+    button
+) {
+
+    try {
+
+        await navigator.clipboard.writeText(
+            text
+        );
+
+        const original =
+            button.textContent;
+
+        button.textContent =
+            '✅ Copied!';
+
+        setTimeout(() => {
+
+            button.textContent =
+                original;
+
+        }, 1200);
+
+    } catch (error) {
+
+        const output =
+            document.getElementById(
+                'copy-output'
+            );
+
+        output.value =
+            text;
+
+        output.select();
+
+        document.execCommand(
+            'copy'
+        );
+
+        const original =
+            button.textContent;
+
+        button.textContent =
+            '✅ Copied!';
+
+        setTimeout(() => {
+
+            button.textContent =
+                original;
+
+        }, 1200);
+    }
+}
+
+// ==================================================
+// Restore saved results
+// ==================================================
+
+document
+    .querySelectorAll(
+        '.image-card'
+    )
+    .forEach(card => {
+
+        const file =
+            card.dataset.file;
+
+        if (
+            results[file]
+        ) {
+
+            card.dataset.status =
+                results[file];
+
+            updateCard(card);
+        }
+    });
+
+// ==================================================
+// Statistics
+// ==================================================
+
+function updateStats() {
+
+    const cards =
+        [
+            ...document.querySelectorAll(
+                '.image-card'
+            )
+        ];
+
+    const reviewed =
+        cards.filter(
+            card =>
+                card.dataset.status !==
+                'unreviewed'
+        ).length;
+
+    const safe =
+        cards.filter(
+            card =>
+                card.dataset.status ===
+                'safe'
+        ).length;
+
+    const unsafe =
+        cards.filter(
+            card =>
+                card.dataset.status ===
+                'unsafe'
+        ).length;
+
+    document.getElementById(
+        'stats'
+    ).textContent =
+        'Reviewed: ' +
+        reviewed +
+        ' / ' +
+        cards.length +
+        ' | 🟢 Safe: ' +
+        safe +
+        ' | 🔴 Unsafe: ' +
+        unsafe +
+        ' | 🔁 Duplicate groups: 11';
+}
+
+updateStats();
+
+// ==================================================
+// Filtering
+// ==================================================
+
+function filterMedia(filter) {
+
+    document
+        .querySelectorAll(
+            '.image-card'
+        )
+        .forEach(card => {
+
+            const status =
+                card.dataset.status;
+
+            const type =
+                card.dataset.type;
+
+            const mediaType =
+                card.dataset.mediaType;
+
+            let visible =
+                false;
+
+            if (
+                filter === 'all'
+            ) {
+
+                visible =
+                    true;
+
+            } else if (
+                filter === 'unreviewed' ||
+                filter === 'safe' ||
+                filter === 'unsafe'
+            ) {
+
+                visible =
+                    status === filter;
+
+            } else if (
+                filter === 'IMAGE' ||
+                filter === 'VIDEO' ||
+                filter === 'AUDIO'
+            ) {
+
+                visible =
+                    mediaType === filter;
+
+            } else {
+
+                visible =
+                    type === filter;
+            }
+
+            card.style.display =
+                visible
+                    ? ''
+                    : 'none';
+        });
+}
+
+// ==================================================
+// Export results
+// ==================================================
+
+function exportResults() {
+
+    const data =
+        JSON.stringify(
+            results,
+            null,
+            2
+        );
+
+    const blob =
+        new Blob(
+            [data],
+            {
+                type:
+                    'application/json'
+            }
+        );
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+    const link =
+        document.createElement(
+            'a'
+        );
+
+    link.href =
+        url;
+
+    link.download =
+        'image-safety.json';
+
+    link.click();
+
+    URL.revokeObjectURL(
+        url
+    );
+}
+
+</script>
+
+</body>
+
+</html>

@@ -79,58 +79,67 @@
 
     <button id="chat-toggle-btn">💬 Chat</button>
 
-    <div id="chat-container">
-      <div id="chat-header">💬 Chat</div>
-    
-      <!-- Chat display area -->
-      <div id="chat-box">
-        <div id="chat-history"></div>
-        <div id="missed-counter"></div>
-      </div>
-    
-      <!-- Chat input area -->
-      <div id="chat-input-area">
-        <input type="text" id="chat-input" placeholder="Type a message..." />
-        <button id="send-btn">Send</button>
-        <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
-      </div>
-    
-      <!-- Emoji menu -->
-      <div id="emoji-menu" class="emoji-menu">
-        <!-- Category tabs -->
-        <div id="emoji-categories" class="emoji-categories">
-          <button data-category="smileys">😄</button>
-          <button data-category="gestures">🙌</button>
-          <button data-category="hearts">❤️</button>
-          <button data-category="animals">🐶</button>
-          <button data-category="food">🍕</button>
-          <button data-category="symbols">🔥</button>
-        </div>
-        <!-- Emoji list container -->
-        <div id="emoji-list" class="emoji-list"></div>
-      </div>
-    
-      <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-    
-      <!-- Username change -->
-      <div id="username-change-area">
-        <input type="text" id="change-username-input" placeholder="New username" />
-        <button id="change-username-btn">Change Username</button>
-      </div>
-    
-      <!-- Safe ping toggle -->
-      <button id="toggle-safe-btn">Safe Pings ON</button>
-    </div>
+        <div id="chat-container">
+          <div id="chat-header">💬 Chat</div>
+        
+          <!-- Chat display area -->
+          <div id="chat-box">
+            <div id="chat-history"></div>
+            <div id="missed-counter"></div>
+          </div>
+        
+          <!-- Chat input area -->
+          <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type a message..." />
+            <button id="send-btn">Send</button>
+            <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
+          </div>
+        
+          <!-- Emoji menu -->
+          <div id="emoji-menu" class="emoji-menu">
+            <!-- Category tabs -->
+            <div id="emoji-categories" class="emoji-categories">
+              <button data-category="smileys">😄</button>
+              <button data-category="gestures">🙌</button>
+              <button data-category="hearts">❤️</button>
+              <button data-category="animals">🐶</button>
+              <button data-category="food">🍕</button>
+              <button data-category="symbols">🔥</button>
+            </div>
+            <!-- Emoji list container -->
+            <div id="emoji-list" class="emoji-list"></div>
+          </div>
+        
+          <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+        
+          <!-- Username change -->
+          <div id="username-change-area">
+            <input type="text" id="change-username-input" placeholder="New username" />
+            <button id="change-username-btn">Change Username</button>
+          </div>
 
-   <div id="online-users-container">
-    <div id="online-users-header">🟢 Online Users</div>
-     <ul id="online-users"></ul>
-  </div>
+          <!-- Ping types -->
+          <button id="notifications-mentions">
+            🔔 Mentions Only
+          </button>
+
+          <button id="notifications-all">
+            🔔 All Messages
+          </button>
+          
+          <!-- Safe ping toggle -->
+          <button id="toggle-safe-btn">Safe Pings ON</button>
+        </div> 
+
+      <div id="online-users-container">
+        <div id="online-users-header">🟢 Online Users</div>
+        <ul id="online-users"></ul>
+      </div>
   
-  <div class="container">
-    <h1>Welcome to Yuuka's Math Game!</h1>
-    <p>Are you smart like Yuuka?</p>
-  </div>
+    <div class="container">
+      <h1>Welcome to Yuuka's Math Game!</h1>
+      <p>Are you smart like Yuuka?</p>
+    </div>
 
   <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -553,16 +562,16 @@ function showProblem() {
     const timeTaken = Math.floor((endTime - startTime) / 1000);
 
     // Decide which image to show
-    let resultImageSrc = images[0]; // Default to low score
+    let resultImageSrc = images[0]; // Default to low attempts
 
-    if (score >= 100) {
-        resultImageSrc = images[4]; // High score
-    } else if (score >= 50) {
-    resultImageSrc = images[3]; // Mid-high
-    } else if (score >= 25) {
-    resultImageSrc = images[2]; // Mid-low
+    if (moveCount === totalQuestions) {
+        resultImageSrc = images[3]; // Perfect: no wrong attempts
+    } else if (moveCount <= totalQuestions + 4) {
+        resultImageSrc = images[2]; // Very good
+    } else if (moveCount <= totalQuestions + 9) {
+        resultImageSrc = images[1]; // Needs improvement
     } else {
-    resultImageSrc = images[1]; // Low score
+        resultImageSrc = images[0]; // Many attempts
     }
     showThankYouMessage(timeTaken, resultImageSrc);
 } else {
@@ -583,7 +592,7 @@ function showProblem() {
 });
 
   function showThankYouMessage(timeTaken, resultImageSrc) {
-    const playerName = localStorage.getItem('playerName') || 'Player';
+    const playerName = localStorage.getItem('userName') || 'Player';
 
     const thankYouMessage = document.createElement('div');
     thankYouMessage.className = 'thank-you-message';
@@ -591,7 +600,7 @@ function showProblem() {
       <h1>Yuuka: Great work, ${playerName}! 🎉</h1>
       <p>You solved ${totalQuestions} ${difficulty.toUpperCase()} math problems! 🧮</p>
       <p>It took you ${timeTaken} seconds with ${moveCount} attempts. ⏱️</p>
-      <img id="resultImage" src="IMG_6212.JPG" style="display:none;">
+      <img id="resultImage" src="${resultImageSrc}" style="display:none;">
       <p id="finalMessage" style="display:none;"></p>
 
       <div class="thankyou-buttons">
@@ -607,7 +616,7 @@ function showProblem() {
     finalMessage.style.display = 'block';
     finalMessage.textContent = `Yuuka is proud of you, ${playerName}! You completed ${difficulty.toUpperCase()} mode in ${timeTaken} seconds with ${moveCount} attempts!`;
 
-    saveResultImageToResults(resultImageSrc, playerName, score);
+    saveResultImageToResults(resultImageSrc, playerName, moveCount);
 
     document.getElementById('play-again').addEventListener('click', () => {
       localStorage.removeItem('playerName');
@@ -617,18 +626,54 @@ function showProblem() {
     document.getElementById('downloadBtn').addEventListener('click', downloadResult);
   }
 
-  function saveResultImageToResults(resultImageSrc, playerName, score) {
-  const timestamp = new Date().toLocaleString();
-  const result = {
-    name: playerName,
-    score: score,
-    image: resultImageSrc,
-    timestamp: timestamp
-  };
+  function saveResultImageToResults(
+      resultImageSrc,
+      playerName,
+      attempts
+  ) {
+      const timestamp = new Date().toLocaleString();
 
-  const results = JSON.parse(localStorage.getItem("yuukaResults")) || [];
-  results.push(result);
-  localStorage.setItem("yuukaResults", JSON.stringify(results));
+      const result = {
+          name: playerName,
+          attempts: attempts,
+          image: resultImageSrc,
+          timestamp: timestamp
+      };
+
+      const results =
+          JSON.parse(
+              localStorage.getItem("yuukaResults")
+          ) || [];
+
+      results.push(result);
+
+      localStorage.setItem(
+          "yuukaResults",
+          JSON.stringify(results)
+      );
+
+      // ✨ Optional: small status update
+      const message = document.createElement("div");
+
+      message.textContent =
+          "✨ Saving your Yuuka result... please wait!";
+
+      message.style.cssText = `
+          color: #fff;
+          background: rgba(0, 0, 0, 0.7);
+          padding: 20px;
+          text-align: center;
+          border-radius: 10px;
+          font-size: 18px;
+      `;
+
+      document.body.appendChild(message);
+
+      setTimeout(() => {
+          window.location.href =
+              "game-results.html";
+      }, 10000);
+  }
 
   // ✨ Optional: small status update
   const message = document.createElement("div");
@@ -646,7 +691,6 @@ function showProblem() {
   setTimeout(() => {
     window.location.href = "game-results.html";
   }, 10000);
-}
 
   function downloadResult() {
     const finalMessage = document.getElementById('finalMessage');

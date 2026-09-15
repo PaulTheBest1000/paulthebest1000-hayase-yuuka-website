@@ -278,52 +278,128 @@ display:none;
 }
 
 canvas {
+  display: block;
+
+  max-width: 100%;
+  max-height: calc(100vh - 100px);
+
+  width: auto;
+  height: auto;
+
+  margin: 10px auto 0;
+
   position: relative;
+
   background: #111;
+
   border: 4px solid #4fa3ff;
   border-radius: 5px;
-  margin-top: 10px;
-  box-shadow: 0 0 20px #4fa3ff; /* glowing effect */
+
+  box-shadow: 0 0 20px #4fa3ff;
+
+  /* 📱 Prevent touching the canvas from scrolling the page */
+  touch-action: none;
 }
 
+/* 📱 Mobile Tetris Controls */
 #mobile-controls {
-  position: sticky;
-  bottom: 10px;           /* distance from container's bottom */
-  
-  display: flex;
-  flex-wrap: wrap;        /* allow multiple rows */
-  justify-content: center;/* center the row horizontally */
-  align-items: center;    /* center buttons vertically */
-  gap: 8px;               /* space between buttons */
+  display: none;
 
-  width: 100%;            /* full width container */
-  max-width: 220px;       /* optional: limit width to fit 3 buttons per row nicely */
-  padding: 5px 0;
-  
-  background: rgba(0,0,0,0.6);
-  border-radius: 12px;
-  z-index: 100;
+  position: sticky;
+  bottom: 170px;
+
+  width: 100%;
+  max-width: 220px;
+
+  margin: 8px auto 0;
+
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
+/* 🎮 Control groups */
+#movement-controls,
+#rotation-controls,
+#drop-controls,
+#game-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+
+  padding: 4px;
+
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 9px;
+
+  box-shadow: 0 0 6px rgba(79, 163, 255, 0.4);
+
+  flex: 0 0 auto;
+}
+
+/* 🔘 Compact buttons */
 #mobile-controls button {
-  position: relative;
-  width: 50px;
-  height: 50px;
-  font-size: 1.5em;
-  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+
+  margin: 0;
+  padding: 0;
+
+  font-size: 1.2em;
+  font-weight: bold;
+
+  border-radius: 8px;
   border: none;
 
   background: rgba(79, 163, 255, 0.2);
   color: #fff;
-  box-shadow: 0 0 5px #4fa3ff;
 
-  display: flex;           /* flex for centering text */
-  justify-content: center; /* horizontal center */
-  align-items: center;     /* vertical center */
+  box-shadow: 0 0 4px #4fa3ff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   text-align: center;
 
-  touch-action: manipulation; /* improves mobile responsiveness */
-  flex: 0 0 auto;          /* prevent shrinking */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+
+  flex: 0 0 auto;
+}
+
+/* 👆 Button press */
+#mobile-controls button:active {
+  transform: scale(0.92);
+}
+
+/* 📱 Small phones */
+@media (max-width: 400px) {
+  #mobile-controls {
+    gap: 3px;
+    max-width: 200px;
+  }
+
+  #movement-controls,
+  #rotation-controls,
+  #drop-controls,
+  #game-controls {
+    padding: 3px;
+    gap: 2px;
+  }
+
+  #mobile-controls button {
+    width: 36px;
+    height: 36px;
+    font-size: 1em;
+    border-radius: 7px;
+  }
 }
 
 #hud {
