@@ -74,108 +74,136 @@
     </nav>
 </header>
 
-    <div id="time">Loading time...</div>
-    <div id="calendar">Loading calendar...</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        // Highlight the active menu item
+        document.querySelectorAll('.menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.menu a.active')?.classList.remove('active');
+                link.classList.add('active');
+            });
+        });
+    
+        // Toggle dropdowns when clicking menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const dropdown = item.querySelector('.dropdown');
+                if (dropdown) {
+                    dropdown.classList.toggle('open');
+                    e.stopPropagation();  // Prevent menu toggle from closing when clicking dropdown
+                }
+            });
+        });
+    
+        // Toggle the mobile menu on hamburger click
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.getElementById('nav-menu').classList.toggle('active');
+        });
+    });
+    </script>
 
-    <button id="chat-toggle-btn">💬 Chat</button>
+        <div id="time">Loading time...</div>
+        <div id="calendar">Loading calendar...</div>
 
-        <div id="chat-container">
-          <div id="chat-header">💬 Chat</div>
-        
-          <!-- Chat display area -->
-          <div id="chat-box">
-            <div id="chat-history"></div>
-            <div id="missed-counter"></div>
+        <button id="chat-toggle-btn">💬 Chat</button>
+
+            <div id="chat-container">
+              <div id="chat-header">💬 Chat</div>
+            
+              <!-- Chat display area -->
+              <div id="chat-box">
+                <div id="chat-history"></div>
+                <div id="missed-counter"></div>
+              </div>
+            
+              <!-- Chat input area -->
+              <div id="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type a message..." />
+                <button id="send-btn">Send</button>
+                <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
+              </div>
+            
+              <!-- Emoji menu -->
+              <div id="emoji-menu" class="emoji-menu">
+                <!-- Category tabs -->
+                <div id="emoji-categories" class="emoji-categories">
+                  <button data-category="smileys">😄</button>
+                  <button data-category="gestures">🙌</button>
+                  <button data-category="hearts">❤️</button>
+                  <button data-category="animals">🐶</button>
+                  <button data-category="food">🍕</button>
+                  <button data-category="symbols">🔥</button>
+                </div>
+                <!-- Emoji list container -->
+                <div id="emoji-list" class="emoji-list"></div>
+              </div>
+            
+              <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
+            
+              <!-- Username change -->
+              <div id="username-change-area">
+                <input type="text" id="change-username-input" placeholder="New username" />
+                <button id="change-username-btn">Change Username</button>
+              </div>
+
+              <!-- Ping types -->
+              <button id="notifications-mentions">
+                🔔 Mentions Only
+              </button>
+
+              <button id="notifications-all">
+                🔔 All Messages
+              </button>
+              
+              <!-- Safe ping toggle -->
+              <button id="toggle-safe-btn">Safe Pings ON</button>
+            </div> 
+
+          <div id="online-users-container">
+            <div id="online-users-header">🟢 Online Users</div>
+            <ul id="online-users"></ul>
           </div>
-        
-          <!-- Chat input area -->
-          <div id="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Type a message..." />
-            <button id="send-btn">Send</button>
-            <button id="emoji-btn">😊</button> <!-- button to toggle emoji menu -->
-          </div>
-        
-          <!-- Emoji menu -->
-          <div id="emoji-menu" class="emoji-menu">
-            <!-- Category tabs -->
-            <div id="emoji-categories" class="emoji-categories">
-              <button data-category="smileys">😄</button>
-              <button data-category="gestures">🙌</button>
-              <button data-category="hearts">❤️</button>
-              <button data-category="animals">🐶</button>
-              <button data-category="food">🍕</button>
-              <button data-category="symbols">🔥</button>
-            </div>
-            <!-- Emoji list container -->
-            <div id="emoji-list" class="emoji-list"></div>
-          </div>
-        
-          <div id="typing-indicator" style="font-style: italic; color: #888;"></div>
-        
-          <!-- Username change -->
-          <div id="username-change-area">
-            <input type="text" id="change-username-input" placeholder="New username" />
-            <button id="change-username-btn">Change Username</button>
-          </div>
 
-          <!-- Ping types -->
-          <button id="notifications-mentions">
-            🔔 Mentions Only
-          </button>
+        <h1>🧩 Yuukatris</h1>
+        <input type="text" id="username-input" placeholder="Enter your name">
+        <canvas id="game" width="300" height="600"></canvas>
+        <p style="color: #6a5acd; font: bold;">Arrow keys/WASD to move • Mouse scroll/Q and E to rotate • Space to Play/Pause</p>
 
-          <button id="notifications-all">
-            🔔 All Messages
-          </button>
-          
-          <!-- Safe ping toggle -->
-          <button id="toggle-safe-btn">Safe Pings ON</button>
-        </div> 
-
-      <div id="online-users-container">
-        <div id="online-users-header">🟢 Online Users</div>
-        <ul id="online-users"></ul>
+      <div id="hud">
+        <div>Score: <span id="score">0</span></div>
+        <div><span id="username-display"></span></div>
+        <div>Lines: <span id="lines">0</span></div>
       </div>
 
-    <h1>🧩 Yuukatris</h1>
-    <input type="text" id="username-input" placeholder="Enter your name">
-    <canvas id="game" width="300" height="600"></canvas>
-    <p style="color: #6a5acd; font: bold;">Arrow keys/WASD to move • Mouse scroll/Q and E to rotate • Space to Play/Pause</p>
+      <div id="mobile-controls">
 
-  <div id="hud">
-    <div>Score: <span id="score">0</span></div>
-    <div><span id="username-display"></span></div>
-    <div>Lines: <span id="lines">0</span></div>
-  </div>
+        <!-- Movement -->
+        <div id="movement-controls">
+          <button id="left">←</button>
+          <button id="softDrop">↓</button>
+          <button id="right">→</button>
+        </div>
 
-  <div id="mobile-controls">
+        <!-- Rotation -->
+        <div id="rotation-controls">
+          <button id="rotateCCW">↺</button>
+          <button id="rotateCW">↻</button>
+        </div>
 
-    <!-- Movement -->
-    <div id="movement-controls">
-      <button id="left">←</button>
-      <button id="softDrop">↓</button>
-      <button id="right">→</button>
-    </div>
+        <!-- Hard drop -->
+        <div id="drop-controls">
+          <button id="hardDrop">⤓</button>
+        </div>
 
-    <!-- Rotation -->
-    <div id="rotation-controls">
-      <button id="rotateCCW">↺</button>
-      <button id="rotateCW">↻</button>
-    </div>
+        <!-- Start / Pause -->
+        <div id="game-controls">
+          <button id="startPause">▶</button>
+        </div>
 
-    <!-- Hard drop -->
-    <div id="drop-controls">
-      <button id="hardDrop">⤓</button>
-    </div>
+      </div>
 
-    <!-- Start / Pause -->
-    <div id="game-controls">
-      <button id="startPause">▶</button>
-    </div>
-
-  </div>
-
-  <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
-  <audio id="ricochet" src="whizzby-41134.mp3"></audio>
+      <button id="toggleBtn">🟢 Start Yuuka Bumper</button>
+      <audio id="ricochet" src="whizzby-41134.mp3"></audio>
 
 <script>
 async function loadGalleryImages(fromExternal = true) {

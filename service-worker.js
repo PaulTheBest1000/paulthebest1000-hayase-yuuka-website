@@ -156,66 +156,105 @@ self.addEventListener('fetch', (event) => {
 // =====================================================
 
 self.addEventListener('push', (event) => {
-  console.log(
-    '[SW] 📲 Push notification received'
-  );
-
-  let data = {};
-
-  try {
-    data = event.data
-      ? event.data.json()
-      : {};
-  } catch (error) {
-    console.error(
-      '[SW] ❌ Failed to parse push data:',
-      error
+    console.log(
+        '[SW] 📲 Push notification received'
     );
-  }
 
-  const title =
-    data.title || 'Hayase Yuuka Chat';
+    let data = {};
 
-  const options = {
-    body:
-      data.body ||
-      'You have a new message!',
-
-    icon:
-      data.icon ||
-      '/IMG_6281.ico',
-
-    badge:
-      data.badge ||
-      '/IMG_6281.ico',
-
-    tag:
-      data.tag ||
-      'chat-notification',
-
-    renotify: true,
-
-    requireInteraction: false,
-
-    vibrate: [
-      200,
-      100,
-      200
-    ],
-
-    data: {
-      url:
-        data.url ||
-        '/'
+    try {
+        data = event.data
+            ? event.data.json()
+            : {};
+    } catch (error) {
+        console.error(
+            '[SW] ❌ Failed to parse push data:',
+            error
+        );
     }
-  };
 
-  event.waitUntil(
-    self.registration.showNotification(
-      title,
-      options
-    )
-  );
+    const title =
+        data.title ||
+        'Hayase Yuuka Chat';
+
+    const icon =
+        data.icon ||
+        new URL(
+            'IMG_6281.JPG',
+            self.location.origin + '/'
+        ).href;
+
+    const badge =
+        data.badge ||
+        icon;
+
+    const options = {
+        body:
+            data.body ||
+            'You have a new message!',
+
+        icon,
+        badge,
+
+        tag:
+            data.tag ||
+            'chat-notification',
+
+        renotify: true,
+
+        requireInteraction: false,
+
+        vibrate: [
+            200,
+            100,
+            200
+        ],
+
+        actions: [
+            {
+                action: 'mark-read',
+                title: 'Mark as read'
+            },
+            {
+                action: 'reply',
+                title: 'Reply'
+            }
+        ],
+
+        data: {
+            notificationId:
+                data.notificationId ||
+                `${Date.now()}`,
+
+            type:
+                data.type ||
+                'message',
+
+            username:
+                data.username ||
+                '',
+
+            message:
+                data.message ||
+                data.body ||
+                '',
+
+            url:
+                data.url ||
+                '/',
+
+            actionUrl:
+                data.url ||
+                '/'
+        }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(
+            title,
+            options
+        )
+    );
 });
 
 
@@ -223,47 +262,140 @@ self.addEventListener('push', (event) => {
 // 👆 NOTIFICATION CLICK
 // =====================================================
 
-self.addEventListener(
-  'notificationclick',
-  (event) => {
-
+self.addEventListener('notificationclick', (event) => {
     console.log(
-      '[SW] 🔔 Notification clicked'
+        '[SW] 🔔 Notification clicked:',
+        event.action || 'notification body'
     );
 
-    event.notification.close();
+    const notification =
+        event.notification;
 
-    const targetUrl =
-      event.notification.data?.url ||
-      '/';
+    const data =
+        notification.data || {};
 
+    const action =
+        event.action;
+
+    notification.close();
+
+    /*
+     * ✅ MARK AS READ
+     */
+    if (action === 'mark-read') {
+        console.log(
+            '[SW] ✅ Notification marked as read'
+        );
+
+        event.waitUntil(
+            notifyOpenClients({
+                type: 'NOTIFICATION_MARK_READ',
+                notificationId:
+                    data.notificationId,
+                username:
+                    data.username,
+                message:
+                    data.message
+            })
+        );
+
+        return;
+    }
+
+    /*
+     * 💬 REPLY
+     *
+     * Open/focus the website and tell the
+     * page to focus the chat input.
+     */
+    if (action === 'reply') {
+        console.log(
+            '[SW] 💬 Reply action selected'
+        );
+
+        event.waitUntil(
+            openChatForReply(data)
+        );
+
+        return;
+    }
+
+    /*
+     * 🖱️ Normal notification click
+     */
     event.waitUntil(
-      clients.matchAll({
-        type: 'window',
-        includeUncontrolled: true
-      })
-      .then((clientList) => {
-
-        for (const client of clientList) {
-
-          if (
-            client.url.includes(targetUrl) &&
-            'focus' in client
-          ) {
-            return client.focus();
-          }
-        }
-
-        if (clients.openWindow) {
-          return clients.openWindow(
-            targetUrl
-          );
-        }
-
-      })
+        openChatForReply(data)
     );
-  }
-);
+});
+
+
+async function openChatForReply(data) {
+    const url =
+        data.actionUrl ||
+        data.url ||
+        '/';
+
+    const clientList =
+        await clients.matchAll({
+            type: 'window',
+            includeUncontrolled: true
+        });
+
+    /*
+     * If the website is already open,
+     * focus it instead of opening another tab.
+     */
+    for (const client of clientList) {
+        if ('focus' in client) {
+            await client.focus();
+
+            client.postMessage({
+                type: 'OPEN_CHAT_REPLY',
+                username:
+                    data.username || '',
+                message:
+                    data.message || ''
+            });
+
+            return;
+        }
+    }
+
+    /*
+     * Otherwise open the website.
+     */
+    const newClient =
+        await clients.openWindow(url);
+
+    if (newClient) {
+        /*
+         * Give the page a moment to load before
+         * sending the message.
+         */
+        setTimeout(() => {
+            newClient.postMessage({
+                type: 'OPEN_CHAT_REPLY',
+                username:
+                    data.username || '',
+                message:
+                    data.message || ''
+            });
+        }, 500);
+    }
+}
+
+
+async function notifyOpenClients(data) {
+    const clientList =
+        await clients.matchAll({
+            type: 'window',
+            includeUncontrolled: true
+        });
+
+    clientList.forEach(client => {
+        client.postMessage(data);
+    });
+}
 
 
 // =====================================================

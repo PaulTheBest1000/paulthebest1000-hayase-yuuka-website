@@ -116,38 +116,33 @@ io.on('connection', (socket) => {
     console.log(`${data.username}: ${data.message}`);
 
     const messageId =
-        `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
     const messageData = {
-        messageId,
-        senderId: socket.id,
-        message: data.message,
-        sender: 'user',
-        username: data.username
+      messageId,
+      senderId: socket.id,
+      message: data.message,
+      sender: 'user',
+      username: data.username
     };
 
     console.log('📨 Sending message:', messageData);
 
     const payload = JSON.stringify({
-        title: `New message from ${data.username}`,
-        body: data.message
+      title: `New message from ${data.username}`,
+      body: data.message
     });
 
-    (subscriptions || []).forEach(sub => {
-        try {
-            webpush.sendNotification(sub, payload);
-        } catch (err) {
-            console.error("Push error:", err);
-        }
+    (subscriptions || []).forEach((sub) => {
+      try {
+        webpush.sendNotification(sub, payload);
+      } catch (err) {
+        console.error('Push error:', err);
+      }
     });
 
-  // Broadcast the message to everyone including sender
-    socket.broadcast.emit('receiveMessage', {
-        message: data.message,
-        sender: 'user',
-        username: data.username
-    });
-});
+    // Broadcast the message to everyone, including sender
+    io.emit('receiveMessage', messageData);
 
     console.log(
       '📡 BROADCASTED TO',
@@ -172,31 +167,35 @@ io.on('connection', (socket) => {
     // Get one username per unique user ID
     const uniqueUsers = [
       ...new Map(
-        Object.values(clients).map(user => [
+        Object.values(clients).map((user) => [
           user.userId,
           user.username
         ])
-      ).values()
-    ];
+      ).entries()
+    ].map(([userId, username]) => ({
+      userId,
+      username
+    }));
 
     io.emit('onlineUsers', uniqueUsers);
   });
+});
 
-  // Handle disconnect
-  socket.on('disconnect', (reason) => {
-    const username = clients[socket.id];
+// Handle disconnect
+socket.on('disconnect', (reason) => {
+  const username = clients[socket.id];
 
-    console.log('🔴 SOCKET DISCONNECTED');
-    console.log('   Socket ID:', socket.id);
-    console.log('   Username:', username || 'Unknown');
-    console.log('   Reason:', reason);
+  console.log('🔴 SOCKET DISCONNECTED');
+  console.log('   Socket ID:', socket.id);
+  console.log('   Username:', username || 'Unknown');
+  console.log('   Reason:', reason);
 
-    delete clients[socket.id];
+  delete clients[socket.id];
 
-    const uniqueUsers = [...new Set(Object.values(clients))];
+  const uniqueUsers = [...new Set(Object.values(clients))];
 
-    io.emit('onlineUsers', uniqueUsers);
-  });
+  io.emit('onlineUsers', uniqueUsers);
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;

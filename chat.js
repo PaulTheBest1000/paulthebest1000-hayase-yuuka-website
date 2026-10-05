@@ -669,6 +669,7 @@ socket.on('receiveMessage', (data) => {
 // 🔔 Notification mode
 // "mentions" = only @mentions
 // "all" = every chat message
+
 const mentionsBtn =
     document.getElementById('notifications-mentions');
 
@@ -678,11 +679,15 @@ const allMessagesBtn =
 let notificationMode = 'mentions';
 
 function updateNotificationButtons() {
-    mentionsBtn.disabled =
-        notificationMode === 'mentions';
+    if (mentionsBtn) {
+        mentionsBtn.disabled =
+            notificationMode === 'mentions';
+    }
 
-    allMessagesBtn.disabled =
-        notificationMode === 'all';
+    if (allMessagesBtn) {
+        allMessagesBtn.disabled =
+            notificationMode === 'all';
+    }
 
     console.log(
         '🔔 Notification mode:',
@@ -690,168 +695,328 @@ function updateNotificationButtons() {
     );
 }
 
-mentionsBtn.addEventListener('click', () => {
-    notificationMode = 'mentions';
+if (mentionsBtn) {
+    mentionsBtn.addEventListener('click', () => {
+        notificationMode = 'mentions';
 
-    console.log(
-        '🔔 Notifications set to: Mentions Only'
-    );
+        console.log(
+            '🔔 Notifications set to: Mentions Only'
+        );
 
-    updateNotificationButtons();
-});
+        updateNotificationButtons();
+    });
+}
 
-allMessagesBtn.addEventListener('click', () => {
-    notificationMode = 'all';
+if (allMessagesBtn) {
+    allMessagesBtn.addEventListener('click', () => {
+        notificationMode = 'all';
 
-    console.log(
-        '🔔 Notifications set to: All Messages'
-    );
+        console.log(
+            '🔔 Notifications set to: All Messages'
+        );
 
-    updateNotificationButtons();
-});
+        updateNotificationButtons();
+    });
+}
 
 /* Initial state */
 updateNotificationButtons();
 
 async function sendMentionNotification(username, message) {
-  console.log('🔔 Notification requested');
-  console.log('   Username:', username);
-  console.log('   Message:', message);
-  console.log('   Notification mode:', notificationMode);
+    console.log('🔔 Notification requested');
+    console.log('   Username:', username);
+    console.log('   Message:', message);
+    console.log('   Notification mode:', notificationMode);
 
-  // Mentions Only mode
-  if (notificationMode === 'mentions') {
-    console.log('👀 Mentions-only mode enabled');
+    // Mentions Only mode
+    if (notificationMode === 'mentions') {
+        console.log('👀 Mentions-only mode enabled');
 
-    const mentioned =
-      message.includes(`@${currentUsername}`);
+        const mentioned =
+            message.includes(`@${currentUsername}`);
 
-    if (!mentioned) {
-      console.log(
-        '⏭️ Message does not mention you — notification skipped'
-      );
-      return;
+        if (!mentioned) {
+            console.log(
+                '⏭️ Message does not mention you — notification skipped'
+            );
+            return;
+        }
     }
-  }
 
-  if (!('Notification' in window)) {
-    console.error(
-      '❌ Notifications API is not supported'
-    );
-    return;
-  }
-
-  console.log(
-    '   Notification permission:',
-    Notification.permission
-  );
-
-  if (Notification.permission !== 'granted') {
-    console.warn(
-      '⚠️ Notifications not allowed:',
-      Notification.permission
-    );
-    return;
-  }
-
-  // Different title depending on notification mode
-  const title =
-    notificationMode === 'all'
-      ? `New message from ${username}`
-      : `You were mentioned by ${username}!`;
-
-  const options = {
-    body: message,
-    icon: 'IMG_6281.ico',
-    badge: 'IMG_6281.ico',
-
-    tag:
-      notificationMode === 'all'
-        ? `message-${username}`
-        : `mention-${username}`,
-
-    renotify: true,
-    requireInteraction: false,
-
-    data: {
-      type:
-        notificationMode === 'all'
-          ? 'message'
-          : 'mention',
-
-      username,
-      message,
-      url: window.location.href
+    if (!('Notification' in window)) {
+        console.error(
+            '❌ Notifications API is not supported'
+        );
+        return;
     }
-  };
-
-  console.log(
-    '📱 Service Worker support:',
-    'serviceWorker' in navigator
-  );
-
-  // 📱 Mobile/Desktop Service Worker notification
-  if ('serviceWorker' in navigator) {
-    try {
-      const registration =
-        await navigator.serviceWorker.ready;
-
-      console.log(
-        '📡 Service Worker ready:',
-        registration
-      );
-
-      await registration.showNotification(
-        title,
-        options
-      );
-
-      console.log(
-        '✅ Mobile/Desktop Service Worker notification shown'
-      );
-
-      return;
-
-    } catch (error) {
-      console.error(
-        '❌ Service Worker notification failed:',
-        error
-      );
-    }
-  }
-
-  // 🖥️ Desktop/browser fallback
-  console.log(
-    '🖥️ Using browser notification fallback'
-  );
-
-  try {
-    const notif =
-      new Notification(title, options);
 
     console.log(
-      '✅ Browser notification created'
+        '   Notification permission:',
+        Notification.permission
     );
 
-    notif.onclick = () => {
-      window.focus();
+    if (Notification.permission !== 'granted') {
+        console.warn(
+            '⚠️ Notifications not allowed:',
+            Notification.permission
+        );
+        return;
+    }
 
-      const chatInput =
-        document.querySelector('#chat-input');
+    const isMention =
+        notificationMode === 'mentions';
 
-      if (chatInput) {
-        chatInput.focus();
-      }
+    const title = isMention
+        ? `You were mentioned by ${username}!`
+        : `New message from ${username}`;
 
-      notif.close();
+    /*
+     * Use an absolute URL for the icon.
+     * This is more reliable when the notification
+     * is displayed by the Service Worker.
+     */
+    const notificationIcon =
+        new URL(
+            'IMG_6281.ico',
+            window.location.origin + '/'
+        ).href;
+
+    const chatUrl =
+        window.location.origin +
+        window.location.pathname +
+        '#chat';
+
+    const notificationId =
+        `${Date.now()}-${Math.random()
+            .toString(36)
+            .slice(2, 10)}`;
+
+    const options = {
+        body: message,
+
+        // 🖼️ Website icon
+        icon: notificationIcon,
+
+        // 📱 Small notification badge
+        badge: notificationIcon,
+
+        tag:
+            isMention
+                ? `mention-${username}-${notificationId}`
+                : `message-${username}-${notificationId}`,
+
+        renotify: true,
+        requireInteraction: false,
+
+        /*
+         * 🔘 Notification action buttons
+         *
+         * "Mark as read" closes/removes the notification.
+         * "Reply" opens the chat.
+         */
+        actions: [
+            {
+                action: 'mark-read',
+                title: 'Mark as read'
+            },
+            {
+                action: 'reply',
+                title: 'Reply'
+            }
+        ],
+
+        data: {
+            notificationId,
+
+            type:
+                isMention
+                    ? 'mention'
+                    : 'message',
+
+            username,
+            message,
+
+            url: chatUrl,
+
+            /*
+             * These are useful to the Service Worker
+             * when processing the action buttons.
+             */
+            actionUrl: chatUrl
+        }
     };
 
-  } catch (error) {
-    console.error(
-      '❌ Failed to create notification:',
-      error
+    console.log(
+        '📱 Notification icon:',
+        notificationIcon
     );
-  }
+
+    console.log(
+        '📱 Service Worker support:',
+        'serviceWorker' in navigator
+    );
+
+    // 📱 Service Worker notification
+    if ('serviceWorker' in navigator) {
+        try {
+            const registration =
+                await navigator.serviceWorker.ready;
+
+            console.log(
+                '📡 Service Worker ready:',
+                registration
+            );
+
+            await registration.showNotification(
+                title,
+                options
+            );
+
+            console.log(
+                '✅ Service Worker notification shown'
+            );
+
+            return;
+
+        } catch (error) {
+            console.error(
+                '❌ Service Worker notification failed:',
+                error
+            );
+        }
+    }
+
+    // 🖥️ Browser fallback
+    console.log(
+        '🖥️ Using browser notification fallback'
+    );
+
+    try {
+        const notif =
+            new Notification(title, options);
+
+        console.log(
+            '✅ Browser notification created'
+        );
+
+        notif.onclick = () => {
+            window.focus();
+
+            const chatInput =
+                document.querySelector('#chat-input');
+
+            if (chatInput) {
+                chatInput.focus();
+            }
+
+            notif.close();
+        };
+
+    } catch (error) {
+        console.error(
+            '❌ Failed to create notification:',
+            error
+        );
+    }
+}
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener(
+        'message',
+        event => {
+            if (!event.data) return;
+
+            /*
+             * ✅ Notification marked as read
+             */
+            if (
+                event.data.type ===
+                'NOTIFICATION_MARK_READ'
+            ) {
+                console.log(
+                    '✅ Notification marked as read:',
+                    event.data
+                );
+
+                /*
+                 * If you have an unread notification
+                 * counter, update it here.
+                 */
+                markNotificationAsRead(
+                    event.data.notificationId
+                );
+            }
+
+            /*
+             * 💬 Reply button
+             */
+            if (
+                event.data.type ===
+                'OPEN_CHAT_REPLY'
+            ) {
+                console.log(
+                    '💬 Opening chat for reply'
+                );
+
+                const chatContainer =
+                    document.querySelector(
+                        '#chat-container'
+                    );
+
+                const chatInput =
+                    document.querySelector(
+                        '#chat-input'
+                    );
+
+                if (chatContainer) {
+                    chatContainer.style.display =
+                        'block';
+                }
+
+                if (chatInput) {
+                    chatInput.focus();
+                }
+            }
+        }
+    );
+}
+
+function markNotificationAsRead(notificationId) {
+    console.log(
+        '📖 Marking notification as read:',
+        notificationId
+    );
+
+    /*
+     * Store locally for now.
+     *
+     * If you later want unread state synchronized
+     * between multiple devices, send this to your
+     * server instead.
+     */
+    const readNotifications =
+        JSON.parse(
+            localStorage.getItem(
+                'readNotifications'
+            ) || '[]'
+        );
+
+    if (
+        !readNotifications.includes(
+            notificationId
+        )
+    ) {
+        readNotifications.push(
+            notificationId
+        );
+    }
+
+    localStorage.setItem(
+        'readNotifications',
+        JSON.stringify(
+            readNotifications
+        )
+    );
 }
 
   // Register current username with the server
