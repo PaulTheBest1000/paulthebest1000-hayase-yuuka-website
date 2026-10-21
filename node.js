@@ -164,12 +164,25 @@ io.on('connection', (socket) => {
     console.log(`   User ID: ${userId}`);
     console.log(`   Socket ID: ${socket.id}`);
 
-    // Get one username per unique user ID
+    // Handle disconnect
+  socket.on('disconnect', (reason) => {
+    const user = clients[socket.id];
+
+    console.log('🔴 SOCKET DISCONNECTED');
+    console.log('   Socket ID:', socket.id);
+    console.log('   Username:', user?.username || 'Unknown');
+    console.log('   User ID:', user?.userId || 'Unknown');
+    console.log('   Reason:', reason);
+
+    delete clients[socket.id];
+  });
+
+    // Get one entry per unique user ID
     const uniqueUsers = [
       ...new Map(
-        Object.values(clients).map((user) => [
-          user.userId,
-          user.username
+        Object.values(clients).map((client) => [
+          client.userId,
+          client.username
         ])
       ).entries()
     ].map(([userId, username]) => ({
@@ -179,23 +192,7 @@ io.on('connection', (socket) => {
 
     io.emit('onlineUsers', uniqueUsers);
   });
-});
-
-// Handle disconnect
-socket.on('disconnect', (reason) => {
-  const username = clients[socket.id];
-
-  console.log('🔴 SOCKET DISCONNECTED');
-  console.log('   Socket ID:', socket.id);
-  console.log('   Username:', username || 'Unknown');
-  console.log('   Reason:', reason);
-
-  delete clients[socket.id];
-
-  const uniqueUsers = [...new Set(Object.values(clients))];
-
-  io.emit('onlineUsers', uniqueUsers);
-});
+}); // End of io.on('connection')
 
 // Start the server
 const PORT = process.env.PORT || 3000;
