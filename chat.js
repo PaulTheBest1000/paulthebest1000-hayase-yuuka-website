@@ -820,8 +820,10 @@ async function sendMentionNotification(username, message) {
                 title: 'Mark as read'
             },
             {
-                action: 'reply',
-                title: 'Reply'
+              action: 'reply',
+              title: 'Reply',
+              type: 'text',
+              placeholder: 'Type your reply...'
             }
         ],
 

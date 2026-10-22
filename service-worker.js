@@ -217,7 +217,9 @@ self.addEventListener('push', (event) => {
             },
             {
                 action: 'reply',
-                title: 'Reply'
+                title: 'Reply',
+                type: 'text',
+                placeholder: 'Type your message...'
             }
         ],
 
@@ -309,16 +311,48 @@ self.addEventListener('notificationclick', (event) => {
      * page to focus the chat input.
      */
     if (action === 'reply') {
-        console.log(
-            '[SW] 💬 Reply action selected'
-        );
+        const replyText =
+            event.reply?.trim();
 
-        event.waitUntil(
-            openChatForReply(data)
-        );
+        console.log('[SW] 💬 Reply action selected');
+
+        if (replyText) {
+            event.waitUntil(
+                sendNotificationReply({
+                    message: replyText,
+                    notificationId: data.notificationId,
+                    username: data.username
+                })
+            );
+        } else {
+            event.waitUntil(
+                openChatForReply(data)
+            );
+        }
 
         return;
     }
+
+    async function sendNotificationReply(reply) {
+    const response = await fetch(
+        'https://paulthebest1000-hayase-yuuka-website.onrender.com/notification-reply',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reply)
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            `Reply failed: HTTP ${response.status}`
+        );
+    }
+
+    console.log('[SW] 💙 Notification reply sent');
+}
 
     /*
      * 🖱️ Normal notification click

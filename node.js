@@ -84,6 +84,57 @@ app.post('/save-subscription', (req, res) => {
   res.status(201).json({ message: "Subscription saved!" });
 });
 
+// Handle replies sent directly from notifications
+app.post('/notification-reply', (req, res) => {
+  const { message, username, notificationId } = req.body;
+
+  if (
+    typeof message !== 'string' ||
+    !message.trim() ||
+    message.length > 2000
+  ) {
+    return res.status(400).json({
+      error: 'Invalid message'
+    });
+  }
+
+  if (
+    typeof username !== 'string' ||
+    !username.trim() ||
+    username.length > 50
+  ) {
+    return res.status(400).json({
+      error: 'Invalid username'
+    });
+  }
+
+  const messageData = {
+    messageId:
+      `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+    senderId: null,
+    message: message.trim(),
+    sender: 'user',
+    username: username.trim(),
+    source: 'notification',
+    notificationId:
+      typeof notificationId === 'string'
+        ? notificationId
+        : ''
+  };
+
+  io.emit('receiveMessage', messageData);
+
+  console.log(
+    `📲 Notification reply from ${messageData.username}:`,
+    messageData.message
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: 'Reply broadcast successfully'
+  });
+});
+
 // Socket.IO connection
 io.on('connection', (socket) => {
   console.log('🟢 SOCKET CONNECTED');
